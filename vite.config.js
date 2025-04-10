@@ -5,7 +5,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/QnA_Game/',  // Make sure it has leading and trailing slashes
+  base: '/QnA_Game/', // This matches the path in the "homepage" field of package.json
   plugins: [
     vue(),
     vueDevTools(),
