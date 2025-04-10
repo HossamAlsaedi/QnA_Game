@@ -1,0 +1,109 @@
+{
+    "id": 2,
+    "name": "Animals",
+    "image": "../",
+    "questions": [
+        {
+            "question": "What is the boiling point of water?",
+            "answer": "100°C (212°F)",
+            "points": 100
+        },
+        {
+            "question": "What planet is known as the Red Planet?",
+            "answer": "Mars",
+            "points": 100
+        },
+        {
+            "question": "How many continents are there on Earth?",
+            "answer": "7",
+            "points": 100
+        },
+        {
+            "question": "What is the largest mammal in the world?",
+            "answer": "Blue Whale",
+            "points": 100
+        },
+        {
+            "question": "What gas do humans need to breathe?",
+            "answer": "Oxygen",
+            "points": 100
+        },
+        {
+            "question": "What color is chlorophyll?",
+            "answer": "Green",
+            "points": 100
+        },
+        {
+            "question": "How many legs does a spider have?",
+            "answer": "8",
+            "points": 100
+        },
+        {
+            "question": "Who is the father of modern physics?",
+            "answer": "Albert Einstein",
+            "points": 200
+          },
+          {
+            "question": "Which gas do plants use for photosynthesis?",
+            "answer": "Carbon Dioxide (CO₂)",
+            "points": 200
+          },
+          {
+            "question": "Which planet has the most moons?",
+            "answer": "Saturn",
+            "points": 200
+          },
+          {
+            "question": "How many bones are in the adult human body?",
+            "answer": "206",
+            "points": 200
+          },
+          {
+            "question": "What is the largest internal organ in the human body?",
+            "answer": "Liver",
+            "points": 200
+          },
+          {
+            "question": "What part of the plant conducts photosynthesis?",
+            "answer": "Leaves",
+            "points": 200
+          },
+          {
+            "question": "What type of energy comes from the sun?",
+            "answer": "Solar energy",
+            "points": 200
+          },
+      
+          {
+            "question": "What is the capital of Japan?",
+            "answer": "Tokyo",
+            "points": 300
+          },
+          {
+            "question": "What organelle is known as the powerhouse of the cell?",
+            "answer": "Mitochondria",
+            "points": 300
+          },
+          {
+            "question": "What year did World War II end?",
+            "answer": "1945",
+            "points": 300
+          },
+      
+          {
+            "question": "What is the chemical symbol for gold?",
+            "answer": "Au",
+            "points": 400
+          },
+          {
+            "question": "What is the process by which a solid turns directly into gas?",
+            "answer": "Sublimation",
+            "points": 400
+          },
+          {
+            "question": "What’s the most abundant element in the universe?",
+            "answer": "Hydrogen",
+            "points": 400
+          }
+        ]
+}
