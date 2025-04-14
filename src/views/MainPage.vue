@@ -12,12 +12,13 @@
         <div class="card w-auto d-flex justify-content-between col-3 p-0"
              :class="{ 'active': selectedCategories.includes(category) }"
              @click="toggleActive(category)">
-          <img 
-            :src="`/categories/${category.image}`" 
-            alt="no Image" 
-            class="w-25 h-75 mx-auto"
-            @error="handleImageError" 
-          />
+             <img 
+  :src="`${import.meta.env.BASE_URL}categories/${category.image}`" 
+  alt="no Image" 
+  class="w-25 h-75 mx-auto"
+  @error="handleImageError" 
+/>
+
           <div class="card-body h-25 d-flex align-items-center justify-content-center py-0 bg-black">
             <p class="text-white p-1 m-0">{{ category.name }}</p>
           </div>
