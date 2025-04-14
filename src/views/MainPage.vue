@@ -1,8 +1,10 @@
 
 
 <template>
+    <LoadSpinner :loading="loading" />
+
   <AppHeader />
-  <div class="container">
+  <div v-if="!loading" class="container">
     <h1 class="mt-4 text-center">Game Board</h1>
 
     <!-- Category Table -->
@@ -13,7 +15,7 @@
              :class="{ 'active': selectedCategories.includes(category) }"
              @click="toggleActive(category)">
           <img 
-            :src="`/Images/${category.image}`" 
+            :src="getImagePath(category.image)"
             alt="no Image" 
             class="w-25 h-75 mx-auto"
             @error="handleImageError" 
@@ -65,11 +67,20 @@
 import AppHeader from '../components/AppHeader.vue';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import LoadSpinner from '@/components/LoadSpinner.vue';
+
 
 const router = useRouter();
 const categories = ref([]);
 const selectedCategories = ref([]);
 const errorMessage = ref("");
+const loading = ref(true);
+
+const getImagePath = (imageName) => {
+  if (!imageName) return ''; // prevent runtime errors
+  return `${import.meta.env.BASE_URL}Images/${imageName}`;
+};
+
 
 // Fetch categories
 onMounted(async () => {
@@ -87,6 +98,7 @@ onMounted(async () => {
     console.error('Error loading categories:', error);
   }
   sessionStorage.clear();
+  loading.value = false;
 });
 
 const toggleActive = (category) => {

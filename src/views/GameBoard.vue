@@ -1,4 +1,6 @@
 <template>
+    <LoadSpinner :loading="loading" />
+
   <AppHeader />
     
   <!-- Current Team Turn Tab -->
@@ -7,7 +9,7 @@
 </div>
 
 
-  <div class="container mt-4">
+  <div v-if="!loading" class="container mt-4">
     <div class="d-flex">
       <!-- Team List + Scores (Left Sidebar) -->
       <div class="team-list-container">
@@ -187,6 +189,7 @@
 
 <script setup>
 import AppHeader from '../components/AppHeader.vue';
+import LoadSpinner from '../components/LoadSpinner.vue';
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -201,6 +204,7 @@ const teams = ref([]);
 const currentQuestion = ref(null);
 const currentCategory = ref(null);
 const showAnswer = ref(false);
+
 
 const normalizeCategoryName = (name) => name.toLowerCase().replace(/\s+/g, '_');
 
@@ -220,6 +224,7 @@ const clearGameState = () => {
 
 
 
+const loading = ref(true); 
 onMounted(() => {
   const gameState = getGameState();
 const categoriesData = JSON.stringify(gameState.categories);
@@ -340,6 +345,7 @@ const parsedCategory = savedCategory;
     }
   }
 }
+loading.value = false;
 });
 
 
