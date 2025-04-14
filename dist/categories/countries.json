@@ -1,7 +1,7 @@
 {
     "id": 3,
     "name": "Countries",
-    "image": "/images/science.jpg",
+    "image": "../Images/GPU.jpg",
     "questions": [
         { "question": "What is the boiling point of water?", "points": 100 },
         { "question": "Who is the father of modern physics?", "points": 200 }

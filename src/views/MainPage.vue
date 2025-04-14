@@ -76,10 +76,11 @@ onMounted(async () => {
   try {
     const categoryFiles = ['science.json', 'animals.json', 'countries.json', 'capital.json', 'general.json', 'place.json', 'names.json'];
     const categoryPromises = categoryFiles.map(async (file) => {
-      const response = await fetch(`/categories/${file}`);
-      if (!response.ok) throw new Error(`Failed to fetch ${file}`);
-      return await response.json();
-    });
+  const response = await fetch(`${import.meta.env.BASE_URL}categories/${file}`);
+  if (!response.ok) throw new Error(`Failed to fetch ${file}`);
+  return await response.json();
+});
+
 
     categories.value = await Promise.all(categoryPromises);
   } catch (error) {

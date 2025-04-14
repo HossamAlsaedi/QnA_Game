@@ -1,7 +1,7 @@
 {
     "id": 2,
     "name": "Animals",
-    "image": "../",
+    "image": "../Images/CPU_I7.jpg",
     "questions": [
         {
             "question": "What is the boiling point of water?",
@@ -38,6 +38,11 @@
             "answer": "8",
             "points": 100
         },
+        {
+          "question": "8th question?",
+          "answer": "8 points",
+          "points": 100
+      },
         {
             "question": "Who is the father of modern physics?",
             "answer": "Albert Einstein",
