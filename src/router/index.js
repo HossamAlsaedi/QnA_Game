@@ -15,7 +15,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.MODE === 'production' ? '/QnA_Game/' : '/'),
   routes,
 });
 

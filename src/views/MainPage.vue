@@ -85,6 +85,7 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error loading categories:', error);
   }
+  sessionStorage.clear();
 });
 
 const toggleActive = (category) => {
@@ -120,6 +121,39 @@ const areAllTeamsValid = () => {
 };
 
 // Start Game Function
+const cleanupLocalStorageForNewGame = (categories) => {
+  const usedQuestions = JSON.parse(localStorage.getItem('usedQuestions') || '{}');
+
+  categories.forEach(category => {
+    const grouped = {
+      100: [],
+      200: [],
+      300: [],
+      400: []
+    };
+
+    category.questions.forEach(q => {
+      if (grouped[q.points]) {
+        grouped[q.points].push(q);
+      }
+    });
+
+    [100, 200, 300, 400].forEach(points => {
+      const key = `${category.name}_${points}`;
+      const used = usedQuestions[key] || [];
+      const total = grouped[points].length;
+
+      // If only 1 or less questions are left, reset the key for that category+points
+      if (used.length >= total - 1) {
+        delete usedQuestions[key];
+      }
+    });
+  });
+
+  localStorage.setItem('usedQuestions', JSON.stringify(usedQuestions));
+};
+
+
 const startGame = () => {
   if (selectedCategories.value.length < 2 || selectedCategories.value.length > 6) {
     errorMessage.value = "Please select between 2 and 6 categories.";
@@ -127,15 +161,21 @@ const startGame = () => {
   }
 
   errorMessage.value = "";
-  
-  router.push({
-    name: 'game-board',
-    query: {
-      teams: JSON.stringify(teams.value),
-      categories: JSON.stringify(selectedCategories.value),
-    }
-  });
+
+  cleanupLocalStorageForNewGame(selectedCategories.value);
+
+  sessionStorage.setItem('gameState', JSON.stringify({
+    categories: selectedCategories.value,
+    teams: teams.value,
+    currentTeamIndex: 0
+  }));
+
+  router.push({ name: 'game-board' });
 };
+
+
+
+
 </script>
 
 
