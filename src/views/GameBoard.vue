@@ -87,7 +87,7 @@
   <!-- Question Modal -->
   <div v-if="currentQuestion" class="category-box">
     <div class="category-header mb-3">
-      <img :src="currentCategory.image" alt="Category Image" class="category-image mb-3">
+      <img :src="getImagePath(currentCategory.image)" alt="Category Image" class="category-image mb-3">
       <h5>{{ currentCategory.name }} - {{ currentQuestion.points }} Points</h5>
     </div>
     <p class="question-text fs-4">{{ currentQuestion.question }}</p>
@@ -222,6 +222,11 @@ const clearGameState = () => {
   sessionStorage.removeItem('gameState');
 };
 
+
+const getImagePath = (imageName) => {
+  if (!imageName) return ''; // prevent runtime errors
+  return `${import.meta.env.BASE_URL}Images/${imageName}`;
+};
 
 
 const loading = ref(true); 
