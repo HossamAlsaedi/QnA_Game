@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router'; // Use createWebHashHistory
 import MainPage from '../views/MainPage.vue';
 import GameBoard from '../views/GameBoard.vue';
 
@@ -15,7 +15,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.MODE === 'production' ? '/QnA_Game/' : '/'),
+  history: createWebHashHistory(),  // Switch to hash mode here
   routes,
 });
 
