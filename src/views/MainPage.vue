@@ -13,7 +13,7 @@
              :class="{ 'active': selectedCategories.includes(category) }"
              @click="toggleActive(category)">
           <img 
-            :src="`/images/${category.image}`" 
+            :src="`/Images/${category.image}`" 
             alt="no Image" 
             class="w-25 h-75 mx-auto"
             @error="handleImageError" 
