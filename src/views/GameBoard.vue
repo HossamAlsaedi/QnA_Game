@@ -1,191 +1,267 @@
 <template>
-    <LoadSpinner :loading="loading" />
-
-  <AppHeader />
+  <LoadSpinner :loading="loading" />
+  <div class="game-container">
+    <AppHeader />
     
-  <!-- Current Team Turn Tab -->
-<div v-if="teams.length > 0" class="alert alert-primary text-center fs-4 mb-4">
-  🎯 It's <strong>{{ teams[currentTeamIndex].name }}</strong>'s turn!
-</div>
-
-
-  <div v-if="!loading" class="container mt-4">
-    <div class="d-flex">
-      <!-- Team List + Scores (Left Sidebar) -->
-      <div class="team-list-container">
-  <div v-if="teams.length > 0" class="team-list">
-    <h4 class="text-center mb-4">Teams</h4>
-
-    <div 
-      v-for="(team, index) in teams" 
-      :key="team.id" 
-      class="team border rounded p-3 mb-3 bg-light"
-    >
-      <!-- Team Name -->
-      <h5 class="text-center mb-2">{{ team.name }}</h5>
-
-      <!-- Score Controls -->
-      <div class="d-flex align-items-center justify-content-center mb-2">
-        <button class="btn btn-success me-2" @click="adjustScore(index, 100)">+</button>
-        <span class="fw-bold mx-2">{{ team.score }} Points</span>
-        <button class="btn btn-danger ms-2" @click="adjustScore(index, -100)">-</button>
-      </div>
-
-      <!-- Special Abilities -->
-<div class="d-flex justify-content-center flex-wrap gap-2 mb-2">
-  <!-- Double Points -->
-  <button 
-  class="btn btn-sm fs-6"
-  :class="[
-    team.doubleActive ? 'btn-primary bg-primary text-white' : 'btn-outline-primary',
-    !team.abilities.doublePoints || index !== currentTeamIndex ? 'disabled-button' : ''
-  ]"
-  :disabled="!team.abilities.doublePoints || index !== currentTeamIndex"
-  @click="activateDoublePoints(index)"
-  title="Double Points"
->
-  x2
-</button>
-
-
-<!-- Change Question -->
-<button 
-  class="btn btn-outline-warning btn-sm" 
-  :disabled="!team.abilities.changeQuestion || index !== currentTeamIndex || !currentQuestion"
-  @click="useChangeQuestionAbility(index)"
-  title="Change Question">
-  <i class="fa fa-solid fa-arrow-right"></i>
-</button>
-
-<!-- Call for Help -->
-<button 
-  class="btn btn-outline-info btn-sm" 
-  :disabled="!team.abilities.callForHelp || index !== currentTeamIndex || !currentQuestion"
-  @click="useCallForHelp(index)"
-  title="Call for Help" 
->
-<i class="fa fa-solid fa-phone fa-xs" style="color: #74C0FC;"></i>
-</button>
-
-<!-- Timer Section with Close Button -->
-<div v-if="callForHelpActive && index === currentTeamIndex" class="text-center mt-2">
-  <p class="fs-6 text-primary">🕒 Time left: {{ callForHelpTimer }}s</p>
-  <button class="btn btn-sm btn-danger" @click="stopTimer();" title="Cancel Timer">
-    <i class="fs-6">x</i> <!-- "x" icon to close the timer -->
-  </button>
-</div>
-
-
-</div>
-    </div>
-  </div>
-</div>
-
-
-<!-- Category Box and Question Modal -->
-<div class="game-board">
-  <!-- Question Modal -->
-  <div v-if="currentQuestion" class="category-box">
-    <div class="category-header mb-3">
-      <img :src="getImagePath(currentCategory.image)" alt="Category Image" class="category-image mb-3">
-      <h5>{{ currentCategory.name }} - {{ currentQuestion.points }} Points</h5>
-    </div>
-    <p class="question-text fs-4">{{ currentQuestion.question }}</p>
-
-    <!-- Answer Section -->
-    <div v-if="showAnswer" class="answer-section mb-4">
-      <p class="text-success"><strong>Answer:</strong> {{ currentQuestion.answer }}</p>
-      <div class="d-flex justify-content-center gap-3">
-        <button v-for="(team, index) in teams" :key="team.id" class="btn btn-outline-success" @click="awardPoints(index)">
-          {{ team.name }}
-        </button>
+    <!-- Current Team Turn Banner -->
+    <div v-if="teams.length > 0" class="team-turn-banner">
+      <div class="team-turn-content">
+        <div class="team-avatar">{{ teams[currentTeamIndex].name.charAt(0) }}</div>
+        <span>It's <strong>{{ teams[currentTeamIndex].name }}</strong>'s turn!</span>
       </div>
     </div>
-
-    <!-- Buttons Section -->
-    <div class="buttons mt-4 d-flex justify-content-between">
-      <button class="btn btn-warning" @click="toggleAnswer">
-        {{ showAnswer ? 'Back to Question' : 'Show Answer' }}
-      </button>
-      <button class="btn btn-secondary" @click="closeModal">Back to Board</button>
-    </div>
-  </div>
-
-  <!-- Game Board -->
-  <div v-else class="row">
-  <div 
-    v-for="category in selectedCategories" 
-    :key="category.id" 
-    :class="{
-      'col-md-4': selectedCategories.length >= 3, 
-      'col-md-6': selectedCategories.length === 2,
-      'col-md-12': selectedCategories.length === 1
-    }"
-    class="mb-4"
-  >
-    <!-- Category Card -->
-    <div class="card shadow-sm">
-      <div class="card-header bg-secondary text-white text-center">
-        <h5>{{ category.name }}</h5>
+    
+    <div v-if="!loading" class="main-content">
+      <!-- Team List Sidebar -->
+      <div class="teams-sidebar">
+        <div v-if="teams.length > 0" class="teams-panel">
+          <h4 class="teams-header">Teams</h4>
+          
+          <div 
+            v-for="(team, index) in teams" 
+            :key="team.id" 
+            class="team-card"
+            :class="{ 'active-team': index === currentTeamIndex }"
+          >
+            <!-- Team Name and Score -->
+            <div class="team-header">
+              <div class="team-avatar">{{ team.name.charAt(0) }}</div>
+              <h5>{{ team.name }}</h5>
+            </div>
+            
+            <!-- Score Controls -->
+            <div class="score-controls">
+              <button class="score-btn decrease" @click="adjustScore(index, -100)">-</button>
+              <span class="team-score">{{ team.score }}</span>
+              <button class="score-btn increase" @click="adjustScore(index, 100)">+</button>
+            </div>
+            
+            <!-- Special Abilities -->
+            <div class="team-abilities">
+              <button 
+                class="ability-btn double-points"
+                :class="{ 
+                  'active': team.doubleActive,
+                  'disabled': !team.abilities.doublePoints || index !== currentTeamIndex
+                }"
+                :disabled="!team.abilities.doublePoints || index !== currentTeamIndex"
+                @click="activateDoublePoints(index)"
+                title="Double Points"
+              >
+                <span>×2</span>
+              </button>
+              
+              <button 
+                class="ability-btn change-question"
+                :class="{ 'disabled': !team.abilities.changeQuestion || index !== currentTeamIndex || !currentQuestion }"
+                :disabled="!team.abilities.changeQuestion || index !== currentTeamIndex || !currentQuestion"
+                @click="useChangeQuestionAbility(index)"
+                title="Change Question"
+              >
+                <i class="fa fa-solid fa-arrow-right"></i>
+              </button>
+              
+              <button 
+                class="ability-btn call-help"
+                :class="{ 'disabled': !team.abilities.callForHelp || index !== currentTeamIndex || !currentQuestion }"
+                :disabled="!team.abilities.callForHelp || index !== currentTeamIndex || !currentQuestion"
+                @click="useCallForHelp(index)"
+                title="Call for Help"
+              >
+                <i class="fa fa-solid fa-phone fa-xs"></i>
+              </button>
+            </div>
+            
+            <!-- Help Timer -->
+            <div v-if="callForHelpActive && index === currentTeamIndex" class="help-timer">
+              <div class="timer-display">
+                <div class="timer-progress" :style="{ width: `${(callForHelpTimer/60)*100}%` }"></div>
+                <span>{{ callForHelpTimer }}s</span>
+              </div>
+              <button class="timer-cancel" @click="stopTimer()">Cancel</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="card-body">
-
-        <div 
-  v-for="(question, index) in category.questions" 
-  :key="index" 
-  class="question-box mb-2" 
-  :class="{ 'answered': question.answered }"
-  @click="!isButtonDisabled(category.id, question.points, index) && selectQuestion(category, question, index)"
->
-  <button 
-    class="btn btn-warning btn-sm w-100"
-    :disabled="question.answered || isButtonDisabled(category.id, question.points, index)"
-  >
-    {{ question.points }} Points
-  </button>
-</div>
-
-
-
+      
+      <!-- Game Board -->
+      <div class="game-board">
+        <!-- Categories Grid -->
+        <div v-if="!currentQuestion" class="categories-grid">
+          <div 
+            v-for="category in selectedCategories" 
+            :key="category.id" 
+            class="category-container"
+          >
+            <div class="category-card">
+              <!-- Left Questions Column -->
+              <div class="questions-column left">
+                <button 
+                  v-for="(question, idx) in category.questions.slice(0, 3)" 
+                  :key="idx"
+                  class="question-btn"
+                  :class="{ 'answered': question.answered }"
+                  :disabled="question.answered || isButtonDisabled(category.id, question.points, idx)"
+                  @click="!isButtonDisabled(category.id, question.points, idx) && selectQuestion(category, question, idx)"
+                >
+                  {{ question.points }}
+                </button>
+              </div>
+              
+              <!-- Center Category Info -->
+              <div class="category-info">
+                <img :src="getImagePath(category.image)" alt="Category Image" class="category-thumbnail">
+                <h5>{{ category.name }}</h5>
+              </div>
+              
+              <!-- Right Questions Column -->
+              <div class="questions-column right">
+                <button 
+                  v-for="(question, idx) in category.questions.slice(3)" 
+                  :key="idx + 3"
+                  class="question-btn"
+                  :class="{ 'answered': question.answered }"
+                  :disabled="question.answered || isButtonDisabled(category.id, question.points, idx + 3)"
+                  @click="!isButtonDisabled(category.id, question.points, idx + 3) && selectQuestion(category, question, idx + 3)"
+                >
+                  {{ question.points }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-
-</div>
-
-
+    
+    <!-- Question Modal - Now moved outside the game-board div -->
+    <div v-if="currentQuestion" class="question-modal">
+      <div class="question-card">
+        <div class="question-header">
+          <img :src="getImagePath(currentCategory.image)" alt="Category Image" class="category-image">
+          <div class="question-meta">
+            <h4>{{ currentCategory.name }}</h4>
+            <div class="points-badge">{{ currentQuestion.points }} Points</div>
+          </div>
+        </div>
+        
+        <div class="question-content">
+          <p>{{ currentQuestion.question }}</p>
+        </div>
+        
+        <!-- Team Abilities Bar Inside the Question Modal -->
+        <div v-if="teams.length > 0" class="modal-team-abilities">
+          <div class="current-team-info">
+            <div class="team-avatar modal-avatar">{{ teams[currentTeamIndex].name.charAt(0) }}</div>
+            <span>{{ teams[currentTeamIndex].name }}</span>
+          </div>
+          
+          <div class="ability-controls">
+            <button 
+              class="ability-btn double-points"
+              :class="{ 
+                'active': teams[currentTeamIndex].doubleActive,
+                'disabled': !teams[currentTeamIndex].abilities.doublePoints
+              }"
+              :disabled="!teams[currentTeamIndex].abilities.doublePoints"
+              @click="activateDoublePoints(currentTeamIndex)"
+              title="Double Points"
+            >
+              <span>×2</span>
+              <span class="btn-label">Double</span>
+            </button>
+            
+            <button 
+              class="ability-btn change-question"
+              :class="{ 'disabled': !teams[currentTeamIndex].abilities.changeQuestion }"
+              :disabled="!teams[currentTeamIndex].abilities.changeQuestion"
+              @click="useChangeQuestionAbility(currentTeamIndex)"
+              title="Change Question"
+            >
+              <i class="fa fa-solid fa-arrow-right"></i>
+              <span class="btn-label">Skip</span>
+            </button>
+            
+            <button 
+              class="ability-btn call-help"
+              :class="{ 'disabled': !teams[currentTeamIndex].abilities.callForHelp }"
+              :disabled="!teams[currentTeamIndex].abilities.callForHelp"
+              @click="useCallForHelp(currentTeamIndex)"
+              title="Call for Help"
+            >
+              <i class="fa fa-solid fa-phone fa-xs"></i>
+              <span class="btn-label">Help</span>
+            </button>
+          </div>
+          
+          <!-- Help Timer in Modal -->
+          <div v-if="callForHelpActive && currentTeamIndex === currentTeamIndex" class="modal-help-timer">
+            <div class="timer-display">
+              <div class="timer-progress" :style="{ width: `${(callForHelpTimer/60)*100}%` }"></div>
+              <span>{{ callForHelpTimer }}s</span>
+            </div>
+            <button class="timer-cancel" @click="stopTimer()">Cancel</button>
+          </div>
+        </div>
+        
+        <!-- Answer Section -->
+        <div v-if="showAnswer" class="answer-section">
+          <div class="answer-reveal">
+            <p><strong>Answer:</strong> {{ currentQuestion.answer }}</p>
+          </div>
+          
+          <div class="team-award">
+            <p>Award points to:</p>
+            <div class="award-buttons">
+              <button 
+                v-for="(team, index) in teams" 
+                :key="team.id" 
+                class="award-btn"
+                @click="awardPoints(index)"
+              >
+                {{ team.name }}
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Control Buttons -->
+        <div class="modal-controls">
+          <button class="toggle-answer" @click="toggleAnswer">
+            {{ showAnswer ? 'Hide Answer' : 'Show Answer' }}
+          </button>
+          <button class="close-modal" @click="closeModal">Back to Board</button>
+        </div>
+      </div>
     </div>
-
+    
     <!-- Winner Modal -->
-<div v-if="showWinnerModal" class="modal-overlay">
-  <div class="modal-content text-center">
-    <h2 class="mb-4">🏆 Game Over!</h2>
-    <h4 class="mb-3">Top Teams:</h4>
-
-    <div v-if="topTeams.length === 1 || teams.length === 2">
-      <h3 class="text-success">{{ topTeams[0].name }} wins with {{ topTeams[0].score }} points! 🎉</h3>
+    <div v-if="showWinnerModal" class="winner-modal-overlay">
+      <div class="winner-modal">
+        <div class="confetti-container">
+          <div class="confetti" v-for="n in 20" :key="n"></div>
+        </div>
+        
+        <h2>Game Over!</h2>
+        <div class="trophy-icon">🏆</div>
+        
+        <div v-if="topTeams.length === 1 || teams.length === 2" class="winner-single">
+          <h3>{{ topTeams[0].name }} wins!</h3>
+          <div class="winner-score">{{ topTeams[0].score }} points</div>
+        </div>
+        <div v-else class="winner-list">
+          <h4>Top Teams:</h4>
+          <ol>
+            <li v-for="(team, index) in topTeams" :key="index">
+              {{ team.name }} - {{ team.score }} points
+            </li>
+          </ol>
+        </div>
+        
+        <button class="new-game-btn" @click="router.push('/')">Start New Game</button>
+      </div>
     </div>
-    <div v-else>
-      <ol class="text-start fs-5">
-        <li v-for="(team, index) in topTeams" :key="index">
-          {{ team.name }} - {{ team.score }} points
-        </li>
-      </ol>
-    </div>
-
-    <button class="btn btn-primary mt-4" @click="router.push('/')">Start New Game</button>
-  </div>
-</div>
-
   </div>
 </template>
-
-
-
-
-
-
 
 <script setup>
 import AppHeader from '../components/AppHeader.vue';
@@ -193,90 +269,73 @@ import LoadSpinner from '../components/LoadSpinner.vue';
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-
-
-
 const route = useRoute();
 const router = useRouter();
-
 const selectedCategories = ref([]);
 const teams = ref([]);
 const currentQuestion = ref(null);
 const currentCategory = ref(null);
 const showAnswer = ref(false);
-
-
 const normalizeCategoryName = (name) => name.toLowerCase().replace(/\s+/g, '_');
-
-
-
 const getGameState = () => {
   return JSON.parse(sessionStorage.getItem('gameState') || '{}');
 };
-
 const setGameState = (newState) => {
   sessionStorage.setItem('gameState', JSON.stringify({ ...getGameState(), ...newState }));
 };
-
 const clearGameState = () => {
   sessionStorage.removeItem('gameState');
 };
-
-
 const getImagePath = (imageName) => {
   if (!imageName) return ''; // prevent runtime errors
   return `${import.meta.env.BASE_URL}Images/${imageName}`;
 };
-
-
 const loading = ref(true); 
+
 onMounted(() => {
   const gameState = getGameState();
-const categoriesData = JSON.stringify(gameState.categories);
-const teamsData = JSON.stringify(gameState.teams);
-
+  const categoriesData = JSON.stringify(gameState.categories);
+  const teamsData = JSON.stringify(gameState.teams); 
   
-
   if (!categoriesData || !teamsData) {
     router.push('/');
     return;
   }
-
+  
   const categories = JSON.parse(categoriesData);
   fullCategories.value = categories;
-
+  
   const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
-
+  
   const pickQuestions = (questions, count, categoryId, pointValue, fullSet, categoryName) => {
-  const storageKey = 'quizAnsweredQuestions';
-  const answeredMap = JSON.parse(localStorage.getItem(storageKey) || '{}');
-  const key = `${normalizeCategoryName(categoryName)}_${pointValue}`;
-  const used = answeredMap[key] || [];
-
-  const unused = questions.filter(q => !used.includes(q.question));
-
-  if (unused.length < count) {
-    delete answeredMap[key]; // allow reuse
-    localStorage.setItem(storageKey, JSON.stringify(answeredMap));
-    const resetPool = fullSet.filter(q => q.points === pointValue);
-    return shuffle(resetPool).slice(0, count);
-  }
-
-  return shuffle(unused).slice(0, count);
-};
-
-
+    const storageKey = 'quizAnsweredQuestions';
+    const answeredMap = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    const key = `${normalizeCategoryName(categoryName)}_${pointValue}`;
+    const used = answeredMap[key] || [];
+    const unused = questions.filter(q => !used.includes(q.question));
+    
+    if (unused.length < count) {
+      delete answeredMap[key]; // allow reuse
+      localStorage.setItem(storageKey, JSON.stringify(answeredMap));
+      const resetPool = fullSet.filter(q => q.points === pointValue);
+      return shuffle(resetPool).slice(0, count);
+    }
+    
+    return shuffle(unused).slice(0, count);
+  };
+  
   let availableQuestions = gameState.availableQuestions || {};
   const alreadyPicked = Object.keys(availableQuestions).length > 0;
-
+  
   selectedCategories.value = categories.map(category => {
     const groupedByPoints = { 100: [], 200: [], 300: [], 400: [] };
+    
     category.questions.forEach(q => {
       if (groupedByPoints[q.points]) {
         groupedByPoints[q.points].push(q);
       }
     });
-
+    
     if (alreadyPicked && gameState.selectedCategories) {
       const prev = gameState.selectedCategories;
       const match = prev.find(cat => cat.id === category.id);
@@ -284,76 +343,73 @@ const teamsData = JSON.stringify(gameState.teams);
         return match;
       }
     }
-
+    
     const picked100 = pickQuestions(groupedByPoints[100], 2, category.id, 100, category.questions, category.name);
     const picked200 = pickQuestions(groupedByPoints[200], 2, category.id, 200, category.questions, category.name);
     const picked300 = pickQuestions(groupedByPoints[300], 1, category.id, 300, category.questions, category.name);
     const picked400 = pickQuestions(groupedByPoints[400], 1, category.id, 400, category.questions, category.name);
-
+    
     availableQuestions[category.id] = {
       100: picked100.length,
       200: picked200.length,
       300: picked300.length,
       400: picked400.length
     };
-
+    
     return {
       ...category,
       questions: [...picked100, ...picked200, ...picked300, ...picked400]
     };
   });
-
-  // ✅ Save only if this is the first time generating
+  
+  // Save only if this is the first time generating
   if (!alreadyPicked) {
     setGameState({
-  selectedCategories: selectedCategories.value,
-  availableQuestions
-});
-
+      selectedCategories: selectedCategories.value,
+      availableQuestions
+    });
   }
 
   teams.value = JSON.parse(teamsData).map(team => ({
     ...team,
     score: team.score ?? 0,
     isUsingDouble: team.isUsingDouble ?? false,
+    doubleActive: team.doubleActive ?? false,
     abilities: {
       doublePoints: team.abilities?.doublePoints ?? true,
       changeQuestion: team.abilities?.changeQuestion ?? true,
       callForHelp: team.abilities?.callForHelp ?? true
     }
   }));
-
+  
   const savedTeamIndex = gameState.currentTeamIndex;
   if (savedTeamIndex !== null) {
-  currentTeamIndex.value = parseInt(savedTeamIndex);
-}
-
-const savedQuestion = gameState.currentQuestion;
-const savedCategory = gameState.currentCategory;
-
-if (savedQuestion && savedCategory) {
-const parsedQuestion = savedQuestion;
-const parsedCategory = savedCategory;
-
-
-  const matchingCategory = selectedCategories.value.find(cat => cat.id === parsedCategory.id);
-  if (matchingCategory) {
-    const matchingQuestion = matchingCategory.questions.find(q => q.question === parsedQuestion.question);
-
-    if (matchingQuestion && !matchingQuestion.answered) {
-      currentCategory.value = matchingCategory;
-      currentQuestion.value = {
-        ...matchingQuestion,
-        slotIndex: parsedQuestion.slotIndex
-      };
-      showAnswer.value = false;
+    currentTeamIndex.value = parseInt(savedTeamIndex);
+  }
+  
+  const savedQuestion = gameState.currentQuestion;
+  const savedCategory = gameState.currentCategory;
+  
+  if (savedQuestion && savedCategory) {
+    const parsedQuestion = savedQuestion;
+    const parsedCategory = savedCategory;
+    const matchingCategory = selectedCategories.value.find(cat => cat.id === parsedCategory.id);
+    
+    if (matchingCategory) {
+      const matchingQuestion = matchingCategory.questions.find(q => q.question === parsedQuestion.question);
+      if (matchingQuestion && !matchingQuestion.answered) {
+        currentCategory.value = matchingCategory;
+        currentQuestion.value = {
+          ...matchingQuestion,
+          slotIndex: parsedQuestion.slotIndex
+        };
+        showAnswer.value = false;
+      }
     }
   }
-}
-loading.value = false;
+  
+  loading.value = false;
 });
-
-
 
 const currentTeamIndex = ref(0);
 const allQuestionsAnswered = ref(false);
@@ -365,7 +421,6 @@ const nextTeamTurn = () => {
   setGameState({ currentTeamIndex: currentTeamIndex.value });
 };
 
-
 // Check if all questions are answered
 const checkIfGameOver = () => {
   const totalQuestions = selectedCategories.value.flatMap(cat => cat.questions);
@@ -376,18 +431,17 @@ const checkIfGameOver = () => {
   }
 };
 
-// Wrap existing closeModal to also rotate team and check for game over
+// Close the question modal
 const closeModal = () => {
   currentQuestion.value = null;
   currentCategory.value = null;
   showAnswer.value = false;
-  stopTimer();   // Stop timer if active
+  stopTimer();  // Stop timer if active
   checkIfGameOver();
   setGameState({
-  currentQuestion: null,
-  currentCategory: null
-});
-
+    currentQuestion: null,
+    currentCategory: null
+  });
 };
 
 // Sort teams by score and return top 3
@@ -400,16 +454,11 @@ const selectQuestion = (category, question, index) => {
   currentCategory.value = category;
   currentQuestion.value = { ...question, slotIndex: index };
   showAnswer.value = false;
-
   setGameState({
-  currentQuestion: currentQuestion.value,
-  currentCategory: currentCategory.value
-});
-
-
+    currentQuestion: currentQuestion.value,
+    currentCategory: currentCategory.value
+  });
 };
-
-
 
 // Adjust score manually
 const adjustScore = (index, value) => {
@@ -417,30 +466,29 @@ const adjustScore = (index, value) => {
   setGameState({ teams: teams.value });
 };
 
-
 // Award points to the selected team
 const awardPoints = (teamIndex) => {
   if (currentQuestion.value && !currentQuestion.value.answered) {
     let points = currentQuestion.value.points;
     const team = teams.value[teamIndex];
-
+    
     // Handle double points ability
     if (team.isUsingDouble) {
       points *= 2;
       team.isUsingDouble = false; // Reset the double points flag
       team.doubleActive = false; // Reset the active styling      
     }
-
+    
     // Award points and mark question as answered
     team.score += points;
     currentQuestion.value.answered = true;
-
+    
     // Deactivate abilities that were used
     if (team.isUsingDouble) {
       team.isUsingDouble = false; // Ensure double points is reset
       team.doubleActive = false;  // Remove the active styling for double points
     }
-
+    
     // Only disable used abilities, not those still available for future use
     teams.value.forEach(t => {
       if (t.isUsingDouble) {
@@ -448,7 +496,7 @@ const awardPoints = (teamIndex) => {
         t.doubleActive = false;  // Remove the active styling for double points
       }
     });
-
+    
     // Update game state after awarding points and answering the question
     const catIndex = selectedCategories.value.findIndex(cat => cat.id === currentCategory.value.id);
     if (catIndex !== -1) {
@@ -458,61 +506,59 @@ const awardPoints = (teamIndex) => {
         setGameState({ selectedCategories: selectedCategories.value });
       }
     }
-
+    
     // Save the updated teams data in sessionStorage
     setGameState({ teams: teams.value });
-
+    
     // Track answered question in localStorage (by question text)
     if (currentCategory.value) {
       const catId = currentCategory.value.id;
       const questionPoints = currentQuestion.value.points;
       const answeredKey = 'quizAnsweredQuestions';
-const answeredMap = JSON.parse(localStorage.getItem(answeredKey) || '{}');
-const key = `${normalizeCategoryName(currentCategory.value.name)}_${questionPoints}`;
-
-if (!answeredMap[key]) {
-  answeredMap[key] = [];
-}
-if (!answeredMap[key].includes(currentQuestion.value.question)) {
-  answeredMap[key].push(currentQuestion.value.question);
-  localStorage.setItem(answeredKey, JSON.stringify(answeredMap));
-}
-
-
+      const answeredMap = JSON.parse(localStorage.getItem(answeredKey) || '{}');
+      const key = `${normalizeCategoryName(currentCategory.value.name)}_${questionPoints}`;
+      
+      if (!answeredMap[key]) {
+        answeredMap[key] = [];
+      }
+      
+      if (!answeredMap[key].includes(currentQuestion.value.question)) {
+        answeredMap[key].push(currentQuestion.value.question);
+        localStorage.setItem(answeredKey, JSON.stringify(answeredMap));
+      }
+      
       // Decrement available questions (if tracked)
       const availableData = JSON.parse(sessionStorage.getItem('availableQuestions') || '{}');
       if (availableData[catId] && availableData[catId][questionPoints] > 0) {
         availableData[catId][questionPoints] -= 1;
         setGameState({ availableQuestions });
       }
-
-      // 🆕 Track disabled button slot (based on slotIndex)
+      
+      // Track disabled button slot (based on slotIndex)
       const slotIndex = currentQuestion.value.slotIndex;
       const gameState = getGameState();
       const disabledButtons = gameState.disabledButtons || {};
-
+      
       if (!disabledButtons[catId]) {
         disabledButtons[catId] = {};
       }
+      
       if (!disabledButtons[catId][questionPoints]) {
         disabledButtons[catId][questionPoints] = [];
       }
-
+      
       if (!disabledButtons[catId][questionPoints].includes(slotIndex)) {
         disabledButtons[catId][questionPoints].push(slotIndex);
         setGameState({ disabledButtons });
       }
     }
-
+    
     nextTeamTurn();
     closeModal();
   }
 };
 
-
-
-
-
+// Check if a question button should be disabled
 const isButtonDisabled = (categoryId, pointValue, index) => {
   const disabledButtons = JSON.parse(sessionStorage.getItem('disabledButtons') || '{}');
   return (
@@ -522,24 +568,20 @@ const isButtonDisabled = (categoryId, pointValue, index) => {
   );
 };
 
-
+// Activate double points ability
 const activateDoublePoints = (index) => {
   const team = teams.value[index];
-
   if (team.abilities.doublePoints && index === currentTeamIndex.value) {
     team.isUsingDouble = true; // Marks the double points as being used
     team.doubleActive = true;  // Used for styling in the UI
     team.abilities.doublePoints = false; // Disable the ability after use
-
     setGameState({ teams: teams.value }); // Save the updated state
   }
 };
 
-
-
-
 const fullCategories = ref([]); // This holds full category data (with all questions)
 
+// Use the change question ability
 const useChangeQuestionAbility = (index) => {
   if (
     !teams.value[index].abilities.changeQuestion ||
@@ -547,73 +589,68 @@ const useChangeQuestionAbility = (index) => {
     !currentCategory.value ||
     !currentQuestion.value
   ) return;
-
+  
   const currentCatId = currentCategory.value.id;
   const currentPoints = currentQuestion.value.points;
-
+  
   if (!currentCatId || !currentPoints) {
     console.error('Missing current category ID or points');
     return;
   }
-
+  
   const fullCategory = fullCategories.value.find(cat => cat.id === currentCatId);
   const selectedCategory = selectedCategories.value.find(cat => cat.id === currentCatId);
-
+  
   setGameState({
-  teams: teams.value,
-  selectedCategories: selectedCategories.value,
-  currentQuestion: currentQuestion.value
-});
-
-
+    teams: teams.value,
+    selectedCategories: selectedCategories.value,
+    currentQuestion: currentQuestion.value
+  });
+  
   if (!fullCategory || !selectedCategory) {
     console.error('Full or selected category not found');
     return;
   }
-
+  
   // Load answered questions from localStorage using correct key format
   const answeredKey = 'quizAnsweredQuestions';
-const answeredMap = JSON.parse(localStorage.getItem(answeredKey) || '{}');
-const mapKey = `${normalizeCategoryName(currentCategory.value.name)}_${currentPoints}`;
-const answeredQuestions = answeredMap[mapKey] || [];
-
-
+  const answeredMap = JSON.parse(localStorage.getItem(answeredKey) || '{}');
+  const mapKey = `${normalizeCategoryName(currentCategory.value.name)}_${currentPoints}`;
+  const answeredQuestions = answeredMap[mapKey] || [];
+  
   // Find unused questions with the same point value
   const samePointQuestions = fullCategory.questions.filter(q =>
     q.points === currentPoints &&
     q.question !== currentQuestion.value.question &&
     !answeredQuestions.includes(q.question)
   );
-
+  
   if (samePointQuestions.length > 0) {
     // Replace current question with a new one
     const newQuestion = samePointQuestions[Math.floor(Math.random() * samePointQuestions.length)];
     const indexToReplace = selectedCategory.questions.findIndex(
       q => q.question === currentQuestion.value.question
     );
-
+    
     if (indexToReplace !== -1) {
-  const originalSlotIndex = currentQuestion.value.slotIndex;
-
-  selectedCategory.questions[indexToReplace] = {
-    ...newQuestion,
-    slotIndex: originalSlotIndex, // ✅ preserve slotIndex
-  };
-
-  currentQuestion.value = {
-    ...newQuestion,
-    slotIndex: originalSlotIndex, // ✅ apply slotIndex to new currentQuestion
-  };
-
-  showAnswer.value = false;
-  teams.value[index].abilities.changeQuestion = false;
-
-  // Update localStorage with new answered question
-  answeredMap[mapKey] = answeredQuestions.concat(newQuestion.question);
-localStorage.setItem(answeredKey, JSON.stringify(answeredMap));
-
-}
-
+      const originalSlotIndex = currentQuestion.value.slotIndex;
+      selectedCategory.questions[indexToReplace] = {
+        ...newQuestion,
+        slotIndex: originalSlotIndex, // preserve slotIndex
+      };
+      
+      currentQuestion.value = {
+        ...newQuestion,
+        slotIndex: originalSlotIndex, // apply slotIndex to new currentQuestion
+      };
+      
+      showAnswer.value = false;
+      teams.value[index].abilities.changeQuestion = false;
+      
+      // Update localStorage with new answered question
+      answeredMap[mapKey] = answeredQuestions.concat(newQuestion.question);
+      localStorage.setItem(answeredKey, JSON.stringify(answeredMap));
+    }
   } else {
     // Handle fallback if only one question remains
     const remainingQuestions = selectedCategory.questions.filter(q => !q.answered);
@@ -622,9 +659,8 @@ localStorage.setItem(answeredKey, JSON.stringify(answeredMap));
       alert('Only one question is left in this category, so the last question will be used.');
       currentQuestion.value = lastQuestion;
       selectedCategory.questions.find(q => q.question === lastQuestion.question).answered = true;
-
       answeredQuestions.push(lastQuestion.question);
-      localStorage.setItem(answeredQuestionsKey, JSON.stringify(answeredQuestions));
+      localStorage.setItem(answeredKey, JSON.stringify(answeredQuestions));
       teams.value[index].abilities.changeQuestion = false;
     } else {
       alert('No other question available with the same points in this category.');
@@ -632,18 +668,18 @@ localStorage.setItem(answeredKey, JSON.stringify(answeredMap));
   }
 };
 
-
+// Call for help ability
 const callForHelpTimer = ref(60);
 const callForHelpActive = ref(false);
 let callTimerInterval;
 
 const useCallForHelp = (index) => {
   if (!teams.value[index].abilities.callForHelp || index !== currentTeamIndex.value) return;
-
+  
   teams.value[index].abilities.callForHelp = false;
   callForHelpActive.value = true;
   callForHelpTimer.value = 60;
-
+  
   callTimerInterval = setInterval(() => {
     callForHelpTimer.value--;
     if (callForHelpTimer.value === 0) {
@@ -653,7 +689,6 @@ const useCallForHelp = (index) => {
   }, 1000);
 };
 
-// Cancel the timer manually
 // Stop the call for help timer
 const stopTimer = () => {
   if (callTimerInterval) {
@@ -666,170 +701,768 @@ const stopTimer = () => {
 const toggleAnswer = () => {
   showAnswer.value = !showAnswer.value;
 };
-
-
 </script>
 
-
-
-
-
-
-
 <style scoped>
-
-.answered button,
-button:disabled {
-  opacity: 0.6;
-  pointer-events: none;
+/* Base Styles & Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* General Styles */
-body {
-  font-family: 'Arial', sans-serif;
+.game-container {
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background-color: #f0f5ff;
+  min-height: 100vh;
+  padding-bottom: 2rem;
 }
 
-/* Team List (Left Sidebar) */
-.team-list-container {
-  width: 250px;
-  margin-right: 20px;
+/* Team Turn Banner */
+.team-turn-banner {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(107, 70, 193, 0.2);
+}
+
+.team-turn-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 1.25rem;
+}
+
+.team-avatar {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+/* Main Layout */
+.main-content {
+  display: flex;
+  gap: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Teams Sidebar */
+.teams-sidebar {
+  width: 280px;
   flex-shrink: 0;
 }
 
-.team-list {
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  padding: 20px;
+.teams-panel {
+  background-color: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.team-name {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-.team-list button {
-  font-size: 1.25rem;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-}
-
-/* Category Box */
-.category-box {
-  background-color: #f1f1f1;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 800px;
-  margin: auto;
-}
-
-.category-header {
+.teams-header {
+  color: #4f46e5;
   text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  position: relative;
 }
 
-.category-image {
-  width: 100%;
-  max-width: 150px;
-  height: auto;
+.teams-header:after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+.team-card {
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.team-card.active-team {
+  border-color: #4f46e5;
+  background-color: rgba(79, 70, 229, 0.05);
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.1);
+}
+
+.team-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.team-header h5 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Score Controls */
+.score-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.75rem 0;
+  padding: 0.5rem;
+  background-color: #f3f4f6;
   border-radius: 8px;
 }
 
-.question-text {
+.team-score {
   font-size: 1.25rem;
-  text-align: center;
+  font-weight: 700;
+  color: #4f46e5;
+}
+
+.score-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.score-btn.decrease {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.score-btn.increase {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.score-btn:hover {
+  transform: scale(1.08);
+}
+
+/* Team Abilities */
+.team-abilities {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.ability-btn {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #e0e7ff;
+  color: #4f46e5;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.ability-btn.double-points {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.ability-btn.double-points.active {
+  background-color: #fcd34d;
+  box-shadow: 0 0 0 2px #d97706;
+}
+
+.ability-btn.change-question {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.ability-btn.call-help {
+  background-color: #fce7f3;
+  color: #db2777;
+}
+
+.ability-btn:hover:not(.disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ability-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #e5e7eb;
+  color: #9ca3af;
+}
+
+/* Help Timer */
+.help-timer {
+  margin-top: 0.75rem;
+}
+
+.timer-display {
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  height: 24px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.timer-progress {
+  background: linear-gradient(90deg, #ec4899, #db2777);
+  height: 100%;
+  transition: width 1s linear;
+}
+
+.timer-display span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 0.875rem;
+}
+
+.timer-cancel {
+  width: 100%;
+  padding: 0.25rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #f9a8d4;
+  color: #831843;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.75rem;
 }
 
 /* Game Board */
 .game-board {
-  flex-grow: 1;
+  flex: 1;
+  background-color: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.category-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-direction: column;
 }
 
-.card {
-  border-radius: 10px;
-  width: calc(33% - 20px);
-  min-width: 280px;
-  margin-bottom: 20px;
-}
-
-.card-header {
-  font-size: 1.25rem;
-  font-weight: bold;
-  border-radius: 10px 10px 0 0;
-}
-
-.card-body .d-flex {
+.category-card {
+  background: linear-gradient(135deg, #f7f9fc, #edf2ff);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.25rem;
+  height: 100%;
+  display: flex;
   justify-content: space-between;
-  align-items: center;
+  transition: all 0.3s ease;
 }
 
-.card-body button {
-  font-size: 1.25rem;
-  width: 100%;
-  height: 40px;
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.category-info {
+  text-align: center;
+  padding: 0 1rem;
+  flex: 1;
+}
+
+.category-thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.category-info h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.questions-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 80px;
+}
+
+.question-btn {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
   border-radius: 8px;
+  padding: 0.75rem;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s;
 }
 
-/* Button Hover Effects */
-button:hover {
-  opacity: 0.8;
+.question-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
 }
 
-/* Modal Buttons */
-.buttons button {
-  font-size: 1.25rem;
-  padding: 10px 20px;
+.question-btn.answered {
+  background-color: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
 }
 
-.buttons button:hover {
-  opacity: 0.8;
+.question-btn:disabled {
+  background-color: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
-  .category-box {
-    width: 100%;
-    padding: 15px;
-  }
-
-  .buttons button {
-    font-size: 1rem;
-    width: 45%;
-  }
-
-  .game-board {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .card {
-    width: 100%;
-  }
-}
-
-
-.modal-overlay {
+/* Question Modal */
+.question-modal {
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(31, 41, 55, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 50;
+}
+
+.question-card {
+  background-color: white;
+  border-radius: 16px;
   width: 100%;
+  max-width: 800px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.question-header {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+  color: white;
+  padding: 1.25rem;
+}
+
+.category-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 1rem;
+}
+
+.question-meta {
+  flex: 1;
+}
+
+.question-meta h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.points-badge {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.question-content {
+  padding: 2rem;
+  font-size: 1.5rem;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.question-content p {
+  max-width: 90%;
+  line-height: 1.5;
+}
+
+/* Modal Team Abilities */
+.modal-team-abilities {
+  background-color: #f3f4f6;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.current-team-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+}
+
+.modal-avatar {
+  background-color: #6366f1;
+  color: white;
+}
+
+.ability-controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.ability-controls .ability-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.ability-btn .btn-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.modal-help-timer {
+  width: 100%;
+  margin-top: 0.75rem;
+}
+
+/* Answer Section */
+.answer-section {
+  padding: 1.5rem;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.answer-reveal {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: #f0fdf4;
+  border-radius: 8px;
+  border-left: 4px solid #16a34a;
+}
+
+.team-award {
+  text-align: center;
+}
+
+.team-award p {
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.award-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.award-btn {
+  padding: 0.5rem 1rem;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.award-btn:hover {
+  background-color: #4338ca;
+  transform: translateY(-2px);
+}
+
+/* Modal Controls */
+.modal-controls {
+  display: flex;
+  padding: 1rem;
+  gap: 1rem;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.toggle-answer, .close-modal {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.toggle-answer {
+  background-color: #fef3c7;
+  color: #d97706;
+  flex: 1;
+}
+
+.toggle-answer:hover {
+  background-color: #fde68a;
+}
+
+.close-modal {
+  background-color: #e0e7ff;
+  color: #4f46e5;
+  flex: 1;
+}
+
+.close-modal:hover {
+  background-color: #c7d2fe;
+}
+
+/* Winner Modal */
+.winner-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(79, 70, 229, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.winner-modal {
+  background-color: white;
+  border-radius: 20px;
+  padding: 3rem;
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.confetti-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 100%;
-  background: rgba(33, 37, 41, 0.85);
+  overflow: hidden;
+  z-index: 0;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #4f46e5;
+  opacity: 0.8;
+  animation: fall 5s linear infinite;
+  top: -20px;
+}
+
+.confetti:nth-child(2n) {
+  background-color: #ec4899;
+  width: 12px;
+  height: 12px;
+}
+
+.confetti:nth-child(3n) {
+  background-color: #fcd34d;
+  width: 8px;
+  height: 8px;
+}
+
+.confetti:nth-child(4n) {
+  background-color: #10b981;
+  width: 14px;
+  height: 14px;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-20px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(800px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.winner-modal h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #4f46e5;
+  position: relative;
+  z-index: 1;
+}
+
+.trophy-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.winner-single h3 {
+  font-size: 1.75rem;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.winner-score {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #4f46e5;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.winner-list {
+  margin: 1rem 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.winner-list h4 {
+  margin-bottom: 1rem;
+  color: #4b5563;
+}
+
+.winner-list ol {
+  list-style-position: inside;
+  text-align: left;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.winner-list li {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.new-game-btn {
+  background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  z-index: 1;
+}
+
+.new-game-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .teams-sidebar {
+    width: 100%;
+  }
+  
+  .question-content {
+    font-size: 1.25rem;
+    padding: 1.5rem;
+  }
+  
+  .modal-team-abilities {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .ability-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .winner-modal {
+    padding: 2rem;
+  }
+}
+
+/* Loading Spinner */
+.loading-spinner {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1050;
+  min-height: 50vh;
 }
 
-.modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(79, 70, 229, 0.3);
+  border-radius: 50%;
+  border-top-color: #4f46e5;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 </style>
-
