@@ -1,0 +1,265 @@
+{
+    "id": 7,
+    "name": "ألعاب سوني",
+    "image": "../Images/playstation.jpg",
+    "questions": [
+      {
+        "question": "في أي لعبة يتحكم اللاعب بشخصية تُدعى 'سبايرو'؟",
+        "answer": "Spyro the Dragon",
+        "points": 100
+      },
+      {
+        "question": "ما اسم البطلة في سلسلة 'Tomb Raider'؟",
+        "answer": "لارا كروفت",
+        "points": 100
+      },
+      {
+        "question": "أي سلسلة ألعاب شهيرة تتمحور حول سباقات السيارات الحقيقية؟",
+        "answer": "Gran Turismo",
+        "points": 100
+      },
+      {
+        "question": "في أي لعبة يلعب اللاعب دور قاتل محترف يُدعى 'Agent 47'؟",
+        "answer": "Hitman",
+        "points": 100
+      },
+      {
+        "question": "ما اسم القنفذ الأزرق الشهير في لعبة من SEGA؟",
+        "answer": "سونيك",
+        "points": 100
+      },
+      {
+        "question": "ما اسم لعبة المغامرة التي يتحكم فيها اللاعب بشخصية تُدعى 'Nathan Drake'؟",
+        "answer": "Uncharted",
+        "points": 100
+      },
+      {
+        "question": "أي لعبة موسيقية شهيرة ظهرت على PS2؟",
+        "answer": "Guitar Hero",
+        "points": 100
+      },
+      {
+        "question": "ما اسم الشخصية الرئيسية في سلسلة 'Metal Gear Solid'؟",
+        "answer": "Solid Snake",
+        "points": 100
+      },
+      {
+        "question": "ما اسم لعبة البقاء التي يتحكم فيها اللاعب بـ Ellie و Joel؟",
+        "answer": "The Last of Us",
+        "points": 100
+      },
+      {
+        "question": "ما اسم لعبة المغامرة التي يتحكم فيها اللاعب بروبوت صغير يدعى 'Ratchet'؟",
+        "answer": "Ratchet & Clank",
+        "points": 100
+      },
+      {
+        "question": "أي لعبة تتضمن سباق سيارات بأسلحة وخرائط غريبة؟",
+        "answer": "Twisted Metal",
+        "points": 100
+      },
+      {
+        "question": "ما اسم لعبة الرعب التي تدور أحداثها في مدينة تُدعى 'Silent Hill'؟",
+        "answer": "Silent Hill",
+        "points": 100
+      },
+      {
+        "question": "أي لعبة تمزج بين التحقيق والغموض في مدينة مظلمة؟",
+        "answer": "Heavy Rain",
+        "points": 100
+      },
+      {
+        "question": "أي لعبة بدأت كحصري على PS4 وتدور أحداثها في اليابان الإقطاعية؟",
+        "answer": "Ghost of Tsushima",
+        "points": 100
+      },
+      {
+        "question": "ما اسم لعبة كرة القدم الشهيرة على أجهزة البلايستيشن؟",
+        "answer": "PES / FIFA",
+        "points": 100
+      },
+  
+      {
+        "question": "ما اسم اللعبة التي يتحكم فيها اللاعب بشخصية آلية في عالم مفتوح مليء بالآلات؟",
+        "answer": "Horizon Zero Dawn",
+        "points": 200
+      },
+      {
+        "question": "أي جزء من سلسلة 'Final Fantasy' كان الأول على PS1؟",
+        "answer": "Final Fantasy VII",
+        "points": 200
+      },
+      {
+        "question": "أي لعبة تجمع بين سباقات وقتال بأسلوب كرتوني وظهرت أولاً على PS1؟",
+        "answer": "Crash Team Racing",
+        "points": 200
+      },
+      {
+        "question": "أي لعبة معروفة بالزومبي بدأت على PS1 وتطورت على جميع الأجيال؟",
+        "answer": "Resident Evil",
+        "points": 200
+      },
+      {
+        "question": "في أي لعبة يتحكم اللاعب بفتى يرافق مخلوق عملاق يُدعى 'Trico'؟",
+        "answer": "The Last Guardian",
+        "points": 200
+      },
+      {
+        "question": "ما اسم اللعبة التي يتحكم فيها اللاعب بمحارب ساموراي يُدعى Jin؟",
+        "answer": "Ghost of Tsushima",
+        "points": 200
+      },
+      {
+        "question": "ما اسم اللعبة التي تدور في نيويورك وتحاكي شخصية بطل خارق؟",
+        "answer": "Spider-Man",
+        "points": 200
+      },
+      {
+        "question": "أي لعبة من FromSoftware تُعرف بصعوبتها الشديدة وعالمها المظلم؟",
+        "answer": "Demon's Souls / Dark Souls",
+        "points": 200
+      },
+      {
+        "question": "أي سلسلة ألعاب تعتمد على التسلل من خلف الأعداء؟",
+        "answer": "Splinter Cell / Metal Gear",
+        "points": 200
+      },
+      {
+        "question": "ما اسم اللعبة التي يستخدم فيها اللاعب مهارات باركور في مدينة مستقبلية؟",
+        "answer": "Mirror’s Edge",
+        "points": 200
+      },
+      {
+        "question": "ما اسم لعبة RPG شهيرة من CD Projekt Red؟",
+        "answer": "The Witcher 3",
+        "points": 200
+      },
+      {
+        "question": "ما اللعبة التي تتحكم فيها بساموراي في اليابان وتحتوي على قرارات متعددة؟",
+        "answer": "Sekiro: Shadows Die Twice",
+        "points": 200
+      },
+      {
+        "question": "في أي لعبة يُقاتل اللاعب ضد وحوش ضخمة تُدعى 'Colossi'؟",
+        "answer": "Shadow of the Colossus",
+        "points": 200
+      },
+      {
+        "question": "ما اسم اللعبة التي تتبع حياة شخصية تُدعى 'Arthur Morgan'؟",
+        "answer": "Red Dead Redemption 2",
+        "points": 200
+      },
+      {
+        "question": "ما اسم لعبة PS5 التي يتحكم فيها اللاعب بشخصية أنثوية في عالم فضائي؟",
+        "answer": "Returnal",
+        "points": 200
+      },
+      {
+        "question": "ما اللعبة التي تحتوي على شخصيات قابلة للجمع ومعارك بأسلوب أنمي؟",
+        "answer": "Genshin Impact",
+        "points": 200
+      },
+  
+      {
+        "question": "ما اسم لعبة الرعب النفسي من كوجيما التي أُلغيت لاحقًا؟",
+        "answer": "P.T.",
+        "points": 300
+      },
+      {
+        "question": "أي لعبة تدور حول توصيل الطرود في عالم ميتافيزيقي؟",
+        "answer": "Death Stranding",
+        "points": 300
+      },
+      {
+        "question": "ما السلسلة التي اشتهرت بأسلوب اللعب الخفي والبقاء في الفضاء؟",
+        "answer": "Dead Space",
+        "points": 300
+      },
+      {
+        "question": "ما اسم لعبة القتال التي تضم شخصيات من ألعاب سوني؟",
+        "answer": "PlayStation All-Stars Battle Royale",
+        "points": 300
+      },
+      {
+        "question": "ما اسم اللعبة التي يتحكم فيها اللاعب بمحقق يُلاحق قاتلًا متسلسلًا؟",
+        "answer": "Detroit: Become Human",
+        "points": 300
+      },
+      {
+        "question": "ما اسم لعبة قتال الوحوش العملاقة التي بدأت على PSP؟",
+        "answer": "Monster Hunter",
+        "points": 300
+      },
+      {
+        "question": "ما اسم لعبة الرعب التي تعتمد على الكاميرا كوسيلة دفاع؟",
+        "answer": "Fatal Frame",
+        "points": 300
+      },
+      {
+        "question": "ما اسم لعبة السحر والشعوذة من استوديو Avalanche؟",
+        "answer": "Hogwarts Legacy",
+        "points": 300
+      },
+      {
+        "question": "ما اسم لعبة الفنون القتالية المستوحاة من السينما الصينية؟",
+        "answer": "Sifu",
+        "points": 300
+      },
+      {
+        "question": "ما اسم لعبة PS5 التي تعيد تشغيل شخصية ميكانيكية شهيرة من PS1؟",
+        "answer": "Ratchet & Clank: Rift Apart",
+        "points": 300
+      },
+  
+      {
+        "question": "ما اللعبة التي تبدأ في مدينة Midgar؟",
+        "answer": "Final Fantasy VII Remake",
+        "points": 400
+      },
+      {
+        "question": "ما اسم لعبة العالم المفتوح التي تقع أحداثها في لندن المستقبلية؟",
+        "answer": "Watch Dogs: Legion",
+        "points": 400
+      },
+      {
+        "question": "أي لعبة تحتوي على قصص تفرعية وعواقب تؤثر على النهايات؟",
+        "answer": "Until Dawn",
+        "points": 400
+      },
+      {
+        "question": "ما اللعبة التي تمزج بين الواقع الافتراضي والموسيقى؟",
+        "answer": "Rez Infinite",
+        "points": 400
+      },
+      {
+        "question": "ما اسم لعبة PS5 التي تتميز برسومات واقعية جداً وتقنية تتبع الضوء؟",
+        "answer": "Ratchet & Clank: Rift Apart",
+        "points": 400
+      },
+      {
+        "question": "ما اسم لعبة الرعب التي تلعب من منظور الطفل؟",
+        "answer": "Among the Sleep",
+        "points": 400
+      },
+      {
+        "question": "ما اسم اللعبة التي تتحكم فيها بروبوت صغير في جهاز PS5؟",
+        "answer": "Astro's Playroom",
+        "points": 400
+      },
+      {
+        "question": "ما اسم اللعبة التي تتحكم فيها بساحر يُقاتل الوحوش باستخدام عصا سحرية؟",
+        "answer": "Hogwarts Legacy",
+        "points": 400
+      },
+      {
+        "question": "ما اسم لعبة الأكشن التي تجمع بين الباركور والنينجا؟",
+        "answer": "Ghostrunner",
+        "points": 400
+      },
+      {
+        "question": "ما اللعبة التي تقدم تجربة زراعية على كوكب غريب؟",
+        "answer": "Lightyear Frontier",
+        "points": 400
+      }
+    ]
+}

@@ -2,22 +2,31 @@
   <LoadSpinner :loading="loading" />
 
   <AppHeader />
-  <div v-if="!loading" class="container py-4 main-container">
+  <div v-if="!loading" class="container py-4 main-container" dir="rtl">
     <div class="row justify-content-center">
       <div class="col-lg-10">
-        <!-- Main Content Card -->
-        <div class="main-card shadow rounded-4 p-4 mb-5">
-          <h1 class="display-5 fw-bold text-center mb-4 game-title">Game Setup</h1>
+        <!-- Main Content Card with enhanced animation -->
+        <div class="main-card shadow rounded-4 p-4 mb-5 animate__animated animate__fadeIn">
+          <h1 class="display-5 fw-bold text-center mb-4 game-title animate__animated animate__pulse animate__delay-1s">
+            إعداد اللعبة
+          </h1>
           
           <!-- Categories Section -->
-          <section class="mb-5">
-            <h2 class="section-title fw-bold mb-3">Select Categories <span class="badge bg-gradient-primary ms-2">{{ selectedCategories.length }}/6</span></h2>
+          <section class="mb-5 animate__animated animate__fadeInUp">
+            <h2 class="section-title fw-bold mb-3">
+              اختر الفئات
+              <span class="badge bg-gradient-primary ms-2 animate__animated" 
+                :class="{ 'animate__bounceIn': selectedCategories.length > 0 }">
+                {{ selectedCategories.length }}/6
+              </span>
+            </h2>
             <div class="category-container">
               <div class="row g-3">
-                <div v-for="category in categories" :key="category.id" class="col-md-4 col-sm-6">
+                <div v-for="(category, idx) in categories" :key="category.id" class="col-md-4 col-sm-6">
                   <div 
-                    class="category-card shadow-sm" 
+                    class="category-card shadow-sm animate__animated animate__fadeInUp"
                     :class="{ 'active': selectedCategories.includes(category) }"
+                    :style="{ 'animation-delay': `${idx * 0.1}s` }"
                     @click="toggleActive(category)"
                   >
                     <div class="category-image-container">
@@ -29,8 +38,15 @@
                       />
                     </div>
                     <div class="category-name">
-                      <h3 class="category-title">{{ category.name }}</h3>
+                      <h3 class="category-title">
+                        {{ category.nameAr || category.name }}
+                      </h3>
                     </div>
+                    <transition name="fade">
+                      <div v-if="selectedCategories.includes(category)" class="selected-indicator">
+                        <i class="bi bi-check-circle-fill"></i>
+                      </div>
+                    </transition>
                   </div>
                 </div>
               </div>
@@ -38,56 +54,70 @@
           </section>
 
           <!-- Teams Section -->
-          <section class="mb-5">
-            <h2 class="section-title fw-bold mb-3">Manage Teams</h2>
+          <section class="mb-5 animate__animated animate__fadeInUp animate__delay-1s">
+            <h2 class="section-title fw-bold mb-3">إدارة الفرق</h2>
             <div class="row g-3">
-              <div v-for="(team, index) in teams" :key="team.id" class="col-md-6">
-                <div class="team-card shadow-sm" :style="{ 'border-left': `5px solid ${getTeamColor(index)}` }">
-                  <div class="d-flex align-items-center">
-                    <div class="team-icon" :style="{ 'background-color': getTeamColor(index) }">{{ index + 1 }}</div>
-                    <div class="flex-grow-1">
-                      <input 
-                        type="text" 
-                        v-model="team.name" 
-                        class="form-control team-input" 
-                        placeholder="Team name" 
-                        maxlength="15"
+              <transition-group name="team-list" tag="div" class="row g-3">
+                <div v-for="(team, index) in teams" :key="team.id" class="col-md-6">
+                  <div 
+                    class="team-card shadow-sm"
+                    :style="{ 'border-right': `5px solid ${getTeamColor(index)}` }"
+                  >
+                    <div class="d-flex align-items-center">
+                      <div 
+                        class="team-icon" 
+                        :style="{ 'background-color': getTeamColor(index) }"
                       >
+                        {{ index + 1 }}
+                      </div>
+                      <div class="flex-grow-1">
+                        <input 
+                          type="text" 
+                          v-model="team.name" 
+                          class="form-control team-input" 
+                          placeholder="اسم الفريق" 
+                          maxlength="15"
+                        >
+                      </div>
+                      <button 
+                        v-if="teams.length > minTeams" 
+                        @click="removeTeam(index)" 
+                        class="btn btn-light remove-team"
+                        title="إزالة الفريق"
+                      >
+                        <i class="fa fas fa-times-circle"></i>
+                      </button>
                     </div>
-                    <button 
-                      v-if="teams.length > minTeams" 
-                      @click="removeTeam(index)" 
-                      class="btn btn-light remove-team"
-                      title="Remove team"
-                    >
-                    <i class="fa fas fa-times-circle"></i>
-                    </button>
                   </div>
                 </div>
-              </div>
+              </transition-group>
             </div>
             
-            <!-- Add Team Button -->
-            <div class="text-center mt-3">
+            <!-- Add Team Button - Completely Redesigned -->
+            <div class="text-center mt-4">
               <button 
                 v-if="teams.length < maxTeams" 
                 @click="addTeam" 
-                class="btn btn-gradient-secondary"
+                class="btn btn-add-team"
               >
-                <i class="bi bi-plus-lg me-2"></i>Add Team
+                <i class="bi bi-plus-circle-fill"></i>إضافة فريق
               </button>
             </div>
           </section>
 
           <!-- Start Game Button & Error Message -->
-          <div class="text-center">
-            <p v-if="errorMessage" class="alert alert-danger d-inline-block">{{ errorMessage }}</p>
+          <div class="text-center animate__animated animate__fadeInUp animate__delay-2s">
+            <transition name="shake">
+              <p v-if="errorMessage" class="alert alert-danger d-inline-block">
+                {{ errorMessage }}
+              </p>
+            </transition>
             <button 
               class="btn btn-gradient-primary btn-lg px-5 py-3 fw-bold start-game-btn" 
               :disabled="!isReadyToStart()"
               @click="startGame"
             >
-              Start Game <i class="bi bi-arrow-right ms-2"></i>
+              ابدأ اللعبة <i class="bi bi-arrow-right ms-2"></i>
             </button>
           </div>
         </div>
@@ -98,7 +128,7 @@
 
 <script setup>
 import AppHeader from '../components/AppHeader.vue';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import LoadSpinner from '@/components/LoadSpinner.vue';
 
@@ -108,13 +138,13 @@ const selectedCategories = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
 
-// Team colors array for variety
+// Enhanced team colors with more vibrant palette
 const teamColors = [
   '#FF6B6B', // Red
   '#4CC9F0', // Blue
   '#7209B7', // Purple
   '#4CAF50', // Green
-  '#F0A500', // Orange
+  '#F9C846', // Yellow
   '#FF85B3'  // Pink
 ];
 
@@ -130,7 +160,10 @@ const getImagePath = (imageName) => {
 // Fetch categories
 onMounted(async () => {
   try {
-    const categoryFiles = ['science.json', 'animals.json', 'countries.json', 'capital.json', 'general.json', 'place.json', 'names.json'];
+    const categoryFiles = [
+      'SA.json', 'animals.json', 'countries_capitals.json',
+      'RE.json', 'quran.json', 'Islam.json',
+      'ps-games.json', ];
     const categoryPromises = categoryFiles.map(async (file) => {
       const response = await fetch(`${import.meta.env.BASE_URL}categories/${file}`);
       if (!response.ok) throw new Error(`Failed to fetch ${file}`);
@@ -216,7 +249,7 @@ const cleanupLocalStorageForNewGame = (categories) => {
 
 const startGame = () => {
   if (selectedCategories.value.length < 2 || selectedCategories.value.length > 6) {
-    errorMessage.value = "Please select between 2 and 6 categories.";
+    errorMessage.value = "الرجاء اختيار ما بين 2 و 6 فئات.";
     return;
   }
 
@@ -230,40 +263,95 @@ const startGame = () => {
     currentTeamIndex: 0
   }));
 
-  router.push({ name: 'game-board' });
+  // Give time for a brief CSS exit animation
+  setTimeout(() => {
+    router.push({ name: 'game-board' });
+  }, 300);
 };
 
 const handleImageError = (event) => {
   // Set a default image if the image fails to load
-  event.target.src = `${import.meta.env.BASE_URL}Images/default.png`;
+  event.target.src = `${import.meta.env.BASE_URL}Images/noImage.jpg`;
 };
 </script>
 
 <style scoped>
-/* Colorful Background */
+/* Import Animate.css */
+@import 'animate.css';
+
+/* Enhanced Colorful Background with gradient animation */
 .main-container {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(-45deg, #f5f7fa, #c3cfe2, #dfe9f3, #e2e2e2);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
   min-height: calc(100vh - 80px);
   padding: 20px;
 }
 
-/* Main card styling */
+[dir="rtl"] .section-title:after {
+  left: auto;
+  right: 0;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Main card styling with subtle animation */
 .main-card {
   background-color: white;
   border: none;
   border-radius: 20px !important;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-top: 5px solid #7209B7;
+  transition: all 0.5s ease;
+  overflow: hidden;
+  position: relative;
 }
 
-/* Game title styling */
+.main-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0;
+  transition: opacity 1.5s ease;
+  pointer-events: none;
+}
+
+.main-card:hover::before {
+  opacity: 1;
+  animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { opacity: 0; }
+}
+
+/* Enhanced Game title styling with gradient animation */
 .game-title {
-  background: linear-gradient(90deg, #7209B7, #3F37C9);
+  background: linear-gradient(90deg, #7209B7, #3F37C9, #4361EE, #3A0CA3);
+  background-size: 300% 300%;
+  animation: gradientText 6s ease infinite;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   letter-spacing: 1px;
   margin-bottom: 1.5rem;
+  text-shadow: 0px 4px 15px rgba(67, 97, 238, 0.2);
+}
+
+@keyframes gradientText {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .section-title {
@@ -282,9 +370,15 @@ const handleImageError = (event) => {
   height: 4px;
   background: linear-gradient(90deg, #7209B7, #3F37C9);
   border-radius: 4px;
+  animation: expand 2s ease-out;
 }
 
-/* Category cards styling */
+@keyframes expand {
+  from { width: 0; }
+  to { width: 60px; }
+}
+
+/* Enhanced Category cards styling with hover effects */
 .category-container {
   overflow-x: hidden;
 }
@@ -295,20 +389,21 @@ const handleImageError = (event) => {
   overflow: hidden;
   position: relative;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: 3px solid #f0f0f0;
   background: linear-gradient(to bottom, #ffffff, #f8f9fa);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
 .category-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
 .category-card.active {
   border-color: #4361EE;
-  box-shadow: 0 10px 25px rgba(67, 97, 238, 0.25);
+  box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+  transform: translateY(-5px);
 }
 
 .category-image-container {
@@ -318,21 +413,40 @@ const handleImageError = (event) => {
   justify-content: center;
   padding: 1.2rem;
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+  transition: all 0.3s ease;
+}
+
+.category-card:hover .category-image-container {
+  background: linear-gradient(135deg, #e4e7eb 0%, #d1d9e6 100%);
 }
 
 .category-image {
   max-height: 80%;
   max-width: 80%;
   object-fit: contain;
+  transition: all 0.4s ease;
+}
+
+.category-card:hover .category-image {
+  transform: scale(1.1);
 }
 
 .category-name {
   height: 30%;
   background: linear-gradient(90deg, #4361EE, #3A0CA3);
+  background-size: 200% 200%;
+  animation: gradientShift 5s ease infinite;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .category-title {
@@ -341,22 +455,76 @@ const handleImageError = (event) => {
   font-weight: 600;
   text-align: center;
   color: white;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Team cards styling */
+/* Selection indicator */
+.selected-indicator {
+  position: absolute;
+  top: 10px;
+  right: auto;
+  left: 10px;
+  background: #4361EE;
+  color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+  transform: scale(0);
+}
+
+/* Team list transitions */
+.team-list-enter-active, .team-list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.team-list-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.team-list-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+/* Enhanced Team cards styling with hover effects */
 .team-card {
   border-radius: 12px;
   padding: 1rem;
   background: white;
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   margin-bottom: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   border: 1px solid #e9ecef;
+  position: relative;
+  overflow: hidden;
 }
 
 .team-card:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+}
+
+.team-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%);
+  pointer-events: none;
 }
 
 .team-icon {
@@ -368,8 +536,14 @@ const handleImageError = (event) => {
   border-radius: 50%;
   color: white;
   font-weight: bold;
-  margin-right: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  margin-right: 0;
+  margin-left: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.team-card:hover .team-icon {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .team-input {
@@ -394,29 +568,101 @@ const handleImageError = (event) => {
   align-items: center;
   justify-content: center;
   color: #d90429;
-  margin-left: 0.5rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
   transition: all 0.2s;
 }
 
 .remove-team:hover {
   background-color: #ffeeee;
   color: #b30012;
+  transform: rotate(90deg);
 }
 
-/* Gradient Buttons */
+/* Completely redesigned Add Team button */
+.btn-add-team {
+  background: linear-gradient(45deg, #7209B7, #4361EE);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.6px;
+  box-shadow: 0 6px 15px rgba(114, 9, 183, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn-add-team::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(45deg, #4361EE, #7209B7);
+  transition: all 0.5s ease;
+  z-index: -1;
+}
+
+.btn-add-team:hover::before {
+  width: 100%;
+}
+
+.btn-add-team:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(114, 9, 183, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.btn-add-team:active {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(114, 9, 183, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.btn-add-team i {
+  font-size: 1.2rem;
+  vertical-align: middle;
+  margin-right: 8px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Enhanced Gradient Buttons with hover animations */
 .btn-gradient-primary {
   background: linear-gradient(45deg, #4361EE, #3A0CA3);
   border: none;
   color: white;
   border-radius: 10px;
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-gradient-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(45deg, #3A0CA3, #7209B7);
+  transition: all 0.5s ease;
+  z-index: -1;
+}
+
+.btn-gradient-primary:hover:not(:disabled)::before {
+  width: 100%;
 }
 
 .btn-gradient-primary:hover:not(:disabled) {
-  background: linear-gradient(45deg, #3A0CA3, #4361EE);
   transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(67, 97, 238, 0.4);
+  box-shadow: 0 8px 20px rgba(67, 97, 238, 0.5);
 }
 
 .btn-gradient-primary:disabled {
@@ -425,27 +671,50 @@ const handleImageError = (event) => {
   opacity: 0.7;
 }
 
-.btn-gradient-secondary {
-  background: linear-gradient(45deg, #7209B7, #560BAD);
-  border: none;
-  color: white;
-  border-radius: 8px;
-  transition: all 0.3s;
-  padding: 8px 16px;
-}
-
-.btn-gradient-secondary:hover {
-  background: linear-gradient(45deg, #560BAD, #7209B7);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(114, 9, 183, 0.3);
-}
-
 .badge.bg-gradient-primary {
   background: linear-gradient(45deg, #7209B7, #560BAD);
   font-size: 0.9rem;
   font-weight: normal;
   padding: 6px 10px;
   border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(114, 9, 183, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Start game button glow effect */
+.start-game-btn {
+  position: relative;
+}
+
+.start-game-btn::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 16px;
+  background: linear-gradient(45deg, #4361EE, #3A0CA3);
+  z-index: -1;
+  opacity: 0;
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0% { opacity: 0; transform: scale(0.85); }
+  50% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.85); }
+}
+
+/* Error message animation */
+.shake-enter-active {
+  animation: shake-rtl 0.5s;
+}
+
+@keyframes shake-rtl {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(5px); }
+  20%, 40%, 60%, 80% { transform: translateX(-5px); }
 }
 
 /* Responsive adjustments */
@@ -460,6 +729,10 @@ const handleImageError = (event) => {
   
   .main-card {
     padding: 1rem;
+  }
+  
+  .game-title {
+    font-size: 2rem;
   }
 }
 </style>

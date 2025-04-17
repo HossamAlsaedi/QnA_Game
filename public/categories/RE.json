@@ -1,0 +1,270 @@
+{
+    "id": 3,
+    "name": "Resident Evil",
+    "image": "../Images/RE.jpg",
+    "questions": [
+      {
+        "question": "ما اسم البطلة في لعبة Resident Evil 3؟",
+        "answer": "جيل فالنتاين",
+        "points": 100
+      },
+      {
+        "question": "من هو الشرير الرئيسي في Resident Evil 5؟",
+        "answer": "ألبرت ويسكر",
+        "points": 100
+      },
+      {
+        "question": "في أي مدينة تقع أحداث Resident Evil 2؟",
+        "answer": "مدينة الراكون",
+        "points": 100
+      },
+      {
+        "question": "ما اسم الفيروس الرئيسي في سلسلة Resident Evil؟",
+        "answer": "T-Virus",
+        "points": 100
+      },
+      {
+        "question": "ما اسم شريك ليون في Resident Evil 4؟",
+        "answer": "أشلي غراهام",
+        "points": 100
+      },
+      {
+        "question": "ما هو الجزء الأول الذي قدم منظور الشخص الأول؟",
+        "answer": "Resident Evil 7",
+        "points": 100
+      },
+      {
+        "question": "ما اسم الشرير في Resident Evil Village؟",
+        "answer": "السيدة ديميتريسكو",
+        "points": 100
+      },
+      {
+        "question": "من هو البطل في Resident Evil 6؟",
+        "answer": "ليون، كريس، جيك، وآدا",
+        "points": 100
+      },
+      {
+        "question": "في أي سنة صدرت Resident Evil 1؟",
+        "answer": "1996",
+        "points": 100
+      },
+      {
+        "question": "من هو والد جيك مولر؟",
+        "answer": "ألبرت ويسكر",
+        "points": 100
+      },
+      {
+        "question": "أي جزء يحتوي على شخصيات كلير و ليون معاً؟",
+        "answer": "Resident Evil 2",
+        "points": 100
+      },
+      {
+        "question": "ما اسم الفتاة الصغيرة في Resident Evil 2؟",
+        "answer": "شيري بيركن",
+        "points": 100
+      },
+      {
+        "question": "من هو العدو المعروف بـ 'نيميسيس'؟",
+        "answer": "تجربة بيولوجية طورتها Umbrella",
+        "points": 100
+      },
+      {
+        "question": "ما اسم المنظمة التي تعمل ضد Umbrella؟",
+        "answer": "BSAA",
+        "points": 100
+      },
+      {
+        "question": "ما اسم زوجة إيثان في Resident Evil 7؟",
+        "answer": "ميا",
+        "points": 100
+      },
+      {
+        "question": "ما نوع اللعبة Resident Evil: Revelations؟",
+        "answer": "لعبة بقاء ورعب",
+        "points": 100
+      },
+
+      {
+        "question": "أي لعبة Resident Evil تدور أحداثها على سفينة؟",
+        "answer": "Resident Evil: Revelations",
+        "points": 200
+      },
+      {
+        "question": "ما اسم الشركة المسؤولة عن صنع الفيروس؟",
+        "answer": "Umbrella Corporation",
+        "points": 200
+      },
+      {
+        "question": "ما اسم العدو الضخم الذي يطارد ليون في Resident Evil 2؟",
+        "answer": "Mr. X (الطاغية)",
+        "points": 200
+      },
+      {
+        "question": "من هو البطل في Resident Evil Code: Veronica؟",
+        "answer": "كلير ريدفيلد",
+        "points": 200
+      },
+      {
+        "question": "ما اسم الفريق الذي يعمل به كريس في Resident Evil 5؟",
+        "answer": "BSAA",
+        "points": 200
+      },
+      {
+        "question": "ما اسم العائلة المرعبة في Resident Evil 7؟",
+        "answer": "عائلة بيكر",
+        "points": 200
+      },
+      {
+        "question": "ما هي المدينة الرئيسية في Resident Evil Outbreak؟",
+        "answer": "مدينة الراكون",
+        "points": 200
+      },
+      {
+        "question": "أي جزء من السلسلة يتم فيه محاربة طائفة دينية؟",
+        "answer": "Resident Evil 4",
+        "points": 200
+      },
+      {
+        "question": "في أي جزء تظهر Ada Wong أول مرة؟",
+        "answer": "Resident Evil 2",
+        "points": 200
+      },
+      {
+        "question": "ما اسم البطل في Resident Evil Village؟",
+        "answer": "إيثان وينترز",
+        "points": 200
+      },
+      {
+        "question": "ما اسم الفيروس في Resident Evil 6؟",
+        "answer": "C-Virus",
+        "points": 200
+      },
+      {
+        "question": "من هي البطلة في Resident Evil Revelations 2؟",
+        "answer": "كلير ريدفيلد",
+        "points": 200
+      },
+      {
+        "question": "ما هو سلاح نيميسيس المميز؟",
+        "answer": "قاذف صواريخ",
+        "points": 200
+      },
+      {
+        "question": "أي جزء يحتوي على Chris و Jill في قصر؟",
+        "answer": "Resident Evil 1",
+        "points": 200
+      },
+      {
+        "question": "ما اسم الطفلة التي تحاول Ada حمايتها في RE6؟",
+        "answer": "دبرا هاربر",
+        "points": 200
+      },
+      {
+        "question": "ما اسم الشخص الذي يقوم بتجربة G-Virus؟",
+        "answer": "ويليام بيركن",
+        "points": 200
+      },
+
+      {
+        "question": "ما الجزء الذي يواجه فيه اللاعب شخصية Krauser؟",
+        "answer": "Resident Evil 4",
+        "points": 300
+      },
+      {
+        "question": "ما هي نهاية Resident Evil 7 بالنسبة لإيثان؟",
+        "answer": "ينقذ ميا ويهرب عبر الهليكوبتر",
+        "points": 300
+      },
+      {
+        "question": "من هو الشرير الذي يتحكم في Las Plagas؟",
+        "answer": "سادلر",
+        "points": 300
+      },
+      {
+        "question": "ما اسم التجربة التي تم استخدامها على Nemesis؟",
+        "answer": "NE-α Type",
+        "points": 300
+      },
+      {
+        "question": "أي جزء يحتوي على وحوش Lickers لأول مرة؟",
+        "answer": "Resident Evil 2",
+        "points": 300
+      },
+      {
+        "question": "ما اسم العملية التي أطلقها ويسكر للسيطرة؟",
+        "answer": "Uroboros",
+        "points": 300
+      },
+      {
+        "question": "ما اسم المستعمرة تحت الأرض في RE: Retribution؟",
+        "answer": "The Hive",
+        "points": 300
+      },
+      {
+        "question": "ما هو اسم الفتاة في RE7 التي كانت جزءاً من التجربة؟",
+        "answer": "إيفلين",
+        "points": 300
+      },
+      {
+        "question": "أي لعبة تحتوي على نظام 'raid mode'؟",
+        "answer": "Revelations 2",
+        "points": 300
+      },
+      {
+        "question": "ما اسم العدو الذي يظهر فجأة عبر الجدران في RE2؟",
+        "answer": "ليكر",
+        "points": 300
+      },
+
+      {
+        "question": "ما اسم المنظمة التي أسسها ويسكر بعد Umbrella؟",
+        "answer": "TRICELL",
+        "points": 400
+      },
+      {
+        "question": "أي جزء يحتوي على معركة مع ويسكر داخل بركان؟",
+        "answer": "Resident Evil 5",
+        "points": 400
+      },
+      {
+        "question": "ما اسم العدو الذي يستمر بالتجدد في RE4 Remake؟",
+        "answer": "ريجينادور",
+        "points": 400
+      },
+      {
+        "question": "أي جزء يحتوي على آدا كشخصية قابلة للعب بشكل رسمي؟",
+        "answer": "Resident Evil 6",
+        "points": 400
+      },
+      {
+        "question": "ما اسم التجربة التي تطور الطاغية؟",
+        "answer": "Tyrant Project",
+        "points": 400
+      },
+      {
+        "question": "ما اسم السم المستخدم لتدمير الفيروسات في RE؟",
+        "answer": "DEVIL",
+        "points": 400
+      },
+      {
+        "question": "أي جزء يحتوي على Chris و Piers؟",
+        "answer": "Resident Evil 6",
+        "points": 400
+      },
+      {
+        "question": "ما اسم منظمة Ada الغامضة؟",
+        "answer": "The Organization",
+        "points": 400
+      },
+      {
+        "question": "ما اسم الابنة التي تبحث عنها روز في RE Village؟",
+        "answer": "روزماي",
+        "points": 400
+      },
+      {
+        "question": "ما اسم السلاح النهائي في RE1؟",
+        "answer": "قاذف الصواريخ",
+        "points": 400
+      }
+    ]
+}

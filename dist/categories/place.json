@@ -1,7 +1,7 @@
 {
     "id": 7,
-    "name": "place",
-    "image": "/images/names.jpg",
+    "name": "Places",
+    "image": "../Images/PowerSupply.jpg",
     "questions": [
         { "question": "What is the boiling point of water?", "points": 100 },
         { "question": "Who is the father of modern physics?", "points": 200 }

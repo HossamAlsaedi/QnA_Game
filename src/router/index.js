@@ -6,11 +6,13 @@ const routes = [
   {
     path: '/',
     component: MainPage,
+    meta: { title: 'الصفحة الرئيسية' }
   },
   {
     path: '/game-board',
     name: 'game-board', 
     component: GameBoard,
+    meta: { title: 'إختبر ذكائك' }
   },
 ];
 

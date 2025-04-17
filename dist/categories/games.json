@@ -1,0 +1,9 @@
+{
+    "id": 5,
+    "name": "Games",
+    "image": "../Images/RAMs.jpg",
+    "questions": [
+        { "question": "What is the boiling point of water?", "points": 100 },
+        { "question": "Who is the father of modern physics?", "points": 200 }
+    ]
+}

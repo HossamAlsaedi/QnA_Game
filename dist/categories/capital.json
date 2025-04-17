@@ -1,6 +1,6 @@
 {
     "id": 5,
-    "name": "capital",
+    "name": "Capital",
     "image": "../Images/RAMs.jpg",
     "questions": [
         { "question": "What is the boiling point of water?", "points": 100 },

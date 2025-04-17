@@ -4,8 +4,8 @@
     "image": "../Images/CPU_I7.jpg",
     "questions": [
         {
-            "question": "What is the boiling point of water?",
-            "answer": "100°C (212°F)",
+            "question": "سؤال تجريبي",
+            "answer": "إجابة تجريبية",
             "points": 100
         },
         {

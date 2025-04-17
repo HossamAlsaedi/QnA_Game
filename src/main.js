@@ -15,4 +15,10 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 
+router.afterEach((to) => {
+    const defaultTitle = 'سؤال وجواب'
+    document.title = to.meta.title || defaultTitle
+})
+
+
 app.mount('#app')

@@ -1,13 +1,13 @@
 <template>
   <LoadSpinner :loading="loading" />
-  <div class="game-container">
+  <div class="game-container rtl">
     <AppHeader />
     
     <!-- Current Team Turn Banner -->
     <div v-if="teams.length > 0" class="team-turn-banner">
       <div class="team-turn-content">
         <div class="team-avatar">{{ teams[currentTeamIndex].name.charAt(0) }}</div>
-        <span>It's <strong>{{ teams[currentTeamIndex].name }}</strong>'s turn!</span>
+        <span>دور فريق <strong>{{ teams[currentTeamIndex].name }}</strong>!</span>
       </div>
     </div>
     
@@ -15,7 +15,7 @@
       <!-- Team List Sidebar -->
       <div class="teams-sidebar">
         <div v-if="teams.length > 0" class="teams-panel">
-          <h4 class="teams-header">Teams</h4>
+          <h4 class="teams-header">الفرق</h4>
           
           <div 
             v-for="(team, index) in teams" 
@@ -37,7 +37,7 @@
             </div>
             
             <!-- Special Abilities -->
-            <div class="team-abilities">
+            <div v-if="index === currentTeamIndex"  class="team-abilities">
               <button 
                 class="ability-btn double-points"
                 :class="{ 
@@ -46,7 +46,7 @@
                 }"
                 :disabled="!team.abilities.doublePoints || index !== currentTeamIndex"
                 @click="activateDoublePoints(index)"
-                title="Double Points"
+                title="نقاط مضاعفة"
               >
                 <span>×2</span>
               </button>
@@ -56,9 +56,9 @@
                 :class="{ 'disabled': !team.abilities.changeQuestion || index !== currentTeamIndex || !currentQuestion }"
                 :disabled="!team.abilities.changeQuestion || index !== currentTeamIndex || !currentQuestion"
                 @click="useChangeQuestionAbility(index)"
-                title="Change Question"
+                title="تغيير السؤال"
               >
-                <i class="fa fa-solid fa-arrow-right"></i>
+                <i class="fa fa-solid fa-arrow-left"></i>
               </button>
               
               <button 
@@ -66,7 +66,7 @@
                 :class="{ 'disabled': !team.abilities.callForHelp || index !== currentTeamIndex || !currentQuestion }"
                 :disabled="!team.abilities.callForHelp || index !== currentTeamIndex || !currentQuestion"
                 @click="useCallForHelp(index)"
-                title="Call for Help"
+                title="طلب المساعدة"
               >
                 <i class="fa fa-solid fa-phone fa-xs"></i>
               </button>
@@ -76,9 +76,9 @@
             <div v-if="callForHelpActive && index === currentTeamIndex" class="help-timer">
               <div class="timer-display">
                 <div class="timer-progress" :style="{ width: `${(callForHelpTimer/60)*100}%` }"></div>
-                <span>{{ callForHelpTimer }}s</span>
+                <span>{{ callForHelpTimer }}ث</span>
               </div>
-              <button class="timer-cancel" @click="stopTimer()">Cancel</button>
+              <button class="timer-cancel" @click="stopTimer()">إلغاء</button>
             </div>
           </div>
         </div>
@@ -94,8 +94,8 @@
             class="category-container"
           >
             <div class="category-card">
-              <!-- Left Questions Column -->
-              <div class="questions-column left">
+              <!-- Right Questions Column (was Left) -->
+              <div class="questions-column right">
                 <button 
                   v-for="(question, idx) in category.questions.slice(0, 3)" 
                   :key="idx"
@@ -110,12 +110,12 @@
               
               <!-- Center Category Info -->
               <div class="category-info">
-                <img :src="getImagePath(category.image)" alt="Category Image" class="category-thumbnail">
+                <img :src="getImagePath(category.image)" alt="صورة الفئة" class="category-thumbnail">
                 <h5>{{ category.name }}</h5>
               </div>
               
-              <!-- Right Questions Column -->
-              <div class="questions-column right">
+              <!-- Left Questions Column (was Right) -->
+              <div class="questions-column left">
                 <button 
                   v-for="(question, idx) in category.questions.slice(3)" 
                   :key="idx + 3"
@@ -133,14 +133,14 @@
       </div>
     </div>
     
-    <!-- Question Modal - Now moved outside the game-board div -->
+    <!-- Question Modal -->
     <div v-if="currentQuestion" class="question-modal">
       <div class="question-card">
         <div class="question-header">
-          <img :src="getImagePath(currentCategory.image)" alt="Category Image" class="category-image">
+          <img :src="getImagePath(currentCategory.image)" alt="صورة الفئة" class="category-image">
           <div class="question-meta">
             <h4>{{ currentCategory.name }}</h4>
-            <div class="points-badge">{{ currentQuestion.points }} Points</div>
+            <div class="points-badge">{{ currentQuestion.points }} نقطة</div>
           </div>
         </div>
         
@@ -164,10 +164,10 @@
               }"
               :disabled="!teams[currentTeamIndex].abilities.doublePoints"
               @click="activateDoublePoints(currentTeamIndex)"
-              title="Double Points"
+              title="نقاط مضاعفة"
             >
               <span>×2</span>
-              <span class="btn-label">Double</span>
+              <span class="btn-label">مضاعفة</span>
             </button>
             
             <button 
@@ -175,10 +175,10 @@
               :class="{ 'disabled': !teams[currentTeamIndex].abilities.changeQuestion }"
               :disabled="!teams[currentTeamIndex].abilities.changeQuestion"
               @click="useChangeQuestionAbility(currentTeamIndex)"
-              title="Change Question"
+              title="تغيير السؤال"
             >
-              <i class="fa fa-solid fa-arrow-right"></i>
-              <span class="btn-label">Skip</span>
+              <i class="fa fa-solid fa-arrow-left"></i>
+              <span class="btn-label">تخطي</span>
             </button>
             
             <button 
@@ -186,10 +186,10 @@
               :class="{ 'disabled': !teams[currentTeamIndex].abilities.callForHelp }"
               :disabled="!teams[currentTeamIndex].abilities.callForHelp"
               @click="useCallForHelp(currentTeamIndex)"
-              title="Call for Help"
+              title="طلب المساعدة"
             >
               <i class="fa fa-solid fa-phone fa-xs"></i>
-              <span class="btn-label">Help</span>
+              <span class="btn-label">مساعدة</span>
             </button>
           </div>
           
@@ -197,20 +197,20 @@
           <div v-if="callForHelpActive && currentTeamIndex === currentTeamIndex" class="modal-help-timer">
             <div class="timer-display">
               <div class="timer-progress" :style="{ width: `${(callForHelpTimer/60)*100}%` }"></div>
-              <span>{{ callForHelpTimer }}s</span>
+              <span>{{ callForHelpTimer }}ث</span>
             </div>
-            <button class="timer-cancel" @click="stopTimer()">Cancel</button>
+            <button class="timer-cancel" @click="stopTimer()">إلغاء</button>
           </div>
         </div>
         
         <!-- Answer Section -->
         <div v-if="showAnswer" class="answer-section">
           <div class="answer-reveal">
-            <p><strong>Answer:</strong> {{ currentQuestion.answer }}</p>
+            <p><strong>الإجابة:</strong> {{ currentQuestion.answer }}</p>
           </div>
           
           <div class="team-award">
-            <p>Award points to:</p>
+            <p>منح النقاط إلى:</p>
             <div class="award-buttons">
               <button 
                 v-for="(team, index) in teams" 
@@ -227,9 +227,9 @@
         <!-- Control Buttons -->
         <div class="modal-controls">
           <button class="toggle-answer" @click="toggleAnswer">
-            {{ showAnswer ? 'Hide Answer' : 'Show Answer' }}
+            {{ showAnswer ? 'إخفاء الإجابة' : 'إظهار الإجابة' }}
           </button>
-          <button class="close-modal" @click="closeModal">Back to Board</button>
+          <button class="close-modal" @click="closeModal">العودة إلى اللوحة</button>
         </div>
       </div>
     </div>
@@ -241,23 +241,23 @@
           <div class="confetti" v-for="n in 20" :key="n"></div>
         </div>
         
-        <h2>Game Over!</h2>
+        <h2>انتهت اللعبة!</h2>
         <div class="trophy-icon">🏆</div>
         
         <div v-if="topTeams.length === 1 || teams.length === 2" class="winner-single">
-          <h3>{{ topTeams[0].name }} wins!</h3>
-          <div class="winner-score">{{ topTeams[0].score }} points</div>
+          <h3>{{ topTeams[0].name }} هو الفائز!</h3>
+          <div class="winner-score">{{ topTeams[0].score }} نقطة</div>
         </div>
         <div v-else class="winner-list">
-          <h4>Top Teams:</h4>
+          <h4>أفضل الفرق:</h4>
           <ol>
             <li v-for="(team, index) in topTeams" :key="index">
-              {{ team.name }} - {{ team.score }} points
+              {{ team.name }} - {{ team.score }} نقطة
             </li>
           </ol>
         </div>
         
-        <button class="new-game-btn" @click="router.push('/')">Start New Game</button>
+        <button class="new-game-btn" @click="router.push('/')">بدء لعبة جديدة</button>
       </div>
     </div>
   </div>
@@ -589,70 +589,72 @@ const useChangeQuestionAbility = (index) => {
     !currentCategory.value ||
     !currentQuestion.value
   ) return;
-  
+
   const currentCatId = currentCategory.value.id;
   const currentPoints = currentQuestion.value.points;
-  
+
   if (!currentCatId || !currentPoints) {
     console.error('Missing current category ID or points');
     return;
   }
-  
+
   const fullCategory = fullCategories.value.find(cat => cat.id === currentCatId);
   const selectedCategory = selectedCategories.value.find(cat => cat.id === currentCatId);
-  
-  setGameState({
-    teams: teams.value,
-    selectedCategories: selectedCategories.value,
-    currentQuestion: currentQuestion.value
-  });
-  
+
   if (!fullCategory || !selectedCategory) {
     console.error('Full or selected category not found');
     return;
   }
-  
-  // Load answered questions from localStorage using correct key format
+
   const answeredKey = 'quizAnsweredQuestions';
   const answeredMap = JSON.parse(localStorage.getItem(answeredKey) || '{}');
   const mapKey = `${normalizeCategoryName(currentCategory.value.name)}_${currentPoints}`;
   const answeredQuestions = answeredMap[mapKey] || [];
-  
-  // Find unused questions with the same point value
+
   const samePointQuestions = fullCategory.questions.filter(q =>
     q.points === currentPoints &&
     q.question !== currentQuestion.value.question &&
     !answeredQuestions.includes(q.question)
   );
-  
+
   if (samePointQuestions.length > 0) {
-    // Replace current question with a new one
     const newQuestion = samePointQuestions[Math.floor(Math.random() * samePointQuestions.length)];
     const indexToReplace = selectedCategory.questions.findIndex(
       q => q.question === currentQuestion.value.question
     );
-    
+
     if (indexToReplace !== -1) {
       const originalSlotIndex = currentQuestion.value.slotIndex;
+
+      // Replace question in selectedCategory
       selectedCategory.questions[indexToReplace] = {
         ...newQuestion,
-        slotIndex: originalSlotIndex, // preserve slotIndex
+        slotIndex: originalSlotIndex,
       };
-      
+
+      // Update current question
       currentQuestion.value = {
         ...newQuestion,
-        slotIndex: originalSlotIndex, // apply slotIndex to new currentQuestion
+        slotIndex: originalSlotIndex,
       };
-      
+
       showAnswer.value = false;
       teams.value[index].abilities.changeQuestion = false;
-      
-      // Update localStorage with new answered question
+
+      // Update localStorage with newly used question
       answeredMap[mapKey] = answeredQuestions.concat(newQuestion.question);
       localStorage.setItem(answeredKey, JSON.stringify(answeredMap));
+
+      // ✅ Save updated state
+      setGameState({
+        selectedCategories: selectedCategories.value,
+        currentQuestion: currentQuestion.value,
+        currentCategory: currentCategory.value,
+        teams: teams.value,
+        currentTeamIndex: currentTeamIndex.value
+      });
     }
   } else {
-    // Handle fallback if only one question remains
     const remainingQuestions = selectedCategory.questions.filter(q => !q.answered);
     if (remainingQuestions.length === 1) {
       const lastQuestion = remainingQuestions[0];
@@ -660,13 +662,23 @@ const useChangeQuestionAbility = (index) => {
       currentQuestion.value = lastQuestion;
       selectedCategory.questions.find(q => q.question === lastQuestion.question).answered = true;
       answeredQuestions.push(lastQuestion.question);
-      localStorage.setItem(answeredKey, JSON.stringify(answeredQuestions));
+      localStorage.setItem(answeredKey, JSON.stringify(answeredMap));
       teams.value[index].abilities.changeQuestion = false;
+
+      // Save updated state
+      setGameState({
+        selectedCategories: selectedCategories.value,
+        currentQuestion: currentQuestion.value,
+        currentCategory: currentCategory.value,
+        teams: teams.value,
+        currentTeamIndex: currentTeamIndex.value
+      });
     } else {
       alert('No other question available with the same points in this category.');
     }
   }
 };
+
 
 // Call for help ability
 const callForHelpTimer = ref(60);
@@ -687,6 +699,9 @@ const useCallForHelp = (index) => {
       callForHelpActive.value = false;
     }
   }, 1000);
+  setGameState({
+        teams: teams.value,
+      });
 };
 
 // Stop the call for help timer
@@ -704,15 +719,19 @@ const toggleAnswer = () => {
 </script>
 
 <style scoped>
-/* Base Styles & Reset */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
 .game-container {
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  font-family: 'Dubai', 'Amiri', 'Arial', sans-serif;
   background-color: #f0f5ff;
   min-height: 100vh;
   padding-bottom: 2rem;
@@ -755,6 +774,7 @@ const toggleAnswer = () => {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 1rem;
+  flex-direction: row-reverse; /* Changed for RTL */
 }
 
 /* Teams Sidebar */
@@ -1026,6 +1046,19 @@ const toggleAnswer = () => {
   width: 80px;
 }
 
+/* Adjusted for RTL layout */
+.questions-column.left {
+  order: 3;
+}
+
+.questions-column.right {
+  order: 1;
+}
+
+.category-info {
+  order: 2;
+}
+
 .question-btn {
   background-color: #4f46e5;
   color: white;
@@ -1088,12 +1121,17 @@ const toggleAnswer = () => {
   padding: 1.25rem;
 }
 
+/* RTL support for question header */
+.rtl .question-header {
+  flex-direction: row-reverse;
+}
+
 .category-image {
   width: 50px;
   height: 50px;
   object-fit: cover;
   border-radius: 8px;
-  margin-right: 1rem;
+  margin-left: 1rem; /* Changed for RTL */
 }
 
 .question-meta {
@@ -1186,7 +1224,8 @@ const toggleAnswer = () => {
   padding: 1rem;
   background-color: #f0fdf4;
   border-radius: 8px;
-  border-left: 4px solid #16a34a;
+  border-right: 4px solid #16a34a; /* Changed for RTL */
+  border-left: none;
 }
 
 .team-award {
@@ -1374,49 +1413,71 @@ const toggleAnswer = () => {
 }
 
 .winner-list h4 {
+  font-size: 1.25rem;
+  color: #1f2937;
   margin-bottom: 1rem;
-  color: #4b5563;
+  position: relative;
+  z-index: 1;
 }
 
 .winner-list ol {
+  text-align: center;
   list-style-position: inside;
-  text-align: left;
-  max-width: 300px;
   margin: 0 auto;
+  max-width: 300px;
 }
 
 .winner-list li {
+  font-size: 1.125rem;
   margin-bottom: 0.5rem;
-  font-weight: 600;
+  color: #4b5563;
+  position: relative;
+  z-index: 1;
 }
 
 .new-game-btn {
   background: linear-gradient(135deg, #4f46e5, #8b5cf6);
   color: white;
   border: none;
-  padding: 0.75rem 2rem;
-  border-radius: 8px;
+  padding: 1rem 2rem;
+  border-radius: 12px;
   font-size: 1.125rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
   position: relative;
   z-index: 1;
 }
 
 .new-game-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 8px 15px rgba(79, 70, 229, 0.4);
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
+/* Responsive Design */
+@media (max-width: 1024px) {
   .main-content {
     flex-direction: column;
   }
   
   .teams-sidebar {
     width: 100%;
+    margin-bottom: 1.5rem;
+  }
+  
+  .teams-panel {
+    padding: 1rem;
+  }
+  
+  .category-card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
   }
   
   .question-content {
@@ -1426,43 +1487,131 @@ const toggleAnswer = () => {
   
   .modal-team-abilities {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+  }
+  
+  .current-team-info {
+    justify-content: center;
   }
   
   .ability-controls {
-    width: 100%;
-    justify-content: space-between;
+    justify-content: center;
   }
   
   .winner-modal {
-    padding: 2rem;
+    padding: 2rem 1.5rem;
   }
 }
 
-/* Loading Spinner */
+/* RTL-specific adjustments */
+.rtl .category-image {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+.rtl .answer-reveal {
+  border-right: none;
+  border-left: 4px solid #16a34a;
+}
+
+/* Custom scrollbar for better UX */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Loading spinner */
 .loading-spinner {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 50vh;
+  height: 100vh;
 }
 
 .spinner {
   width: 50px;
   height: 50px;
-  border: 5px solid rgba(79, 70, 229, 0.3);
+  border: 5px solid rgba(79, 70, 229, 0.2);
   border-radius: 50%;
   border-top-color: #4f46e5;
-  animation: spin 1s infinite linear;
+  animation: spin 1s ease-in-out infinite;
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
+  to {
     transform: rotate(360deg);
   }
 }
 
+/* Additional animations for better UX */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.question-card, .category-card, .team-card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Double points active indicator pulse animation */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(217, 119, 6, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0);
+  }
+}
+
+.ability-btn.double-points.active {
+  animation: pulse 2s infinite;
+}
+
+/* Accessibility improvements */
+button:focus, 
+input:focus {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .game-container {
+    background-color: white;
+  }
+  
+  .teams-sidebar, 
+  .modal-controls, 
+  .ability-controls {
+    display: none;
+  }
+  
+  .game-board {
+    box-shadow: none;
+  }
+  
+  .category-card {
+    break-inside: avoid;
+  }
+}
 </style>
