@@ -1,114 +1,267 @@
 {
     "id": 2,
-    "name": "Animals",
-    "image": "../Images/CPU_I7.jpg",
+    "name": "الحيوانات",
+    "image": "../Images/animals.jpg",
     "questions": [
         {
-            "question": "What is the boiling point of water?",
-            "answer": "100°C (212°F)",
+            "question": "ما الحيوان الذي يُطلق عليه ملك الغابة؟",
+            "answer": "الأسد",
             "points": 100
         },
         {
-            "question": "What planet is known as the Red Planet?",
-            "answer": "Mars",
+            "question": "ما هو الحيوان الذي يعيش في الماء ويصدر أصواتًا بالنقر؟",
+            "answer": "الدلفين",
             "points": 100
         },
         {
-            "question": "How many continents are there on Earth?",
-            "answer": "7",
+            "question": "ما الحيوان المعروف بأنه أطول حيوان في العالم؟",
+            "answer": "الزرافة",
             "points": 100
         },
         {
-            "question": "What is the largest mammal in the world?",
-            "answer": "Blue Whale",
+            "question": "ما اسم صغير الخروف؟",
+            "answer": "الحَمَل",
             "points": 100
         },
         {
-            "question": "What gas do humans need to breathe?",
-            "answer": "Oxygen",
+            "question": "ما هو الحيوان الذي ينام واقفًا؟",
+            "answer": "الحصان",
             "points": 100
         },
         {
-            "question": "What color is chlorophyll?",
-            "answer": "Green",
+            "question": "ما اسم بيت الطائر؟",
+            "answer": "العش",
             "points": 100
         },
         {
-            "question": "How many legs does a spider have?",
-            "answer": "8",
+            "question": "ما الحيوان الذي يعيش في الصحراء ويُعرف بسفينة الصحراء؟",
+            "answer": "الجمل",
             "points": 100
         },
         {
-          "question": "8th question?",
-          "answer": "8 points",
-          "points": 100
-      },
+            "question": "أي طائر يستطيع الطيران للخلف؟",
+            "answer": "الطنّان",
+            "points": 100
+        },
         {
-            "question": "Who is the father of modern physics?",
-            "answer": "Albert Einstein",
+            "question": "ما الحيوان الذي يملك أنيابًا ضخمة ويعيش في الماء؟",
+            "answer": "فرس النهر",
+            "points": 100
+        },
+        {
+            "question": "ما الحيوان الذي يبيض ولا يلد؟",
+            "answer": "التمساح",
+            "points": 100
+        },
+        {
+            "question": "ما الحيوان الذي لديه خرطوم؟",
+            "answer": "الفيل",
+            "points": 100
+        },
+        {
+            "question": "أي حيوان يعتبر الأسرع على اليابسة؟",
+            "answer": "الفهد",
+            "points": 100
+        },
+        {
+            "question": "ما الحيوان الذي يزحف وليس له أرجل؟",
+            "answer": "الثعبان",
+            "points": 100
+        },
+        {
+            "question": "ما الحيوان الذي يتغذى على النحل والعسل؟",
+            "answer": "الدب",
+            "points": 100
+        },
+        {
+            "question": "ما الحيوان الذي يعيش في البيت ويُعرف بالوفاء؟",
+            "answer": "الكلب",
+            "points": 100
+        },
+        {
+            "question": "ما اسم أنثى الأسد؟",
+            "answer": "اللبؤة",
+            "points": 100
+        },
+        {
+            "question": "ما الحيوان الذي يستطيع تغيير لونه ليتماشى مع محيطه؟",
+            "answer": "الحرباء",
             "points": 200
-          },
-          {
-            "question": "Which gas do plants use for photosynthesis?",
-            "answer": "Carbon Dioxide (CO₂)",
+        },
+        {
+            "question": "ما الحيوان الذي يُعد أذكى الثدييات البحرية؟",
+            "answer": "الدلفين",
             "points": 200
-          },
-          {
-            "question": "Which planet has the most moons?",
-            "answer": "Saturn",
+        },
+        {
+            "question": "ما الطائر الذي لا يطير لكنه سريع الجري؟",
+            "answer": "النعامة",
             "points": 200
-          },
-          {
-            "question": "How many bones are in the adult human body?",
-            "answer": "206",
+        },
+        {
+            "question": "ما الحيوان الذي يُطلق عليه اسم الزاحف البطيء؟",
+            "answer": "السلحفاة",
             "points": 200
-          },
-          {
-            "question": "What is the largest internal organ in the human body?",
-            "answer": "Liver",
+        },
+        {
+            "question": "أي من الحيوانات يستخدم الصدى لتحديد موقع الأشياء؟",
+            "answer": "الخفاش",
             "points": 200
-          },
-          {
-            "question": "What part of the plant conducts photosynthesis?",
-            "answer": "Leaves",
+        },
+        {
+            "question": "ما الحيوان الذي يمتلك قرونًا ويمضغ الطعام مرتين؟",
+            "answer": "البقرة",
             "points": 200
-          },
-          {
-            "question": "What type of energy comes from the sun?",
-            "answer": "Solar energy",
+        },
+        {
+            "question": "ما الحيوان الذي يطلق عليه اسم القطة الكبيرة؟",
+            "answer": "النمر",
             "points": 200
-          },
-      
-          {
-            "question": "What is the capital of Japan?",
-            "answer": "Tokyo",
+        },
+        {
+            "question": "ما الحيوان الذي يتميز بسرعة نمو شعره؟",
+            "answer": "الأرنب",
+            "points": 200
+        },
+        {
+            "question": "ما الحيوان الذي له أطول عمر بين الثدييات؟",
+            "answer": "الحوت المقوّس الرأس",
+            "points": 200
+        },
+        {
+            "question": "ما اسم ذكر النحلة؟",
+            "answer": "الذكر",
+            "points": 200
+        },
+        {
+            "question": "أي الحيوانات له ثلاثة قلوب؟",
+            "answer": "الأخطبوط",
+            "points": 200
+        },
+        {
+            "question": "ما الحيوان الذي يُطلق عليه اسم الثعلب الطائر؟",
+            "answer": "نوع من الخفافيش",
+            "points": 200
+        },
+        {
+            "question": "ما الحيوان الذي يستطيع البقاء بدون ماء لفترة طويلة؟",
+            "answer": "الجمل",
+            "points": 200
+        },
+        {
+            "question": "ما الحيوان الذي لا يملك أسنانًا؟",
+            "answer": "آكل النمل",
+            "points": 200
+        },
+        {
+            "question": "ما الحيوان الذي يصدر أصواتًا تُسمع تحت الماء لمسافات بعيدة؟",
+            "answer": "الحوت الأزرق",
+            "points": 200
+        },
+        {
+            "question": "أي الحيوانات تضع بيضها وتحضنه؟",
+            "answer": "الطيور",
+            "points": 200
+        },
+        {
+            "question": "ما اسم الطائر الذي يُعرف بصراخه العالي وعيشه في الصحراء؟",
+            "answer": "الحدأة",
             "points": 300
-          },
-          {
-            "question": "What organelle is known as the powerhouse of the cell?",
-            "answer": "Mitochondria",
+        },
+        {
+            "question": "ما اسم الحيوان الذي لديه لسان أطول من جسمه؟",
+            "answer": "الضفدع",
             "points": 300
-          },
-          {
-            "question": "What year did World War II end?",
-            "answer": "1945",
+        },
+        {
+            "question": "ما هو الحيوان الثديي الوحيد القادر على الطيران؟",
+            "answer": "الخفاش",
             "points": 300
-          },
-      
-          {
-            "question": "What is the chemical symbol for gold?",
-            "answer": "Au",
+        },
+        {
+            "question": "أي الحيوانات البحرية لديها مخ أكبر من حجم جسمها؟",
+            "answer": "الأخطبوط",
+            "points": 300
+        },
+        {
+            "question": "ما الحيوان الذي ينام نصف دماغه ويبقى النصف الآخر مستيقظًا؟",
+            "answer": "الدلفين",
+            "points": 300
+        },
+        {
+            "question": "ما الحيوان المعروف بأنه لا يشرب الماء طوال حياته؟",
+            "answer": "الكنغر البري",
+            "points": 300
+        },
+        {
+            "question": "ما الحيوان الذي يمكنه تسلق الأشجار وهو من الزواحف؟",
+            "answer": "الإغوانا",
+            "points": 300
+        },
+        {
+            "question": "ما الحيوان الذي لديه مخالب سامة ويعيش في البحر؟",
+            "answer": "الأخطبوط الأزرق",
+            "points": 300
+        },
+        {
+            "question": "ما اسم حيوان مفترس بحري يُعد من الأسماك الغضروفية؟",
+            "answer": "سمك القرش",
+            "points": 300
+        },
+        {
+            "question": "ما الحيوان الذي يمكنه تغيير شكل جسمه للمرور من فتحات صغيرة؟",
+            "answer": "الأخطبوط",
+            "points": 300
+        },
+        {
+            "question": "أي حيوان من الثدييات يبيض بدل أن يلد؟",
+            "answer": "منقار البط",
             "points": 400
-          },
-          {
-            "question": "What is the process by which a solid turns directly into gas?",
-            "answer": "Sublimation",
+        },
+        {
+            "question": "ما اسم أضخم حيوان عاش على وجه الأرض؟",
+            "answer": "الحوت الأزرق",
             "points": 400
-          },
-          {
-            "question": "What’s the most abundant element in the universe?",
-            "answer": "Hydrogen",
+        },
+        {
+            "question": "أي حيوان يمكنه العيش في الظلام التام طوال حياته؟",
+            "answer": "السمك الكهفي",
             "points": 400
-          }
-        ]
+        },
+        {
+            "question": "أي حيوان يمتلك جهازًا كهربائيًا للدفاع عن النفس؟",
+            "answer": "الأنقليس الكهربائي",
+            "points": 400
+        },
+        {
+            "question": "ما الحيوان الذي يستطيع البقاء تحت الماء لأكثر من ساعة؟",
+            "answer": "فرس النهر",
+            "points": 400
+        },
+        {
+            "question": "ما اسم الطائر الذي يهاجر آلاف الكيلومترات سنويًا؟",
+            "answer": "طائر السنونو",
+            "points": 400
+        },
+        {
+            "question": "ما الحيوان الذي لا يمكنه التعرق؟",
+            "answer": "الكلب",
+            "points": 400
+        },
+        {
+            "question": "ما الحيوان الذي يستخدم ذيله كوسيلة توازن أثناء القفز؟",
+            "answer": "الكنغر",
+            "points": 400
+        },
+        {
+            "question": "أي الحيوانات لا تملك حبالًا صوتية؟",
+            "answer": "الزرافة",
+            "points": 400
+        },
+        {
+            "question": "ما الحيوان الذي لديه أكثر من 30 ألف سن؟",
+            "answer": "القوقعة البحرية",
+            "points": 400
+        }
+    ]
 }
