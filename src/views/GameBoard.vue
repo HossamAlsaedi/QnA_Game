@@ -12,77 +12,77 @@
     </div>
     
     <div v-if="!loading" class="main-content">
-      <!-- Team List Sidebar -->
-      <div class="teams-sidebar">
-        <div v-if="teams.length > 0" class="teams-panel">
-          <h4 class="teams-header">الفرق</h4>
-          
-          <div 
-            v-for="(team, index) in teams" 
-            :key="team.id" 
-            class="team-card"
-            :class="{ 'active-team': index === currentTeamIndex }"
-          >
-            <!-- Team Name and Score -->
-            <div class="team-header">
-              <div class="team-avatar">{{ team.name.charAt(0) }}</div>
-              <h5>{{ team.name }}</h5>
-            </div>
-            
-            <!-- Score Controls -->
-            <div class="score-controls">
-              <button class="score-btn decrease" @click="adjustScore(index, -100)">-</button>
-              <span class="team-score">{{ team.score }}</span>
-              <button class="score-btn increase" @click="adjustScore(index, 100)">+</button>
-            </div>
-            
-            <!-- Special Abilities -->
-            <div v-if="index === currentTeamIndex"  class="team-abilities">
-              <button 
-                class="ability-btn double-points"
-                :class="{ 
-                  'active': team.doubleActive,
-                  'disabled': !team.abilities.doublePoints || index !== currentTeamIndex
-                }"
-                :disabled="!team.abilities.doublePoints || index !== currentTeamIndex"
-                @click="activateDoublePoints(index)"
-                title="نقاط مضاعفة"
-              >
-                <span>×2</span>
-              </button>
-              
-              <button 
-                class="ability-btn change-question"
-                :class="{ 'disabled': !team.abilities.changeQuestion || index !== currentTeamIndex || !currentQuestion }"
-                :disabled="!team.abilities.changeQuestion || index !== currentTeamIndex || !currentQuestion"
-                @click="useChangeQuestionAbility(index)"
-                title="تغيير السؤال"
-              >
-                <i class="fa fa-solid fa-arrow-left"></i>
-              </button>
-              
-              <button 
-                class="ability-btn call-help"
-                :class="{ 'disabled': !team.abilities.callForHelp || index !== currentTeamIndex || !currentQuestion }"
-                :disabled="!team.abilities.callForHelp || index !== currentTeamIndex || !currentQuestion"
-                @click="useCallForHelp(index)"
-                title="طلب المساعدة"
-              >
-                <i class="fa fa-solid fa-phone fa-xs"></i>
-              </button>
-            </div>
-            
-            <!-- Help Timer -->
-            <div v-if="callForHelpActive && index === currentTeamIndex" class="help-timer">
-              <div class="timer-display">
-                <div class="timer-progress" :style="{ width: `${(callForHelpTimer/60)*100}%` }"></div>
-                <span>{{ callForHelpTimer }}ث</span>
+            <!-- Team List Sidebar -->
+            <div class="teams-sidebar">
+                <div v-if="teams.length > 0" class="teams-panel">
+                  <h4 class="teams-header">الفرق</h4>
+                  
+                  <div 
+                    v-for="(team, index) in teams" 
+                    :key="team.id" 
+                    class="team-card"
+                    :class="{ 'active-team': index === currentTeamIndex }"
+                  >
+                    <!-- Team Name and Score -->
+                    <div class="team-header">
+                      <div class="team-avatar">{{ team.name.charAt(0) }}</div>
+                      <h5>{{ team.name }}</h5>
+                    </div>
+                    
+                    <!-- Score Controls -->
+                    <div class="score-controls">
+                      <button class="score-btn decrease" @click="adjustScore(index, -100)">-</button>
+                      <span class="team-score">{{ team.score }}</span>
+                      <button class="score-btn increase" @click="adjustScore(index, 100)">+</button>
+                    </div>
+                    
+                    <!-- Special Abilities -->
+                    <div v-if="index === currentTeamIndex"  class="team-abilities">
+                      <button 
+                        class="ability-btn double-points"
+                        :class="{ 
+                          'active': team.doubleActive,
+                          'disabled': !team.abilities.doublePoints || index !== currentTeamIndex
+                        }"
+                        :disabled="!team.abilities.doublePoints || index !== currentTeamIndex"
+                        @click="activateDoublePoints(index)"
+                        title="نقاط مضاعفة"
+                      >
+                        <span>×2</span>
+                      </button>
+                      
+                      <button 
+                        class="ability-btn change-question"
+                        :class="{ 'disabled': !team.abilities.changeQuestion || index !== currentTeamIndex || !currentQuestion }"
+                        :disabled="!team.abilities.changeQuestion || index !== currentTeamIndex || !currentQuestion"
+                        @click="useChangeQuestionAbility(index)"
+                        title="تغيير السؤال"
+                      >
+                        <i class="fa fa-solid fa-arrow-left"></i>
+                      </button>
+                      
+                      <button 
+                        class="ability-btn call-help"
+                        :class="{ 'disabled': !team.abilities.callForHelp || index !== currentTeamIndex || !currentQuestion }"
+                        :disabled="!team.abilities.callForHelp || index !== currentTeamIndex || !currentQuestion"
+                        @click="useCallForHelp(index)"
+                        title="طلب المساعدة"
+                      >
+                        <i class="fa fa-solid fa-phone fa-xs"></i>
+                      </button>
+                    </div>
+                    
+                    <!-- Help Timer -->
+                    <div v-if="callForHelpActive && index === currentTeamIndex" class="help-timer">
+                      <div class="timer-display">
+                        <div class="timer-progress" :style="{ width: `${(callForHelpTimer/60)*100}%` }"></div>
+                        <span>{{ callForHelpTimer }}ث</span>
+                      </div>
+                      <button class="timer-cancel" @click="stopTimer()">إلغاء</button>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <button class="timer-cancel" @click="stopTimer()">إلغاء</button>
-            </div>
-          </div>
-        </div>
-      </div>
       
       <!-- Game Board -->
       <div class="game-board">
@@ -130,7 +130,7 @@
             </div>
           </div>
         </div>
-      </div>
+            </div>
     </div>
     
     <!-- Question Modal -->
@@ -220,6 +220,9 @@
               >
                 {{ team.name }}
               </button>
+              <button class="award-btn nobody-btn" @click="awardPoints(-1)">
+                لا أحد أجاب
+              </button>
             </div>
           </div>
         </div>
@@ -236,29 +239,76 @@
     
     <!-- Winner Modal -->
     <div v-if="showWinnerModal" class="winner-modal-overlay">
-      <div class="winner-modal">
-        <div class="confetti-container">
-          <div class="confetti" v-for="n in 20" :key="n"></div>
-        </div>
-        
-        <h2>انتهت اللعبة!</h2>
-        <div class="trophy-icon">🏆</div>
-        
-        <div v-if="topTeams.length === 1 || teams.length === 2" class="winner-single">
-          <h3>{{ topTeams[0].name }} هو الفائز!</h3>
-          <div class="winner-score">{{ topTeams[0].score }} نقطة</div>
-        </div>
-        <div v-else class="winner-list">
-          <h4>أفضل الفرق:</h4>
-          <ol>
-            <li v-for="(team, index) in topTeams" :key="index">
-              {{ team.name }} - {{ team.score }} نقطة
-            </li>
-          </ol>
-        </div>
-        
-        <button class="new-game-btn" @click="router.push('/')">بدء لعبة جديدة</button>
+  <div class="winner-modal">
+    <!-- Confetti Elements - Generated dynamically with v-for -->
+    <div class="confetti-container">
+      <div 
+        class="confetti" 
+        v-for="i in 50" 
+        :key="i" 
+        :style="getConfettiStyle(i)"
+      ></div>
+    </div>
+    
+    <!-- Victory Badges -->
+    <div class="victory-badges">
+      <div class="badge" :style="{ '--index': 1 }">
+        <span>🎮</span>
       </div>
+      <div class="badge badge-large" :style="{ '--index': 2 }">
+        <span>🏆</span>
+      </div>
+      <div class="badge" :style="{ '--index': 3 }">
+        <span>🎯</span>
+      </div>
+    </div>
+    
+    <h2 class="title-animation">انتهت اللعبة!</h2>
+    
+    <!-- Winner section -->
+    <div v-if="topTeams.length === 1 || teams.length === 2" class="winner-single">
+      <div class="winner-avatar">
+        {{ topTeams[0].name.charAt(0) }}
+      </div>
+      <h3>{{ topTeams[0].name }} هو الفائز!</h3>
+      <div class="winner-score-container">
+        <div class="score-value">{{ topTeams[0].score }}</div>
+        <div class="score-label">نقطة</div>
+      </div>
+    </div>
+    
+    <!-- Top teams list -->
+    <div v-else class="winner-list">
+      <h4>أفضل الفرق:</h4>
+      <div class="podium-container">
+        <div class="podium-place second-place" v-if="topTeams.length > 1">
+          <div class="podium-avatar">{{ topTeams[1].name.charAt(0) }}</div>
+          <div class="podium-name">{{ topTeams[1].name }}</div>
+          <div class="podium-score">{{ topTeams[1].score }}</div>
+          <div class="podium-block">2</div>
+        </div>
+        
+        <div class="podium-place first-place" v-if="topTeams.length > 0">
+          <div class="podium-avatar">{{ topTeams[0].name.charAt(0) }}</div>
+          <div class="podium-name">{{ topTeams[0].name }}</div>
+          <div class="podium-score">{{ topTeams[0].score }}</div>
+          <div class="podium-block">1</div>
+        </div>
+        
+        <div class="podium-place third-place" v-if="topTeams.length > 2">
+          <div class="podium-avatar">{{ topTeams[2].name.charAt(0) }}</div>
+          <div class="podium-name">{{ topTeams[2].name }}</div>
+          <div class="podium-score">{{ topTeams[2].score }}</div>
+          <div class="podium-block">3</div>
+        </div>
+      </div>
+    </div>
+    
+    <button class="new-game-btn" @click="restartGame">
+      <span class="btn-icon">🎲</span>
+      <span class="btn-text">بدء لعبة جديدة</span>
+    </button>
+  </div>
     </div>
   </div>
 </template>
@@ -266,7 +316,7 @@
 <script setup>
 import AppHeader from '../components/AppHeader.vue';
 import LoadSpinner from '../components/LoadSpinner.vue';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
@@ -278,13 +328,13 @@ const currentCategory = ref(null);
 const showAnswer = ref(false);
 const normalizeCategoryName = (name) => name.toLowerCase().replace(/\s+/g, '_');
 const getGameState = () => {
-  return JSON.parse(sessionStorage.getItem('gameState') || '{}');
+  return JSON.parse(localStorage.getItem('gameState') || '{}');
 };
 const setGameState = (newState) => {
-  sessionStorage.setItem('gameState', JSON.stringify({ ...getGameState(), ...newState }));
+  localStorage.setItem('gameState', JSON.stringify({ ...getGameState(), ...newState }));
 };
 const clearGameState = () => {
-  sessionStorage.removeItem('gameState');
+  localStorage.removeItem('gameState');
 };
 const getImagePath = (imageName) => {
   if (!imageName) return ''; // prevent runtime errors
@@ -437,11 +487,11 @@ const closeModal = () => {
   currentCategory.value = null;
   showAnswer.value = false;
   stopTimer();  // Stop timer if active
-  checkIfGameOver();
   setGameState({
     currentQuestion: null,
     currentCategory: null
   });
+  checkIfGameOver();
 };
 
 // Sort teams by score and return top 3
@@ -467,37 +517,37 @@ const adjustScore = (index, value) => {
 };
 
 // Award points to the selected team
+// Award points to the selected team
 const awardPoints = (teamIndex) => {
   if (currentQuestion.value && !currentQuestion.value.answered) {
-    let points = currentQuestion.value.points;
-    const team = teams.value[teamIndex];
-    
-    // Handle double points ability
-    if (team.isUsingDouble) {
-      points *= 2;
-      team.isUsingDouble = false; // Reset the double points flag
-      team.doubleActive = false; // Reset the active styling      
-    }
-    
-    // Award points and mark question as answered
-    team.score += points;
+    // Mark question as answered
     currentQuestion.value.answered = true;
     
-    // Deactivate abilities that were used
-    if (team.isUsingDouble) {
-      team.isUsingDouble = false; // Ensure double points is reset
-      team.doubleActive = false;  // Remove the active styling for double points
+    // Only award points if a valid team index was provided
+    if (teamIndex >= 0) {
+      let points = currentQuestion.value.points;
+      const team = teams.value[teamIndex];
+      
+      // Handle double points ability
+      if (team.isUsingDouble) {
+        points *= 2;
+        team.isUsingDouble = false; // Reset the double points flag
+        team.doubleActive = false; // Reset the active styling      
+      }
+      
+      // Award points to the team
+      team.score += points;
     }
     
-    // Only disable used abilities, not those still available for future use
+    // Deactivate abilities that were used
     teams.value.forEach(t => {
       if (t.isUsingDouble) {
-        t.isUsingDouble = false; // Deactivate double points for the team that used it
+        t.isUsingDouble = false; // Deactivate double points for any team that used it
         t.doubleActive = false;  // Remove the active styling for double points
       }
     });
     
-    // Update game state after awarding points and answering the question
+    // Update game state after answering the question
     const catIndex = selectedCategories.value.findIndex(cat => cat.id === currentCategory.value.id);
     if (catIndex !== -1) {
       const qIndex = selectedCategories.value[catIndex].questions.findIndex(q => q.question === currentQuestion.value.question);
@@ -507,7 +557,7 @@ const awardPoints = (teamIndex) => {
       }
     }
     
-    // Save the updated teams data in sessionStorage
+    // Save the updated teams data in localStorage
     setGameState({ teams: teams.value });
     
     // Track answered question in localStorage (by question text)
@@ -528,7 +578,7 @@ const awardPoints = (teamIndex) => {
       }
       
       // Decrement available questions (if tracked)
-      const availableData = JSON.parse(sessionStorage.getItem('availableQuestions') || '{}');
+      const availableData = JSON.parse(localStorage.getItem('availableQuestions') || '{}');
       if (availableData[catId] && availableData[catId][questionPoints] > 0) {
         availableData[catId][questionPoints] -= 1;
         setGameState({ availableQuestions });
@@ -560,7 +610,7 @@ const awardPoints = (teamIndex) => {
 
 // Check if a question button should be disabled
 const isButtonDisabled = (categoryId, pointValue, index) => {
-  const disabledButtons = JSON.parse(sessionStorage.getItem('disabledButtons') || '{}');
+  const disabledButtons = JSON.parse(localStorage.getItem('disabledButtons') || '{}');
   return (
     disabledButtons[categoryId] &&
     disabledButtons[categoryId][pointValue] &&
@@ -716,6 +766,40 @@ const stopTimer = () => {
 const toggleAnswer = () => {
   showAnswer.value = !showAnswer.value;
 };
+
+// Add these functions to your script setup
+
+// Function to get a random confetti style
+const getConfettiStyle = (index) => {
+  const colors = ['#4f46e5', '#ec4899', '#fcd34d', '#10b981', '#f97316', '#0ea5e9'];
+  
+  // Use a consistent random seed based on the index
+  const randomLeft = ((index * 7919) % 100);
+  const randomDelay = ((index * 104729) % 50) / 10;
+  const randomDuration = 3 + ((index * 15485863) % 40) / 10;
+  const colorIndex = ((index * 32452843) % colors.length);
+  const size = 8 + ((index * 104729) % 10);
+  const isRectangular = ((index * 32452843) % 2) === 0;
+  
+  return {
+    left: `${randomLeft}%`,
+    animationDelay: `${randomDelay}s`,
+    animationDuration: `${randomDuration}s`,
+    backgroundColor: colors[colorIndex],
+    width: `${size}px`,
+    height: `${size}px`,
+    transform: `rotate(${(index * 104729) % 360}deg)`,
+    borderRadius: isRectangular ? '2px' : '50%'
+  };
+};
+
+// Function to restart the game
+const restartGame = () => {
+  // Clear game state and navigate to home
+  clearGameState();
+  router.push('/');
+};
+
 </script>
 
 <style scoped>
@@ -774,13 +858,29 @@ const toggleAnswer = () => {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 1rem;
-  flex-direction: row-reverse; /* Changed for RTL */
+  flex-direction: row; /* Changed to row for LTR layout */
 }
 
 /* Teams Sidebar */
 .teams-sidebar {
   width: 280px;
   flex-shrink: 0;
+}
+
+/* Responsive behavior for small screens */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column; /* Teams at top, game board below */
+  }
+  
+  .teams-sidebar {
+    width: 100%;
+    order: 1; /* Appears first (at top) on mobile */
+  }
+  
+  .game-board {
+    order: 2; /* Appears second (below teams) on mobile */
+  }
 }
 
 .teams-panel {
@@ -1261,6 +1361,15 @@ const toggleAnswer = () => {
   transform: translateY(-2px);
 }
 
+.award-btn.nobody-btn {
+  background-color: #ef4444;
+  color: white;
+}
+
+.award-btn.nobody-btn:hover {
+  background-color: #dc2626;
+}
+
 /* Modal Controls */
 .modal-controls {
   display: flex;
@@ -1306,135 +1415,412 @@ const toggleAnswer = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(79, 70, 229, 0.9);
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.95), rgba(124, 58, 237, 0.95));
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
+  padding: 1rem;
+  perspective: 1000px;
+  animation: modalFadeIn 0.5s ease-out forwards;
+  overflow-y: auto; /* Enable scrolling if content is tall */
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .winner-modal {
-  background-color: white;
-  border-radius: 20px;
-  padding: 3rem;
+  background: linear-gradient(135deg, #ffffff, #f9fafb);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
   width: 90%;
-  max-width: 600px;
+  max-width: 700px;
   text-align: center;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
   position: relative;
   overflow: hidden;
+  animation: modalZoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  transform-style: preserve-3d;
+  margin: 1.5rem 0; /* Add margin to ensure it's not flush against edges */
 }
 
+@keyframes modalZoomIn {
+  from {
+    transform: scale(0.8) rotateX(10deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotateX(0);
+    opacity: 1;
+  }
+}
+
+/* Confetti Positioning Improvements */
 .confetti-container {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 100%;
+  bottom: 0;
   overflow: hidden;
-  z-index: 0;
+  pointer-events: none;
 }
 
 .confetti {
   position: absolute;
   width: 10px;
   height: 10px;
-  background-color: #4f46e5;
   opacity: 0.8;
   animation: fall 5s linear infinite;
   top: -20px;
-}
-
-.confetti:nth-child(2n) {
-  background-color: #ec4899;
-  width: 12px;
-  height: 12px;
-}
-
-.confetti:nth-child(3n) {
-  background-color: #fcd34d;
-  width: 8px;
-  height: 8px;
-}
-
-.confetti:nth-child(4n) {
-  background-color: #10b981;
-  width: 14px;
-  height: 14px;
+  border-radius: 2px;
+  will-change: transform;
 }
 
 @keyframes fall {
   0% {
-    transform: translateY(-20px) rotate(0deg);
+    transform: translateY(-20px) rotateZ(0deg) scale(1);
     opacity: 1;
   }
+  50% {
+    transform: translateY(400px) rotateZ(180deg) scale(1.2);
+    opacity: 0.8;
+  }
   100% {
-    transform: translateY(800px) rotate(360deg);
+    transform: translateY(800px) rotateZ(360deg) scale(0.5);
     opacity: 0;
   }
 }
 
-.winner-modal h2 {
+/* Making sure animations run */
+.badge, .first-place, .second-place, .third-place, 
+.title-animation, .winner-single, .new-game-btn {
+  animation-fill-mode: both;
+}
+
+.badge-large span, .badge span {
+  display: block;
+}
+
+/* Victory Badges */
+.victory-badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0.5rem 0 1.5rem; /* Reduced top margin */
+  z-index: 5;
+  position: relative;
+  padding-top: 1rem; /* Add padding to ensure badges are visible */
+}
+
+.badge {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+  animation: badgePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: calc(var(--index, 0) * 0.1s);
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.badge-large {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.badge span {
+  font-size: 1.75rem; /* Slightly smaller for better fit */
+}
+
+.badge-large span {
+  font-size: 2.5rem; /* Slightly smaller for better fit */
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Title Animation */
+.title-animation {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   color: #4f46e5;
   position: relative;
   z-index: 1;
+  display: inline-block;
+  overflow: hidden;
+  animation: titleSlideIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation-delay: 0.4s;
+  opacity: 0;
 }
 
-.trophy-icon {
-  font-size: 4rem;
-  margin-bottom: 1.5rem;
+@keyframes titleSlideIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Winner Single */
+.winner-single {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(139, 92, 246, 0.1));
+  border-radius: 20px;
+  padding: 2rem;
+  margin: 1.5rem 0;
   position: relative;
-  z-index: 1;
+  z-index: 5;
+  animation: winnerAppear 0.8s ease-out forwards;
+  animation-delay: 0.6s;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+@keyframes winnerAppear {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.winner-avatar {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
+  text-transform: uppercase;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(79, 70, 229, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
 }
 
 .winner-single h3 {
   font-size: 1.75rem;
   color: #1f2937;
-  margin-bottom: 0.5rem;
-  position: relative;
-  z-index: 1;
+  margin-bottom: 1rem;
 }
 
-.winner-score {
-  font-size: 1.25rem;
-  font-weight: 700;
+.winner-score-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: scoreCount 1.5s ease-out forwards;
+  animation-delay: 1s;
+}
+
+.score-value {
+  font-size: 3rem;
+  font-weight: 800;
   color: #4f46e5;
-  margin-bottom: 2rem;
-  position: relative;
-  z-index: 1;
+  background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
+.score-label {
+  font-size: 1.25rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+@keyframes scoreCount {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Winner List - Podium Style */
 .winner-list {
-  margin: 1rem 0 2rem;
+  margin: 2rem 0;
   position: relative;
-  z-index: 1;
+  z-index: 5;
 }
 
 .winner-list h4 {
+  font-size: 1.5rem;
+  color: #4f46e5;
+  margin-bottom: 2rem;
+  animation: fadeIn 0.5s ease-out forwards;
+  animation-delay: 0.7s;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.podium-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1rem;
+  height: 250px;
+}
+
+.podium-place {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.podium-avatar {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
   font-size: 1.25rem;
-  color: #1f2937;
-  margin-bottom: 1rem;
-  position: relative;
-  z-index: 1;
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
 }
 
-.winner-list ol {
-  text-align: center;
-  list-style-position: inside;
-  margin: 0 auto;
-  max-width: 300px;
-}
-
-.winner-list li {
-  font-size: 1.125rem;
-  margin-bottom: 0.5rem;
+.podium-name {
+  margin-top: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
   color: #4b5563;
-  position: relative;
-  z-index: 1;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+.podium-score {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #4f46e5;
+  margin-bottom: 0.5rem;
+}
+
+.podium-block {
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px 8px 0 0;
+}
+
+.first-place {
+  animation: riseUp 1s ease-out forwards;
+  animation-delay: 0.8s;
+  opacity: 0;
+}
+
+.first-place .podium-avatar {
+  width: 60px;
+  height: 60px;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.first-place .podium-block {
+  height: 120px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.second-place {
+  animation: riseUp 1s ease-out forwards;
+  animation-delay: 1s;
+  opacity: 0;
+}
+
+.second-place .podium-block {
+  height: 80px;
+  background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+}
+
+.third-place {
+  animation: riseUp 1s ease-out forwards;
+  animation-delay: 1.2s;
+  opacity: 0;
+}
+
+.third-place .podium-block {
+  height: 60px;
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+@keyframes riseUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* New Game Button */
 .new-game-btn {
   background: linear-gradient(135deg, #4f46e5, #8b5cf6);
   color: white;
@@ -1445,62 +1831,165 @@ const toggleAnswer = () => {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  box-shadow: 0 8px 15px rgba(79, 70, 229, 0.3);
   position: relative;
-  z-index: 1;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0 auto;
+  animation: buttonAppear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: 1.5s;
+  opacity: 0;
+  transform: translateY(30px);
 }
 
 .new-game-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 15px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 12px 20px rgba(79, 70, 229, 0.4);
+  background: linear-gradient(135deg, #4338ca, #7e22ce);
+}
+
+.btn-icon {
+  font-size: 1.5rem;
+}
+
+@keyframes buttonAppear {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pulse-animation {
+  animation: pulseButton 2s infinite;
+  animation-delay: 2s;
+}
+
+@keyframes pulseButton {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(79, 70, 229, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
-  .main-content {
-    flex-direction: column;
+@media (max-width: 768px) {
+  .winner-modal {
+    padding: 2rem 1rem;
+    width: 95%;
+    margin: 0.5rem 0;
   }
   
-  .teams-sidebar {
-    width: 100%;
+  .victory-badges {
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .badge {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .badge-large {
+    width: 55px;
+    height: 55px;
+  }
+  
+  .badge span {
+    font-size: 1.5rem;
+  }
+  
+  .badge-large span {
+    font-size: 2rem;
+  }
+  
+  .title-animation {
+    font-size: 2rem;
     margin-bottom: 1.5rem;
   }
   
-  .teams-panel {
-    padding: 1rem;
+  /* Adjusting winner avatar size */
+  .winner-avatar {
+    width: 65px;
+    height: 65px;
+    font-size: 1.75rem;
   }
   
-  .category-card {
-    padding: 1rem;
+  /* Reduce padding for single winner display */
+  .winner-single {
+    padding: 1.5rem 1rem;
   }
 }
 
-@media (max-width: 768px) {
-  .categories-grid {
-    grid-template-columns: 1fr;
+/* Extra small screen adjustments */
+@media (max-width: 480px) {
+  .winner-modal {
+    padding: 1.5rem 1rem;
   }
   
-  .question-content {
+  .badge {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .badge-large {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .badge span {
     font-size: 1.25rem;
-    padding: 1.5rem;
   }
   
-  .modal-team-abilities {
-    flex-direction: column;
-    align-items: stretch;
+  .badge-large span {
+    font-size: 1.75rem;
   }
   
-  .current-team-info {
-    justify-content: center;
+  /* Make sure the new game button fits */
+  .new-game-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
   }
   
-  .ability-controls {
-    justify-content: center;
+  /* Ensure titles fit on screen */
+  .title-animation {
+    font-size: 1.75rem;
+  }
+  
+  .winner-single h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Ensure modal scrolls properly on very small screens */
+@media (max-height: 600px) {
+  .winner-modal-overlay {
+    align-items: flex-start;
+    padding: 0.5rem;
   }
   
   .winner-modal {
-    padding: 2rem 1.5rem;
+    margin: 0.5rem 0;
+    padding: 1.5rem 1rem;
   }
+}
+
+/* Fix for badge visibility on all screen sizes */
+.badge, .badge-large {
+  position: relative;
+  z-index: 10;
 }
 
 /* RTL-specific adjustments */

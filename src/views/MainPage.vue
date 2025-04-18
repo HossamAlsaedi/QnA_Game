@@ -6,35 +6,53 @@
     <div class="row justify-content-center">
       <div class="col-lg-10">
         <!-- Main Content Card with enhanced animation -->
-        <div class="main-card shadow rounded-4 p-4 mb-5 animate__animated animate__fadeIn">
-          <h1 class="display-5 fw-bold text-center mb-4 game-title animate__animated animate__pulse animate__delay-1s">
+        <div
+          class="main-card shadow rounded-4 p-4 mb-5 animate__animated animate__fadeIn"
+        >
+          <h1
+            class="display-5 fw-bold text-center mb-4 game-title animate__animated animate__pulse animate__delay-1s"
+          >
             إعداد اللعبة
           </h1>
-          
+
           <!-- Categories Section -->
           <section class="mb-5 animate__animated animate__fadeInUp">
             <h2 class="section-title fw-bold mb-3">
               اختر الفئات
-              <span class="badge bg-gradient-primary ms-2 animate__animated" 
-                :class="{ 'animate__bounceIn': selectedCategories.length > 0 }">
-                {{ selectedCategories.length }}/6
+              <span
+                class="badge bg-gradient-primary ms-2 animate__animated"
+                :class="{
+                  animate__bounceIn: selectedCategories.length > 0,
+                  'badge-warning': selectedCategories.length < 2,
+                  'badge-success':
+                    selectedCategories.length >= 2 &&
+                    selectedCategories.length <= 6,
+                }"
+              >
+                {{ selectedCategories.length }}/{{ minCategories }}-{{
+                  maxCategories
+                }}
               </span>
             </h2>
             <div class="category-container">
               <div class="row g-3">
-                <div v-for="(category, idx) in categories" :key="category.id" class="col-md-4 col-sm-6">
-                  <div 
+                <div
+                  v-for="(category, idx) in categories"
+                  :key="category.id"
+                  class="col-md-4 col-sm-6"
+                >
+                  <div
                     class="category-card shadow-sm animate__animated animate__fadeInUp"
-                    :class="{ 'active': selectedCategories.includes(category) }"
+                    :class="{ active: selectedCategories.includes(category) }"
                     :style="{ 'animation-delay': `${idx * 0.1}s` }"
                     @click="toggleActive(category)"
                   >
                     <div class="category-image-container">
-                      <img 
+                      <img
                         :src="getImagePath(category.image)"
-                        :alt="category.name" 
+                        :alt="category.name"
                         class="category-image"
-                        @error="handleImageError" 
+                        @error="handleImageError"
                       />
                     </div>
                     <div class="category-name">
@@ -43,7 +61,10 @@
                       </h3>
                     </div>
                     <transition name="fade">
-                      <div v-if="selectedCategories.includes(category)" class="selected-indicator">
+                      <div
+                        v-if="selectedCategories.includes(category)"
+                        class="selected-indicator"
+                      >
                         <i class="bi bi-check-circle-fill"></i>
                       </div>
                     </transition>
@@ -54,34 +75,42 @@
           </section>
 
           <!-- Teams Section -->
-          <section class="mb-5 animate__animated animate__fadeInUp animate__delay-1s">
+          <section
+            class="mb-5 animate__animated animate__fadeInUp animate__delay-1s"
+          >
             <h2 class="section-title fw-bold mb-3">إدارة الفرق</h2>
             <div class="row g-3">
               <transition-group name="team-list" tag="div" class="row g-3">
-                <div v-for="(team, index) in teams" :key="team.id" class="col-md-6">
-                  <div 
+                <div
+                  v-for="(team, index) in teams"
+                  :key="team.id"
+                  class="col-md-6"
+                >
+                  <div
                     class="team-card shadow-sm"
-                    :style="{ 'border-right': `5px solid ${getTeamColor(index)}` }"
+                    :style="{
+                      'border-right': `5px solid ${getTeamColor(index)}`,
+                    }"
                   >
                     <div class="d-flex align-items-center">
-                      <div 
-                        class="team-icon" 
+                      <div
+                        class="team-icon"
                         :style="{ 'background-color': getTeamColor(index) }"
                       >
                         {{ index + 1 }}
                       </div>
                       <div class="flex-grow-1">
-                        <input 
-                          type="text" 
-                          v-model="team.name" 
-                          class="form-control team-input" 
-                          placeholder="اسم الفريق" 
+                        <input
+                          type="text"
+                          v-model="team.name"
+                          class="form-control team-input"
+                          placeholder="اسم الفريق"
                           maxlength="15"
-                        >
+                        />
                       </div>
-                      <button 
-                        v-if="teams.length > minTeams" 
-                        @click="removeTeam(index)" 
+                      <button
+                        v-if="teams.length > minTeams"
+                        @click="removeTeam(index)"
                         class="btn btn-light remove-team"
                         title="إزالة الفريق"
                       >
@@ -92,12 +121,12 @@
                 </div>
               </transition-group>
             </div>
-            
+
             <!-- Add Team Button - Completely Redesigned -->
             <div class="text-center mt-4">
-              <button 
-                v-if="teams.length < maxTeams" 
-                @click="addTeam" 
+              <button
+                v-if="teams.length < maxTeams"
+                @click="addTeam"
                 class="btn btn-add-team"
               >
                 <i class="bi bi-plus-circle-fill"></i>إضافة فريق
@@ -106,14 +135,16 @@
           </section>
 
           <!-- Start Game Button & Error Message -->
-          <div class="text-center animate__animated animate__fadeInUp animate__delay-2s">
+          <div
+            class="text-center animate__animated animate__fadeInUp animate__delay-2s"
+          >
             <transition name="shake">
               <p v-if="errorMessage" class="alert alert-danger d-inline-block">
                 {{ errorMessage }}
               </p>
             </transition>
-            <button 
-              class="btn btn-gradient-primary btn-lg px-5 py-3 fw-bold start-game-btn" 
+            <button
+              class="btn btn-gradient-primary btn-lg px-5 py-3 fw-bold start-game-btn"
               :disabled="!isReadyToStart()"
               @click="startGame"
             >
@@ -127,10 +158,10 @@
 </template>
 
 <script setup>
-import AppHeader from '../components/AppHeader.vue';
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import LoadSpinner from '@/components/LoadSpinner.vue';
+import AppHeader from "../components/AppHeader.vue";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import LoadSpinner from "@/components/LoadSpinner.vue";
 
 const router = useRouter();
 const categories = ref([]);
@@ -138,14 +169,17 @@ const selectedCategories = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
 
+const minCategories = 2;
+const maxCategories = 6;
+
 // Enhanced team colors with more vibrant palette
 const teamColors = [
-  '#FF6B6B', // Red
-  '#4CC9F0', // Blue
-  '#7209B7', // Purple
-  '#4CAF50', // Green
-  '#F9C846', // Yellow
-  '#FF85B3'  // Pink
+  "#FF6B6B", // Red
+  "#4CC9F0", // Blue
+  "#7209B7", // Purple
+  "#4CAF50", // Green
+  "#F9C846", // Yellow
+  "#FF85B3", // Pink
 ];
 
 const getTeamColor = (index) => {
@@ -153,7 +187,7 @@ const getTeamColor = (index) => {
 };
 
 const getImagePath = (imageName) => {
-  if (!imageName) return ''; // prevent runtime errors
+  if (!imageName) return ""; // prevent runtime errors
   return `${import.meta.env.BASE_URL}Images/${imageName}`;
 };
 
@@ -161,20 +195,35 @@ const getImagePath = (imageName) => {
 onMounted(async () => {
   try {
     const categoryFiles = [
-      'SA.json', 'animals.json', 'countries_capitals.json',
-      'RE.json', 'quran.json', 'Islam.json',
-      'ps-games.json', ];
+      "SA.json",
+      "animals.json",
+      "countries_capitals.json",
+      "RE.json",
+      "quran.json",
+      "Islam.json",
+      "ps-games.json",
+      "wwe.json",
+      "ST.json",
+      "hayala.json",
+      "cars.json",
+      "PB.json",
+      "puzzles.json",
+      "history.json",
+      "general.json",
+      "anime.json",
+    ];
     const categoryPromises = categoryFiles.map(async (file) => {
-      const response = await fetch(`${import.meta.env.BASE_URL}categories/${file}`);
+      const response = await fetch(
+        `${import.meta.env.BASE_URL}categories/${file}`
+      );
       if (!response.ok) throw new Error(`Failed to fetch ${file}`);
       return await response.json();
     });
 
     categories.value = await Promise.all(categoryPromises);
   } catch (error) {
-    console.error('Error loading categories:', error);
+    console.error("Error loading categories:", error);
   }
-  sessionStorage.clear();
   loading.value = false;
 });
 
@@ -191,11 +240,14 @@ const toggleActive = (category) => {
 // Team Logic
 const minTeams = 2;
 const maxTeams = 6;
-const teams = ref([{ id: 1, name: '' }, { id: 2, name: '' }]);
+const teams = ref([
+  { id: 1, name: "" },
+  { id: 2, name: "" },
+]);
 
 const addTeam = () => {
   if (teams.value.length < maxTeams) {
-    teams.value.push({ id: Date.now(), name: '' });
+    teams.value.push({ id: Date.now(), name: "" });
   }
 };
 
@@ -207,7 +259,9 @@ const removeTeam = (index) => {
 
 const areAllTeamsValid = () => {
   // Check if all team names are valid (non-empty and less than 15 characters)
-  return teams.value.every(team => team.name.trim() && team.name.length <= 15);
+  return teams.value.every(
+    (team) => team.name.trim() && team.name.length <= 15
+  );
 };
 
 const isReadyToStart = () => {
@@ -216,23 +270,25 @@ const isReadyToStart = () => {
 
 // Start Game Function
 const cleanupLocalStorageForNewGame = (categories) => {
-  const usedQuestions = JSON.parse(localStorage.getItem('usedQuestions') || '{}');
+  const usedQuestions = JSON.parse(
+    localStorage.getItem("usedQuestions") || "{}"
+  );
 
-  categories.forEach(category => {
+  categories.forEach((category) => {
     const grouped = {
       100: [],
       200: [],
       300: [],
-      400: []
+      400: [],
     };
 
-    category.questions.forEach(q => {
+    category.questions.forEach((q) => {
       if (grouped[q.points]) {
         grouped[q.points].push(q);
       }
     });
 
-    [100, 200, 300, 400].forEach(points => {
+    [100, 200, 300, 400].forEach((points) => {
       const key = `${category.name}_${points}`;
       const used = usedQuestions[key] || [];
       const total = grouped[points].length;
@@ -244,11 +300,14 @@ const cleanupLocalStorageForNewGame = (categories) => {
     });
   });
 
-  localStorage.setItem('usedQuestions', JSON.stringify(usedQuestions));
+  localStorage.setItem("usedQuestions", JSON.stringify(usedQuestions));
 };
 
 const startGame = () => {
-  if (selectedCategories.value.length < 2 || selectedCategories.value.length > 6) {
+  if (
+    selectedCategories.value.length < 2 ||
+    selectedCategories.value.length > 6
+  ) {
     errorMessage.value = "الرجاء اختيار ما بين 2 و 6 فئات.";
     return;
   }
@@ -256,16 +315,19 @@ const startGame = () => {
   errorMessage.value = "";
 
   cleanupLocalStorageForNewGame(selectedCategories.value);
-
-  sessionStorage.setItem('gameState', JSON.stringify({
-    categories: selectedCategories.value,
-    teams: teams.value,
-    currentTeamIndex: 0
-  }));
+  localStorage.removeItem("gameState");
+  localStorage.setItem(
+    "gameState",
+    JSON.stringify({
+      categories: selectedCategories.value,
+      teams: teams.value,
+      currentTeamIndex: 0,
+    })
+  );
 
   // Give time for a brief CSS exit animation
   setTimeout(() => {
-    router.push({ name: 'game-board' });
+    router.push({ name: "game-board" });
   }, 300);
 };
 
@@ -277,7 +339,7 @@ const handleImageError = (event) => {
 
 <style scoped>
 /* Import Animate.css */
-@import 'animate.css';
+@import "animate.css";
 
 /* Enhanced Colorful Background with gradient animation */
 .main-container {
@@ -294,9 +356,15 @@ const handleImageError = (event) => {
 }
 
 @keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Enhanced Main card styling with subtle animation */
@@ -305,7 +373,7 @@ const handleImageError = (event) => {
   border: none;
   border-radius: 20px !important;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border-top: 5px solid #7209B7;
+  border-top: 5px solid #7209b7;
   transition: all 0.5s ease;
   overflow: hidden;
   position: relative;
@@ -318,7 +386,11 @@ const handleImageError = (event) => {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
   opacity: 0;
   transition: opacity 1.5s ease;
   pointer-events: none;
@@ -330,14 +402,20 @@ const handleImageError = (event) => {
 }
 
 @keyframes pulse {
-  0% { opacity: 0; }
-  50% { opacity: 0.5; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 /* Enhanced Game title styling with gradient animation */
 .game-title {
-  background: linear-gradient(90deg, #7209B7, #3F37C9, #4361EE, #3A0CA3);
+  background: linear-gradient(90deg, #7209b7, #3f37c9, #4361ee, #3a0ca3);
   background-size: 300% 300%;
   animation: gradientText 6s ease infinite;
   -webkit-background-clip: text;
@@ -349,9 +427,15 @@ const handleImageError = (event) => {
 }
 
 @keyframes gradientText {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .section-title {
@@ -368,19 +452,62 @@ const handleImageError = (event) => {
   left: 0;
   width: 60px;
   height: 4px;
-  background: linear-gradient(90deg, #7209B7, #3F37C9);
+  background: linear-gradient(90deg, #7209b7, #3f37c9);
   border-radius: 4px;
   animation: expand 2s ease-out;
 }
 
 @keyframes expand {
-  from { width: 0; }
-  to { width: 60px; }
+  from {
+    width: 0;
+  }
+  to {
+    width: 60px;
+  }
 }
 
 /* Enhanced Category cards styling with hover effects */
 .category-container {
   overflow-x: hidden;
+}
+
+.badge-warning {
+  background: linear-gradient(45deg, #ffa726, #fb8c00);
+  animation: pulse-attention 1.5s infinite;
+}
+
+.badge-success {
+  background: linear-gradient(45deg, #66bb6a, #43a047);
+}
+
+@keyframes pulse-attention {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.category-hint {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: #d32f2f;
+  margin-right: 8px;
+  opacity: 0.9;
+  animation: fadeInRight 0.5s;
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateX(0);
+  }
 }
 
 .category-card {
@@ -401,7 +528,7 @@ const handleImageError = (event) => {
 }
 
 .category-card.active {
-  border-color: #4361EE;
+  border-color: #4361ee;
   box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
   transform: translateY(-5px);
 }
@@ -433,7 +560,7 @@ const handleImageError = (event) => {
 
 .category-name {
   height: 30%;
-  background: linear-gradient(90deg, #4361EE, #3A0CA3);
+  background: linear-gradient(90deg, #4361ee, #3a0ca3);
   background-size: 200% 200%;
   animation: gradientShift 5s ease infinite;
   display: flex;
@@ -444,9 +571,15 @@ const handleImageError = (event) => {
 }
 
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .category-title {
@@ -464,7 +597,7 @@ const handleImageError = (event) => {
   top: 10px;
   right: auto;
   left: 10px;
-  background: #4361EE;
+  background: #4361ee;
   color: white;
   border-radius: 50%;
   width: 30px;
@@ -474,17 +607,20 @@ const handleImageError = (event) => {
   justify-content: center;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.3s, transform 0.3s;
 }
 
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
   transform: scale(0);
 }
 
 /* Team list transitions */
-.team-list-enter-active, .team-list-leave-active {
+.team-list-enter-active,
+.team-list-leave-active {
   transition: all 0.5s ease;
 }
 
@@ -523,7 +659,11 @@ const handleImageError = (event) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0) 50%
+  );
   pointer-events: none;
 }
 
@@ -555,7 +695,7 @@ const handleImageError = (event) => {
 }
 
 .team-input:focus {
-  border-color: #4361EE;
+  border-color: #4361ee;
   box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
 }
 
@@ -581,7 +721,7 @@ const handleImageError = (event) => {
 
 /* Completely redesigned Add Team button */
 .btn-add-team {
-  background: linear-gradient(45deg, #7209B7, #4361EE);
+  background: linear-gradient(45deg, #7209b7, #4361ee);
   border: 2px solid rgba(255, 255, 255, 0.3);
   color: white;
   border-radius: 12px;
@@ -589,7 +729,8 @@ const handleImageError = (event) => {
   font-weight: 700;
   font-size: 1.05rem;
   letter-spacing: 0.6px;
-  box-shadow: 0 6px 15px rgba(114, 9, 183, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 6px 15px rgba(114, 9, 183, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
@@ -598,13 +739,13 @@ const handleImageError = (event) => {
 }
 
 .btn-add-team::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 0%;
   height: 100%;
-  background: linear-gradient(45deg, #4361EE, #7209B7);
+  background: linear-gradient(45deg, #4361ee, #7209b7);
   transition: all 0.5s ease;
   z-index: -1;
 }
@@ -615,13 +756,15 @@ const handleImageError = (event) => {
 
 .btn-add-team:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(114, 9, 183, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 10px 20px rgba(114, 9, 183, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .btn-add-team:active {
   transform: translateY(-2px);
-  box-shadow: 0 5px 10px rgba(114, 9, 183, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 5px 10px rgba(114, 9, 183, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
 .btn-add-team i {
@@ -633,7 +776,7 @@ const handleImageError = (event) => {
 
 /* Enhanced Gradient Buttons with hover animations */
 .btn-gradient-primary {
-  background: linear-gradient(45deg, #4361EE, #3A0CA3);
+  background: linear-gradient(45deg, #4361ee, #3a0ca3);
   border: none;
   color: white;
   border-radius: 10px;
@@ -645,13 +788,13 @@ const handleImageError = (event) => {
 }
 
 .btn-gradient-primary::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 0%;
   height: 100%;
-  background: linear-gradient(45deg, #3A0CA3, #7209B7);
+  background: linear-gradient(45deg, #3a0ca3, #7209b7);
   transition: all 0.5s ease;
   z-index: -1;
 }
@@ -672,7 +815,7 @@ const handleImageError = (event) => {
 }
 
 .badge.bg-gradient-primary {
-  background: linear-gradient(45deg, #7209B7, #560BAD);
+  background: linear-gradient(45deg, #7209b7, #560bad);
   font-size: 0.9rem;
   font-weight: normal;
   padding: 6px 10px;
@@ -694,16 +837,25 @@ const handleImageError = (event) => {
   right: -10px;
   bottom: -10px;
   border-radius: 16px;
-  background: linear-gradient(45deg, #4361EE, #3A0CA3);
+  background: linear-gradient(45deg, #4361ee, #3a0ca3);
   z-index: -1;
   opacity: 0;
   animation: pulse-glow 2s infinite;
 }
 
 @keyframes pulse-glow {
-  0% { opacity: 0; transform: scale(0.85); }
-  50% { opacity: 0.3; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0.85); }
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
 }
 
 /* Error message animation */
@@ -712,9 +864,23 @@ const handleImageError = (event) => {
 }
 
 @keyframes shake-rtl {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(5px); }
-  20%, 40%, 60%, 80% { transform: translateX(-5px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(5px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(-5px);
+  }
 }
 
 /* Responsive adjustments */
@@ -722,15 +888,15 @@ const handleImageError = (event) => {
   .category-card {
     height: 180px;
   }
-  
+
   .team-card {
     margin-bottom: 1rem;
   }
-  
+
   .main-card {
     padding: 1rem;
   }
-  
+
   .game-title {
     font-size: 2rem;
   }

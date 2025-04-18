@@ -1,9 +1,0 @@
-{
-    "id": 6,
-    "name": "Names",
-    "image": "../Images/MotherBoard.jpg",
-    "questions": [
-        { "question": "What is the boiling point of water?", "points": 100 },
-        { "question": "Who is the father of modern physics?", "points": 200 }
-    ]
-}
