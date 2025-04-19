@@ -1,0 +1,307 @@
+{
+  "id": 8,
+  "name": "مصارعه",
+  "image": "../Images/wwe.jpg",
+  "questions": [
+    {
+      "question": "ما هي أول لعبة WWE تم إصدارها؟",
+      "answer": "WWE WrestleMania",
+      "points": 100
+    },
+    {
+      "question": "في أي عام تم إصدار لعبة WWE SmackDown! Here Comes the Pain؟",
+      "answer": "2003",
+      "points": 100
+    },
+    {
+      "question": "أي مصارع WWE كان الغلاف الرسمي للعبة WWE 2K15؟",
+      "answer": "جون سينا",
+      "points": 100
+    },
+    {
+      "question": "ما هي لعبة WWE التي تم إصدارها لأول مرة على جهاز PS4؟",
+      "answer": "WWE 2K14",
+      "points": 100
+    },
+    {
+      "question": "ما هي أول لعبة WWE تم إصدارها لجهاز نينتندو 64؟",
+      "answer": "WCW vs. nWo: World Tour",
+      "points": 100
+    },
+    {
+      "question": "ما هي أشهر لعبة WWE على جهاز PlayStation 2؟",
+      "answer": "WWE SmackDown! vs. Raw",
+      "points": 100
+    },
+    {
+      "question": "أي لعبة WWE تحتوي على أسلوب القتال الحر (Hardcore Match)؟",
+      "answer": "WWE SmackDown! Here Comes the Pain",
+      "points": 100
+    },
+    {
+      "question": "أي مصارع WWE كان الغلاف الرسمي للعبة WWE 2K16؟",
+      "answer": "ستف ذا روك جونسون",
+      "points": 100
+    },
+    {
+      "question": "من كان بطل WWE في لعبة WWE SmackDown! vs. Raw 2006؟",
+      "answer": "إيدج",
+      "points": 100
+    },
+    {
+      "question": "أي لعبة WWE تم إصدارها في 2014 وظهرت فيها شخصية دانيل براين على الغلاف؟",
+      "answer": "WWE 2K14",
+      "points": 100
+    },
+    {
+      "question": "أي مصارع WWE كان بطل WWE في لعبة WWE 2K17؟",
+      "answer": "بروك ليسنر",
+      "points": 100
+    },
+    {
+      "question": "أي مصارع كان بطل WWE في لعبة WWE SmackDown! vs. Raw 2009؟",
+      "answer": "ري ميستيريو",
+      "points": 100
+    },
+    {
+      "question": "من هو المصارع الذي كان في غلاف لعبة WWE 2K19؟",
+      "answer": "ستيف أوستن",
+      "points": 100
+    },
+    {
+      "question": "من كان بطل WWE في لعبة WWE 2K14؟",
+      "answer": "ذا روك",
+      "points": 100
+    },
+    {
+      "question": "أي لعبة WWE كانت تحتوي على شخصية ذا أندرتيكر بشخصيته الشهيرة \"The Phenom\"؟",
+      "answer": "WWE 2K14",
+      "points": 100
+    },
+    {
+      "question": "من كان بطل WWE في لعبة WWE 2K20؟",
+      "answer": "سيث رولينز",
+      "points": 100
+    },
+    {
+      "question": "أي لعبة WWE ظهرت فيها شخصية جون سينا بشخصية \"Never Give Up\"؟",
+      "answer": "WWE 2K16",
+      "points": 100
+    },
+    {
+      "question": "أي مصارع كان بطل WWE في لعبة WWE 2K18؟",
+      "answer": "بروك ليسنر",
+      "points": 100
+    },
+    {
+      "question": "ما هي أول لعبة WWE تم إصدارها على جهاز Xbox 360؟",
+      "answer": "WWE SmackDown vs. Raw 2007",
+      "points": 100
+    },
+    {
+      "question": "أي لعبة WWE تم إصدارها لأول مرة على جهاز نينتندو سوويتش؟",
+      "answer": "WWE 2K18",
+      "points": 100
+    },
+    {
+      "question": "أي مصارع WWE كان في غلاف لعبة WWE 2K17؟",
+      "answer": "بروك ليسنر",
+      "points": 100
+    },
+    {
+      "question": "أي مصارع WWE كان بطل العالم في لعبة WWE 2K19؟",
+      "answer": "دانيال براين",
+      "points": 200
+    },
+    {
+      "question": "ما هي لعبة WWE التي تحتوي على أكبر عدد من الشخصيات القابلة للعب؟",
+      "answer": "WWE 2K15",
+      "points": 200
+    },
+    {
+      "question": "من هو المصارع الذي كان أول من فاز بلقب WWE Universal Champion في لعبة WWE 2K17؟",
+      "answer": "رومان رينز",
+      "points": 200
+    },
+    {
+      "question": "من هو المصارع الذي كان بطل WWE في لعبة WWE SmackDown! vs. Raw 2007؟",
+      "answer": "جيف هاردي",
+      "points": 200
+    },
+    {
+      "question": "من كان أول مصارع من خارج الولايات المتحدة يحصل على لقب WWE في لعبة WWE 2K16؟",
+      "answer": "سي أم بانك",
+      "points": 200
+    },
+    {
+      "question": "أي مصارع كان بطل WWE في لعبة WWE 2K12؟",
+      "answer": "جون سينا",
+      "points": 200
+    },
+    {
+      "question": "أي لعبة WWE تحتوي على أطول قائمة للشخصيات القابلة للعب؟",
+      "answer": "WWE SmackDown! vs. Raw 2009",
+      "points": 200
+    },
+    {
+      "question": "أي مصارع كان بطل WWE في لعبة WWE SmackDown! Here Comes the Pain؟",
+      "answer": "بروك ليسنر",
+      "points": 200
+    },
+    {
+      "question": "من كان المصارع الذي ظهر في غلاف لعبة WWE SmackDown! vs. Raw 2009؟",
+      "answer": "ري ميستيريو",
+      "points": 200
+    },
+    {
+      "question": "أي مصارع كان الغلاف الرسمي للعبة WWE SmackDown! vs. Raw 2010؟",
+      "answer": "تريبل إتش",
+      "points": 200
+    },
+    {
+      "question": "أي مصارع كان بطل WWE في لعبة WWE 2K14؟",
+      "answer": "ذا روك",
+      "points": 200
+    },
+    {
+      "question": "من هو المصارع الذي كان بطل WWE في لعبة WWE 2K20؟",
+      "answer": "سيث رولينز",
+      "points": 200
+    },
+    {
+      "question": "أي مصارع كان بطل WWE في لعبة WWE SmackDown! Here Comes the Pain؟",
+      "answer": "بروك ليسنر",
+      "points": 200
+    },
+    {
+      "question": "من كان المصارع الذي ظهر في غلاف لعبة WWE SmackDown! vs. Raw 2011؟",
+      "answer": "جون سينا",
+      "points": 200
+    },
+    {
+      "question": "أي مصارع كان بطل WWE في لعبة WWE 2K15؟",
+      "answer": "جون سينا",
+      "points": 200
+    },
+    {
+      "question": "من كان المصارع الذي ظهر في غلاف لعبة WWE 2K17؟",
+      "answer": "بروك ليسنر",
+      "points": 200
+    },
+    {
+      "question": "أي مصارع كان بطل WWE في لعبة WWE SmackDown! Here Comes the Pain؟",
+      "answer": "بروك ليسنر",
+      "points": 200
+    },
+    {
+      "question": "من كان المصارع الذي ظهر في غلاف لعبة WWE SmackDown! vs. Raw 2009؟",
+      "answer": "ري ميستيريو",
+      "points": 200
+    },
+    {
+      "question": "أي مصارع كان غلاف لعبة WWE 2K18؟",
+      "answer": "بروك ليسنر",
+      "points": 200
+    },
+    {
+      "question": "من هو المصارع الذي فاز بلقب WWE في أول ظهور له في لعبة WWE SmackDown! Here Comes the Pain؟",
+      "answer": "بروك ليسنر",
+      "points": 300
+    },
+    {
+      "question": "أي مصارع كان في غلاف لعبة WWE 2K20؟",
+      "answer": "بريت 'هارت' و 'ستيف أوستن'",
+      "points": 300
+    },
+    {
+      "question": "من هو المصارع الذي كان بطل العالم في لعبة WWE 2K15؟",
+      "answer": "جون سينا",
+      "points": 300
+    },
+    {
+      "question": "أي مصارع كان غلاف لعبة WWE 2K17؟",
+      "answer": "بروك ليسنر",
+      "points": 300
+    },
+    {
+      "question": "من كان المصارع الذي يظهر في غلاف لعبة WWE 2K18؟",
+      "answer": "ساشا بانكس",
+      "points": 300
+    },
+    {
+      "question": "أي مصارع كان بطل WWE في لعبة WWE 2K14؟",
+      "answer": "ذا روك",
+      "points": 300
+    },
+    {
+      "question": "أي مصارع كان الغلاف الرسمي للعبة WWE SmackDown! vs. Raw 2008؟",
+      "answer": "باتيستا",
+      "points": 300
+    },
+    {
+      "question": "من كان بطل WWE في لعبة WWE SmackDown! vs. Raw 2007؟",
+      "answer": "إيدج",
+      "points": 300
+    },
+    {
+      "question": "أي مصارع كان الغلاف الرسمي للعبة WWE SmackDown! vs. Raw 2011؟",
+      "answer": "جون سينا",
+      "points": 300
+    },
+    {
+      "question": "من هو المصارع الذي كان بطل WWE في لعبة WWE 2K11؟",
+      "answer": "ذا روك",
+      "points": 300
+    },
+    {
+      "question": "من هو المصارع الذي كان بطل WWE في لعبة WWE SmackDown! vs. Raw 2006؟",
+      "answer": "إيدج",
+      "points": 400
+    },
+    {
+      "question": "أي لعبة WWE تحتوي على أشهر تصاميم للحدائق في ألعاب المصارعة؟",
+      "answer": "WWE 2K15",
+      "points": 400
+    },
+    {
+      "question": "أي مصارع كان بطل WWE في لعبة WWE 2K20؟",
+      "answer": "سيث رولينز",
+      "points": 400
+    },
+    {
+      "question": "من كان بطل WWE في لعبة WWE 2K14؟",
+      "answer": "سي أم بانك",
+      "points": 400
+    },
+    {
+      "question": "من هو المصارع الذي ظهر في غلاف لعبة WWE SmackDown! vs. Raw 2012؟",
+      "answer": "جون سينا",
+      "points": 400
+    },
+    {
+      "question": "من كان بطل WWE في لعبة WWE 2K19؟",
+      "answer": "دانيال براين",
+      "points": 400
+    },
+    {
+      "question": "أي مصارع كان بطل WWE في لعبة WWE 2K18؟",
+      "answer": "بروك ليسنر",
+      "points": 400
+    },
+    {
+      "question": "من كان المصارع الذي فاز بلقب WWE في لعبة WWE 2K17؟",
+      "answer": "دولف زيغلر",
+      "points": 400
+    },
+    {
+      "question": "أي مصارع كان غلاف لعبة WWE SmackDown! vs. Raw 2007؟",
+      "answer": "سي إم بانك",
+      "points": 400
+    },
+    {
+      "question": "أي مصارع كان بطل WWE في لعبة WWE 2K12؟",
+      "answer": "جون سينا",
+      "points": 400
+    }
+  ]
+}

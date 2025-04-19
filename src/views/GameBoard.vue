@@ -2,127 +2,185 @@
   <LoadSpinner :loading="loading" />
   <div class="game-container rtl">
     <AppHeader />
-    
+
     <!-- Current Team Turn Banner -->
     <div v-if="teams.length > 0" class="team-turn-banner">
       <div class="team-turn-content">
-        <div class="team-avatar">{{ teams[currentTeamIndex].name.charAt(0) }}</div>
-        <span>دور فريق <strong>{{ teams[currentTeamIndex].name }}</strong>!</span>
+        <div class="team-avatar">
+          {{ teams[currentTeamIndex].name.charAt(0) }}
+        </div>
+        <span
+          >دور فريق <strong>{{ teams[currentTeamIndex].name }}</strong
+          >!</span
+        >
       </div>
     </div>
-    
+
     <div v-if="!loading" class="main-content">
-            <!-- Team List Sidebar -->
-            <div class="teams-sidebar">
-                <div v-if="teams.length > 0" class="teams-panel">
-                  <h4 class="teams-header">الفرق</h4>
-                  
-                  <div 
-                    v-for="(team, index) in teams" 
-                    :key="team.id" 
-                    class="team-card"
-                    :class="{ 'active-team': index === currentTeamIndex }"
-                  >
-                    <!-- Team Name and Score -->
-                    <div class="team-header">
-                      <div class="team-avatar">{{ team.name.charAt(0) }}</div>
-                      <h5>{{ team.name }}</h5>
-                    </div>
-                    
-                    <!-- Score Controls -->
-                    <div class="score-controls">
-                      <button class="score-btn decrease" @click="adjustScore(index, -100)">-</button>
-                      <span class="team-score">{{ team.score }}</span>
-                      <button class="score-btn increase" @click="adjustScore(index, 100)">+</button>
-                    </div>
-                    
-                    <!-- Special Abilities -->
-                    <div v-if="index === currentTeamIndex"  class="team-abilities">
-                      <button 
-                        class="ability-btn double-points"
-                        :class="{ 
-                          'active': team.doubleActive,
-                          'disabled': !team.abilities.doublePoints || index !== currentTeamIndex
-                        }"
-                        :disabled="!team.abilities.doublePoints || index !== currentTeamIndex"
-                        @click="activateDoublePoints(index)"
-                        title="نقاط مضاعفة"
-                      >
-                        <span>×2</span>
-                      </button>
-                      
-                      <button 
-                        class="ability-btn change-question"
-                        :class="{ 'disabled': !team.abilities.changeQuestion || index !== currentTeamIndex || !currentQuestion }"
-                        :disabled="!team.abilities.changeQuestion || index !== currentTeamIndex || !currentQuestion"
-                        @click="useChangeQuestionAbility(index)"
-                        title="تغيير السؤال"
-                      >
-                        <i class="fa fa-solid fa-arrow-left"></i>
-                      </button>
-                      
-                      <button 
-                        class="ability-btn call-help"
-                        :class="{ 'disabled': !team.abilities.callForHelp || index !== currentTeamIndex || !currentQuestion }"
-                        :disabled="!team.abilities.callForHelp || index !== currentTeamIndex || !currentQuestion"
-                        @click="useCallForHelp(index)"
-                        title="طلب المساعدة"
-                      >
-                        <i class="fa fa-solid fa-phone fa-xs"></i>
-                      </button>
-                    </div>
-                    
-                    <!-- Help Timer -->
-                    <div v-if="callForHelpActive && index === currentTeamIndex" class="help-timer">
-                      <div class="timer-display">
-                        <div class="timer-progress" :style="{ width: `${(callForHelpTimer/60)*100}%` }"></div>
-                        <span>{{ callForHelpTimer }}ث</span>
-                      </div>
-                      <button class="timer-cancel" @click="stopTimer()">إلغاء</button>
-                    </div>
-                  </div>
-                </div>
+      <!-- Team List Sidebar -->
+      <div class="teams-sidebar">
+        <div v-if="teams.length > 0" class="teams-panel">
+          <h4 class="teams-header">الفرق</h4>
+
+          <div
+            v-for="(team, index) in teams"
+            :key="team.id"
+            class="team-card"
+            :class="{ 'active-team': index === currentTeamIndex }"
+          >
+            <!-- Team Name and Score -->
+            <div class="team-header">
+              <div class="team-avatar">{{ team.name.charAt(0) }}</div>
+              <h5>{{ team.name }}</h5>
+            </div>
+
+            <!-- Score Controls -->
+            <div class="score-controls">
+              <button
+                class="score-btn decrease"
+                @click="adjustScore(index, -100)"
+              >
+                -
+              </button>
+              <span class="team-score">{{ team.score }}</span>
+              <button
+                class="score-btn increase"
+                @click="adjustScore(index, 100)"
+              >
+                +
+              </button>
+            </div>
+
+            <!-- Special Abilities -->
+            <div v-if="index === currentTeamIndex" class="team-abilities">
+              <button
+                class="ability-btn double-points"
+                :class="{
+                  active: team.doubleActive,
+                  disabled:
+                    !team.abilities.doublePoints || index !== currentTeamIndex,
+                }"
+                :disabled="
+                  !team.abilities.doublePoints || index !== currentTeamIndex
+                "
+                @click="activateDoublePoints(index)"
+                title="نقاط مضاعفة"
+              >
+                <span>×2</span>
+              </button>
+
+              <button
+                class="ability-btn change-question"
+                :class="{
+                  disabled:
+                    !team.abilities.changeQuestion ||
+                    index !== currentTeamIndex ||
+                    !currentQuestion,
+                }"
+                :disabled="
+                  !team.abilities.changeQuestion ||
+                  index !== currentTeamIndex ||
+                  !currentQuestion
+                "
+                @click="useChangeQuestionAbility(index)"
+                title="تغيير السؤال"
+              >
+                <i class="fa fa-solid fa-arrow-left"></i>
+              </button>
+
+              <button
+                class="ability-btn call-help"
+                :class="{
+                  disabled:
+                    !team.abilities.callForHelp ||
+                    index !== currentTeamIndex ||
+                    !currentQuestion,
+                }"
+                :disabled="
+                  !team.abilities.callForHelp ||
+                  index !== currentTeamIndex ||
+                  !currentQuestion
+                "
+                @click="useCallForHelp(index)"
+                title="طلب المساعدة"
+              >
+                <i class="fa fa-solid fa-phone fa-xs"></i>
+              </button>
+            </div>
+
+            <!-- Help Timer -->
+            <div
+              v-if="callForHelpActive && index === currentTeamIndex"
+              class="help-timer"
+            >
+              <div class="timer-display">
+                <div
+                  class="timer-progress"
+                  :style="{ width: `${(callForHelpTimer / 60) * 100}%` }"
+                ></div>
+                <span>{{ callForHelpTimer }}ث</span>
               </div>
-      
+              <button class="timer-cancel" @click="stopTimer()">إلغاء</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Game Board -->
       <div class="game-board">
         <!-- Categories Grid -->
         <div v-if="!currentQuestion" class="categories-grid">
-          <div 
-            v-for="category in selectedCategories" 
-            :key="category.id" 
+          <div
+            v-for="category in selectedCategories"
+            :key="category.id"
             class="category-container"
           >
             <div class="category-card">
               <!-- Right Questions Column (was Left) -->
               <div class="questions-column right">
-                <button 
-                  v-for="(question, idx) in category.questions.slice(0, 3)" 
+                <button
+                  v-for="(question, idx) in category.questions.slice(0, 3)"
                   :key="idx"
                   class="question-btn"
-                  :class="{ 'answered': question.answered }"
-                  :disabled="question.answered || isButtonDisabled(category.id, question.points, idx)"
-                  @click="!isButtonDisabled(category.id, question.points, idx) && selectQuestion(category, question, idx)"
+                  :class="{ answered: question.answered }"
+                  :disabled="
+                    question.answered ||
+                    isButtonDisabled(category.id, question.points, idx)
+                  "
+                  @click="
+                    !isButtonDisabled(category.id, question.points, idx) &&
+                      selectQuestion(category, question, idx)
+                  "
                 >
                   {{ question.points }}
                 </button>
               </div>
-              
+
               <!-- Center Category Info -->
               <div class="category-info">
-                <img :src="getImagePath(category.image)" alt="صورة الفئة" class="category-thumbnail">
+                <img
+                  :src="getImagePath(category.image)"
+                  alt="صورة الفئة"
+                  class="category-thumbnail"
+                />
                 <h5>{{ category.name }}</h5>
               </div>
-              
+
               <!-- Left Questions Column (was Right) -->
               <div class="questions-column left">
-                <button 
-                  v-for="(question, idx) in category.questions.slice(3)" 
+                <button
+                  v-for="(question, idx) in category.questions.slice(3)"
                   :key="idx + 3"
                   class="question-btn"
-                  :class="{ 'answered': question.answered }"
-                  :disabled="question.answered || isButtonDisabled(category.id, question.points, idx + 3)"
-                  @click="!isButtonDisabled(category.id, question.points, idx + 3) && selectQuestion(category, question, idx + 3)"
+                  :class="{ answered: question.answered }"
+                  :disabled="
+                    question.answered ||
+                    isButtonDisabled(category.id, question.points, idx + 3)
+                  "
+                  @click="
+                    !isButtonDisabled(category.id, question.points, idx + 3) &&
+                      selectQuestion(category, question, idx + 3)
+                  "
                 >
                   {{ question.points }}
                 </button>
@@ -130,37 +188,43 @@
             </div>
           </div>
         </div>
-            </div>
+      </div>
     </div>
-    
+
     <!-- Question Modal -->
     <div v-if="currentQuestion" class="question-modal">
       <div class="question-card">
         <div class="question-header">
-          <img :src="getImagePath(currentCategory.image)" alt="صورة الفئة" class="category-image">
+          <img
+            :src="getImagePath(currentCategory.image)"
+            alt="صورة الفئة"
+            class="category-image"
+          />
           <div class="question-meta">
             <h4>{{ currentCategory.name }}</h4>
             <div class="points-badge">{{ currentQuestion.points }} نقطة</div>
           </div>
         </div>
-        
+
         <div class="question-content">
           <p>{{ currentQuestion.question }}</p>
         </div>
-        
+
         <!-- Team Abilities Bar Inside the Question Modal -->
         <div v-if="teams.length > 0" class="modal-team-abilities">
           <div class="current-team-info">
-            <div class="team-avatar modal-avatar">{{ teams[currentTeamIndex].name.charAt(0) }}</div>
+            <div class="team-avatar modal-avatar">
+              {{ teams[currentTeamIndex].name.charAt(0) }}
+            </div>
             <span>{{ teams[currentTeamIndex].name }}</span>
           </div>
-          
+
           <div class="ability-controls">
-            <button 
+            <button
               class="ability-btn double-points"
-              :class="{ 
-                'active': teams[currentTeamIndex].doubleActive,
-                'disabled': !teams[currentTeamIndex].abilities.doublePoints
+              :class="{
+                active: teams[currentTeamIndex].doubleActive,
+                disabled: !teams[currentTeamIndex].abilities.doublePoints,
               }"
               :disabled="!teams[currentTeamIndex].abilities.doublePoints"
               @click="activateDoublePoints(currentTeamIndex)"
@@ -169,10 +233,12 @@
               <span>×2</span>
               <span class="btn-label">مضاعفة</span>
             </button>
-            
-            <button 
+
+            <button
               class="ability-btn change-question"
-              :class="{ 'disabled': !teams[currentTeamIndex].abilities.changeQuestion }"
+              :class="{
+                disabled: !teams[currentTeamIndex].abilities.changeQuestion,
+              }"
               :disabled="!teams[currentTeamIndex].abilities.changeQuestion"
               @click="useChangeQuestionAbility(currentTeamIndex)"
               title="تغيير السؤال"
@@ -180,10 +246,12 @@
               <i class="fa fa-solid fa-arrow-left"></i>
               <span class="btn-label">تخطي</span>
             </button>
-            
-            <button 
+
+            <button
               class="ability-btn call-help"
-              :class="{ 'disabled': !teams[currentTeamIndex].abilities.callForHelp }"
+              :class="{
+                disabled: !teams[currentTeamIndex].abilities.callForHelp,
+              }"
               :disabled="!teams[currentTeamIndex].abilities.callForHelp"
               @click="useCallForHelp(currentTeamIndex)"
               title="طلب المساعدة"
@@ -192,132 +260,143 @@
               <span class="btn-label">مساعدة</span>
             </button>
           </div>
-          
+
           <!-- Help Timer in Modal -->
-          <div v-if="callForHelpActive && currentTeamIndex === currentTeamIndex" class="modal-help-timer">
+          <div
+            v-if="callForHelpActive && currentTeamIndex === currentTeamIndex"
+            class="modal-help-timer"
+          >
             <div class="timer-display">
-              <div class="timer-progress" :style="{ width: `${(callForHelpTimer/60)*100}%` }"></div>
+              <div
+                class="timer-progress"
+                :style="{ width: `${(callForHelpTimer / 60) * 100}%` }"
+              ></div>
               <span>{{ callForHelpTimer }}ث</span>
             </div>
             <button class="timer-cancel" @click="stopTimer()">إلغاء</button>
           </div>
         </div>
-        
+
         <!-- Answer Section -->
         <div v-if="showAnswer" class="answer-section">
           <div class="answer-reveal">
             <p><strong>الإجابة:</strong> {{ currentQuestion.answer }}</p>
           </div>
-          
+
           <div class="team-award">
             <p>منح النقاط إلى:</p>
             <div class="award-buttons">
-              <button 
-                v-for="(team, index) in teams" 
-                :key="team.id" 
+              <button
+                v-for="(team, index) in teams"
+                :key="team.id"
                 class="award-btn"
                 @click="awardPoints(index)"
               >
                 {{ team.name }}
               </button>
               <button class="award-btn nobody-btn" @click="awardPoints(-1)">
-                لا أحد أجاب
+                لا أحد
               </button>
             </div>
           </div>
         </div>
-        
+
         <!-- Control Buttons -->
         <div class="modal-controls">
           <button class="toggle-answer" @click="toggleAnswer">
-            {{ showAnswer ? 'إخفاء الإجابة' : 'إظهار الإجابة' }}
+            {{ showAnswer ? "إخفاء الإجابة" : "إظهار الإجابة" }}
           </button>
-          <button class="close-modal" @click="closeModal">العودة إلى اللوحة</button>
+          <button class="close-modal" @click="closeModal">
+            العودة إلى اللوحة
+          </button>
         </div>
       </div>
     </div>
-    
+
     <!-- Winner Modal -->
     <div v-if="showWinnerModal" class="winner-modal-overlay">
-  <div class="winner-modal">
-    <!-- Confetti Elements - Generated dynamically with v-for -->
-    <div class="confetti-container">
-      <div 
-        class="confetti" 
-        v-for="i in 50" 
-        :key="i" 
-        :style="getConfettiStyle(i)"
-      ></div>
-    </div>
-    
-    <!-- Victory Badges -->
-    <div class="victory-badges">
-      <div class="badge" :style="{ '--index': 1 }">
-        <span>🎮</span>
-      </div>
-      <div class="badge badge-large" :style="{ '--index': 2 }">
-        <span>🏆</span>
-      </div>
-      <div class="badge" :style="{ '--index': 3 }">
-        <span>🎯</span>
-      </div>
-    </div>
-    
-    <h2 class="title-animation">انتهت اللعبة!</h2>
-    
-    <!-- Winner section -->
-    <div v-if="topTeams.length === 1 || teams.length === 2" class="winner-single">
-      <div class="winner-avatar">
-        {{ topTeams[0].name.charAt(0) }}
-      </div>
-      <h3>{{ topTeams[0].name }} هو الفائز!</h3>
-      <div class="winner-score-container">
-        <div class="score-value">{{ topTeams[0].score }}</div>
-        <div class="score-label">نقطة</div>
-      </div>
-    </div>
-    
-    <!-- Top teams list -->
-    <div v-else class="winner-list">
-      <h4>أفضل الفرق:</h4>
-      <div class="podium-container">
-        <div class="podium-place second-place" v-if="topTeams.length > 1">
-          <div class="podium-avatar">{{ topTeams[1].name.charAt(0) }}</div>
-          <div class="podium-name">{{ topTeams[1].name }}</div>
-          <div class="podium-score">{{ topTeams[1].score }}</div>
-          <div class="podium-block">2</div>
+      <div class="winner-modal">
+        <!-- Confetti Elements - Generated dynamically with v-for -->
+        <div class="confetti-container">
+          <div
+            class="confetti"
+            v-for="i in 50"
+            :key="i"
+            :style="getConfettiStyle(i)"
+          ></div>
         </div>
-        
-        <div class="podium-place first-place" v-if="topTeams.length > 0">
-          <div class="podium-avatar">{{ topTeams[0].name.charAt(0) }}</div>
-          <div class="podium-name">{{ topTeams[0].name }}</div>
-          <div class="podium-score">{{ topTeams[0].score }}</div>
-          <div class="podium-block">1</div>
+
+        <!-- Victory Badges -->
+        <div class="victory-badges">
+          <div class="badge" :style="{ '--index': 1 }">
+            <span>🎮</span>
+          </div>
+          <div class="badge badge-large" :style="{ '--index': 2 }">
+            <span>🏆</span>
+          </div>
+          <div class="badge" :style="{ '--index': 3 }">
+            <span>🎯</span>
+          </div>
         </div>
-        
-        <div class="podium-place third-place" v-if="topTeams.length > 2">
-          <div class="podium-avatar">{{ topTeams[2].name.charAt(0) }}</div>
-          <div class="podium-name">{{ topTeams[2].name }}</div>
-          <div class="podium-score">{{ topTeams[2].score }}</div>
-          <div class="podium-block">3</div>
+
+        <h2 class="title-animation">انتهت اللعبة!</h2>
+
+        <!-- Winner section -->
+        <div
+          v-if="topTeams.length === 1 || teams.length === 2"
+          class="winner-single"
+        >
+          <div class="winner-avatar">
+            {{ topTeams[0].name.charAt(0) }}
+          </div>
+          <h3>{{ topTeams[0].name }} هو الفائز!</h3>
+          <div class="winner-score-container">
+            <div class="score-value">{{ topTeams[0].score }}</div>
+            <div class="score-label">نقطة</div>
+          </div>
         </div>
+
+        <!-- Top teams list -->
+        <div v-else class="winner-list">
+          <h4>أفضل الفرق:</h4>
+          <div class="podium-container">
+            <div class="podium-place second-place" v-if="topTeams.length > 1">
+              <div class="podium-avatar">{{ topTeams[1].name.charAt(0) }}</div>
+              <div class="podium-name">{{ topTeams[1].name }}</div>
+              <div class="podium-score">{{ topTeams[1].score }}</div>
+              <div class="podium-block">2</div>
+            </div>
+
+            <div class="podium-place first-place" v-if="topTeams.length > 0">
+              <div class="podium-avatar">{{ topTeams[0].name.charAt(0) }}</div>
+              <div class="podium-name">{{ topTeams[0].name }}</div>
+              <div class="podium-score">{{ topTeams[0].score }}</div>
+              <div class="podium-block">1</div>
+            </div>
+
+            <div class="podium-place third-place" v-if="topTeams.length > 2">
+              <div class="podium-avatar">{{ topTeams[2].name.charAt(0) }}</div>
+              <div class="podium-name">{{ topTeams[2].name }}</div>
+              <div class="podium-score">{{ topTeams[2].score }}</div>
+              <div class="podium-block">3</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="new-game-btn" @click="restartGame">
+          <span class="btn-icon">🎲</span>
+          <span class="btn-text">بدء لعبة جديدة</span>
+        </button>
       </div>
-    </div>
-    
-    <button class="new-game-btn" @click="restartGame">
-      <span class="btn-icon">🎲</span>
-      <span class="btn-text">بدء لعبة جديدة</span>
-    </button>
-  </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import AppHeader from '../components/AppHeader.vue';
-import LoadSpinner from '../components/LoadSpinner.vue';
-import { ref, onMounted, computed} from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import AppHeader from "../components/AppHeader.vue";
+import LoadSpinner from "../components/LoadSpinner.vue";
+import { ref, onMounted, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
@@ -326,101 +405,139 @@ const teams = ref([]);
 const currentQuestion = ref(null);
 const currentCategory = ref(null);
 const showAnswer = ref(false);
-const normalizeCategoryName = (name) => name.toLowerCase().replace(/\s+/g, '_');
+const normalizeCategoryName = (name) => name.toLowerCase().replace(/\s+/g, "_");
 const getGameState = () => {
-  return JSON.parse(localStorage.getItem('gameState') || '{}');
+  return JSON.parse(localStorage.getItem("gameState") || "{}");
 };
 const setGameState = (newState) => {
-  localStorage.setItem('gameState', JSON.stringify({ ...getGameState(), ...newState }));
+  localStorage.setItem(
+    "gameState",
+    JSON.stringify({ ...getGameState(), ...newState })
+  );
 };
 const clearGameState = () => {
-  localStorage.removeItem('gameState');
+  localStorage.removeItem("gameState");
 };
 const getImagePath = (imageName) => {
-  if (!imageName) return ''; // prevent runtime errors
+  if (!imageName) return ""; // prevent runtime errors
   return `${import.meta.env.BASE_URL}Images/${imageName}`;
 };
-const loading = ref(true); 
+const loading = ref(true);
 
 onMounted(() => {
   const gameState = getGameState();
   const categoriesData = JSON.stringify(gameState.categories);
-  const teamsData = JSON.stringify(gameState.teams); 
-  
+  const teamsData = JSON.stringify(gameState.teams);
+
   if (!categoriesData || !teamsData) {
-    router.push('/');
+    router.push("/");
     return;
   }
-  
+
   const categories = JSON.parse(categoriesData);
   fullCategories.value = categories;
-  
+
   const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
-  
-  const pickQuestions = (questions, count, categoryId, pointValue, fullSet, categoryName) => {
-    const storageKey = 'quizAnsweredQuestions';
-    const answeredMap = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+  const pickQuestions = (
+    questions,
+    count,
+    categoryId,
+    pointValue,
+    fullSet,
+    categoryName
+  ) => {
+    const storageKey = "quizAnsweredQuestions";
+    const answeredMap = JSON.parse(localStorage.getItem(storageKey) || "{}");
     const key = `${normalizeCategoryName(categoryName)}_${pointValue}`;
     const used = answeredMap[key] || [];
-    const unused = questions.filter(q => !used.includes(q.question));
-    
+    const unused = questions.filter((q) => !used.includes(q.question));
+
     if (unused.length < count) {
       delete answeredMap[key]; // allow reuse
       localStorage.setItem(storageKey, JSON.stringify(answeredMap));
-      const resetPool = fullSet.filter(q => q.points === pointValue);
+      const resetPool = fullSet.filter((q) => q.points === pointValue);
       return shuffle(resetPool).slice(0, count);
     }
-    
+
     return shuffle(unused).slice(0, count);
   };
-  
+
   let availableQuestions = gameState.availableQuestions || {};
   const alreadyPicked = Object.keys(availableQuestions).length > 0;
-  
-  selectedCategories.value = categories.map(category => {
+
+  selectedCategories.value = categories.map((category) => {
     const groupedByPoints = { 100: [], 200: [], 300: [], 400: [] };
-    
-    category.questions.forEach(q => {
+
+    category.questions.forEach((q) => {
       if (groupedByPoints[q.points]) {
         groupedByPoints[q.points].push(q);
       }
     });
-    
+
     if (alreadyPicked && gameState.selectedCategories) {
       const prev = gameState.selectedCategories;
-      const match = prev.find(cat => cat.id === category.id);
+      const match = prev.find((cat) => cat.id === category.id);
       if (match) {
         return match;
       }
     }
-    
-    const picked100 = pickQuestions(groupedByPoints[100], 2, category.id, 100, category.questions, category.name);
-    const picked200 = pickQuestions(groupedByPoints[200], 2, category.id, 200, category.questions, category.name);
-    const picked300 = pickQuestions(groupedByPoints[300], 1, category.id, 300, category.questions, category.name);
-    const picked400 = pickQuestions(groupedByPoints[400], 1, category.id, 400, category.questions, category.name);
-    
+
+    const picked100 = pickQuestions(
+      groupedByPoints[100],
+      2,
+      category.id,
+      100,
+      category.questions,
+      category.name
+    );
+    const picked200 = pickQuestions(
+      groupedByPoints[200],
+      2,
+      category.id,
+      200,
+      category.questions,
+      category.name
+    );
+    const picked300 = pickQuestions(
+      groupedByPoints[300],
+      1,
+      category.id,
+      300,
+      category.questions,
+      category.name
+    );
+    const picked400 = pickQuestions(
+      groupedByPoints[400],
+      1,
+      category.id,
+      400,
+      category.questions,
+      category.name
+    );
+
     availableQuestions[category.id] = {
       100: picked100.length,
       200: picked200.length,
       300: picked300.length,
-      400: picked400.length
+      400: picked400.length,
     };
-    
+
     return {
       ...category,
-      questions: [...picked100, ...picked200, ...picked300, ...picked400]
+      questions: [...picked100, ...picked200, ...picked300, ...picked400],
     };
   });
-  
+
   // Save only if this is the first time generating
   if (!alreadyPicked) {
     setGameState({
       selectedCategories: selectedCategories.value,
-      availableQuestions
+      availableQuestions,
     });
   }
 
-  teams.value = JSON.parse(teamsData).map(team => ({
+  teams.value = JSON.parse(teamsData).map((team) => ({
     ...team,
     score: team.score ?? 0,
     isUsingDouble: team.isUsingDouble ?? false,
@@ -428,36 +545,40 @@ onMounted(() => {
     abilities: {
       doublePoints: team.abilities?.doublePoints ?? true,
       changeQuestion: team.abilities?.changeQuestion ?? true,
-      callForHelp: team.abilities?.callForHelp ?? true
-    }
+      callForHelp: team.abilities?.callForHelp ?? true,
+    },
   }));
-  
+
   const savedTeamIndex = gameState.currentTeamIndex;
   if (savedTeamIndex !== null) {
     currentTeamIndex.value = parseInt(savedTeamIndex);
   }
-  
+
   const savedQuestion = gameState.currentQuestion;
   const savedCategory = gameState.currentCategory;
-  
+
   if (savedQuestion && savedCategory) {
     const parsedQuestion = savedQuestion;
     const parsedCategory = savedCategory;
-    const matchingCategory = selectedCategories.value.find(cat => cat.id === parsedCategory.id);
-    
+    const matchingCategory = selectedCategories.value.find(
+      (cat) => cat.id === parsedCategory.id
+    );
+
     if (matchingCategory) {
-      const matchingQuestion = matchingCategory.questions.find(q => q.question === parsedQuestion.question);
+      const matchingQuestion = matchingCategory.questions.find(
+        (q) => q.question === parsedQuestion.question
+      );
       if (matchingQuestion && !matchingQuestion.answered) {
         currentCategory.value = matchingCategory;
         currentQuestion.value = {
           ...matchingQuestion,
-          slotIndex: parsedQuestion.slotIndex
+          slotIndex: parsedQuestion.slotIndex,
         };
         showAnswer.value = false;
       }
     }
   }
-  
+
   loading.value = false;
 });
 
@@ -473,8 +594,10 @@ const nextTeamTurn = () => {
 
 // Check if all questions are answered
 const checkIfGameOver = () => {
-  const totalQuestions = selectedCategories.value.flatMap(cat => cat.questions);
-  if (totalQuestions.every(q => q.answered)) {
+  const totalQuestions = selectedCategories.value.flatMap(
+    (cat) => cat.questions
+  );
+  if (totalQuestions.every((q) => q.answered)) {
     allQuestionsAnswered.value = true;
     showWinnerModal.value = true;
     clearGameState();
@@ -486,10 +609,10 @@ const closeModal = () => {
   currentQuestion.value = null;
   currentCategory.value = null;
   showAnswer.value = false;
-  stopTimer();  // Stop timer if active
+  stopTimer(); // Stop timer if active
   setGameState({
     currentQuestion: null,
-    currentCategory: null
+    currentCategory: null,
   });
   checkIfGameOver();
 };
@@ -506,7 +629,7 @@ const selectQuestion = (category, question, index) => {
   showAnswer.value = false;
   setGameState({
     currentQuestion: currentQuestion.value,
-    currentCategory: currentCategory.value
+    currentCategory: currentCategory.value,
   });
 };
 
@@ -522,87 +645,95 @@ const awardPoints = (teamIndex) => {
   if (currentQuestion.value && !currentQuestion.value.answered) {
     // Mark question as answered
     currentQuestion.value.answered = true;
-    
+
     // Only award points if a valid team index was provided
     if (teamIndex >= 0) {
       let points = currentQuestion.value.points;
       const team = teams.value[teamIndex];
-      
+
       // Handle double points ability
       if (team.isUsingDouble) {
         points *= 2;
         team.isUsingDouble = false; // Reset the double points flag
-        team.doubleActive = false; // Reset the active styling      
+        team.doubleActive = false; // Reset the active styling
       }
-      
+
       // Award points to the team
       team.score += points;
     }
-    
+
     // Deactivate abilities that were used
-    teams.value.forEach(t => {
+    teams.value.forEach((t) => {
       if (t.isUsingDouble) {
         t.isUsingDouble = false; // Deactivate double points for any team that used it
-        t.doubleActive = false;  // Remove the active styling for double points
+        t.doubleActive = false; // Remove the active styling for double points
       }
     });
-    
+
     // Update game state after answering the question
-    const catIndex = selectedCategories.value.findIndex(cat => cat.id === currentCategory.value.id);
+    const catIndex = selectedCategories.value.findIndex(
+      (cat) => cat.id === currentCategory.value.id
+    );
     if (catIndex !== -1) {
-      const qIndex = selectedCategories.value[catIndex].questions.findIndex(q => q.question === currentQuestion.value.question);
+      const qIndex = selectedCategories.value[catIndex].questions.findIndex(
+        (q) => q.question === currentQuestion.value.question
+      );
       if (qIndex !== -1) {
         selectedCategories.value[catIndex].questions[qIndex].answered = true;
         setGameState({ selectedCategories: selectedCategories.value });
       }
     }
-    
+
     // Save the updated teams data in localStorage
     setGameState({ teams: teams.value });
-    
+
     // Track answered question in localStorage (by question text)
     if (currentCategory.value) {
       const catId = currentCategory.value.id;
       const questionPoints = currentQuestion.value.points;
-      const answeredKey = 'quizAnsweredQuestions';
-      const answeredMap = JSON.parse(localStorage.getItem(answeredKey) || '{}');
-      const key = `${normalizeCategoryName(currentCategory.value.name)}_${questionPoints}`;
-      
+      const answeredKey = "quizAnsweredQuestions";
+      const answeredMap = JSON.parse(localStorage.getItem(answeredKey) || "{}");
+      const key = `${normalizeCategoryName(
+        currentCategory.value.name
+      )}_${questionPoints}`;
+
       if (!answeredMap[key]) {
         answeredMap[key] = [];
       }
-      
+
       if (!answeredMap[key].includes(currentQuestion.value.question)) {
         answeredMap[key].push(currentQuestion.value.question);
         localStorage.setItem(answeredKey, JSON.stringify(answeredMap));
       }
-      
+
       // Decrement available questions (if tracked)
-      const availableData = JSON.parse(localStorage.getItem('availableQuestions') || '{}');
+      const availableData = JSON.parse(
+        localStorage.getItem("availableQuestions") || "{}"
+      );
       if (availableData[catId] && availableData[catId][questionPoints] > 0) {
         availableData[catId][questionPoints] -= 1;
         setGameState({ availableQuestions });
       }
-      
+
       // Track disabled button slot (based on slotIndex)
       const slotIndex = currentQuestion.value.slotIndex;
       const gameState = getGameState();
       const disabledButtons = gameState.disabledButtons || {};
-      
+
       if (!disabledButtons[catId]) {
         disabledButtons[catId] = {};
       }
-      
+
       if (!disabledButtons[catId][questionPoints]) {
         disabledButtons[catId][questionPoints] = [];
       }
-      
+
       if (!disabledButtons[catId][questionPoints].includes(slotIndex)) {
         disabledButtons[catId][questionPoints].push(slotIndex);
         setGameState({ disabledButtons });
       }
     }
-    
+
     nextTeamTurn();
     closeModal();
   }
@@ -610,7 +741,9 @@ const awardPoints = (teamIndex) => {
 
 // Check if a question button should be disabled
 const isButtonDisabled = (categoryId, pointValue, index) => {
-  const disabledButtons = JSON.parse(localStorage.getItem('disabledButtons') || '{}');
+  const disabledButtons = JSON.parse(
+    localStorage.getItem("disabledButtons") || "{}"
+  );
   return (
     disabledButtons[categoryId] &&
     disabledButtons[categoryId][pointValue] &&
@@ -623,7 +756,7 @@ const activateDoublePoints = (index) => {
   const team = teams.value[index];
   if (team.abilities.doublePoints && index === currentTeamIndex.value) {
     team.isUsingDouble = true; // Marks the double points as being used
-    team.doubleActive = true;  // Used for styling in the UI
+    team.doubleActive = true; // Used for styling in the UI
     team.abilities.doublePoints = false; // Disable the ability after use
     setGameState({ teams: teams.value }); // Save the updated state
   }
@@ -638,39 +771,48 @@ const useChangeQuestionAbility = (index) => {
     index !== currentTeamIndex.value ||
     !currentCategory.value ||
     !currentQuestion.value
-  ) return;
+  )
+    return;
 
   const currentCatId = currentCategory.value.id;
   const currentPoints = currentQuestion.value.points;
 
   if (!currentCatId || !currentPoints) {
-    console.error('Missing current category ID or points');
+    console.error("Missing current category ID or points");
     return;
   }
 
-  const fullCategory = fullCategories.value.find(cat => cat.id === currentCatId);
-  const selectedCategory = selectedCategories.value.find(cat => cat.id === currentCatId);
+  const fullCategory = fullCategories.value.find(
+    (cat) => cat.id === currentCatId
+  );
+  const selectedCategory = selectedCategories.value.find(
+    (cat) => cat.id === currentCatId
+  );
 
   if (!fullCategory || !selectedCategory) {
-    console.error('Full or selected category not found');
+    console.error("Full or selected category not found");
     return;
   }
 
-  const answeredKey = 'quizAnsweredQuestions';
-  const answeredMap = JSON.parse(localStorage.getItem(answeredKey) || '{}');
-  const mapKey = `${normalizeCategoryName(currentCategory.value.name)}_${currentPoints}`;
+  const answeredKey = "quizAnsweredQuestions";
+  const answeredMap = JSON.parse(localStorage.getItem(answeredKey) || "{}");
+  const mapKey = `${normalizeCategoryName(
+    currentCategory.value.name
+  )}_${currentPoints}`;
   const answeredQuestions = answeredMap[mapKey] || [];
 
-  const samePointQuestions = fullCategory.questions.filter(q =>
-    q.points === currentPoints &&
-    q.question !== currentQuestion.value.question &&
-    !answeredQuestions.includes(q.question)
+  const samePointQuestions = fullCategory.questions.filter(
+    (q) =>
+      q.points === currentPoints &&
+      q.question !== currentQuestion.value.question &&
+      !answeredQuestions.includes(q.question)
   );
 
   if (samePointQuestions.length > 0) {
-    const newQuestion = samePointQuestions[Math.floor(Math.random() * samePointQuestions.length)];
+    const newQuestion =
+      samePointQuestions[Math.floor(Math.random() * samePointQuestions.length)];
     const indexToReplace = selectedCategory.questions.findIndex(
-      q => q.question === currentQuestion.value.question
+      (q) => q.question === currentQuestion.value.question
     );
 
     if (indexToReplace !== -1) {
@@ -701,16 +843,22 @@ const useChangeQuestionAbility = (index) => {
         currentQuestion: currentQuestion.value,
         currentCategory: currentCategory.value,
         teams: teams.value,
-        currentTeamIndex: currentTeamIndex.value
+        currentTeamIndex: currentTeamIndex.value,
       });
     }
   } else {
-    const remainingQuestions = selectedCategory.questions.filter(q => !q.answered);
+    const remainingQuestions = selectedCategory.questions.filter(
+      (q) => !q.answered
+    );
     if (remainingQuestions.length === 1) {
       const lastQuestion = remainingQuestions[0];
-      alert('Only one question is left in this category, so the last question will be used.');
+      alert(
+        "Only one question is left in this category, so the last question will be used."
+      );
       currentQuestion.value = lastQuestion;
-      selectedCategory.questions.find(q => q.question === lastQuestion.question).answered = true;
+      selectedCategory.questions.find(
+        (q) => q.question === lastQuestion.question
+      ).answered = true;
       answeredQuestions.push(lastQuestion.question);
       localStorage.setItem(answeredKey, JSON.stringify(answeredMap));
       teams.value[index].abilities.changeQuestion = false;
@@ -721,14 +869,15 @@ const useChangeQuestionAbility = (index) => {
         currentQuestion: currentQuestion.value,
         currentCategory: currentCategory.value,
         teams: teams.value,
-        currentTeamIndex: currentTeamIndex.value
+        currentTeamIndex: currentTeamIndex.value,
       });
     } else {
-      alert('No other question available with the same points in this category.');
+      alert(
+        "No other question available with the same points in this category."
+      );
     }
   }
 };
-
 
 // Call for help ability
 const callForHelpTimer = ref(60);
@@ -736,12 +885,16 @@ const callForHelpActive = ref(false);
 let callTimerInterval;
 
 const useCallForHelp = (index) => {
-  if (!teams.value[index].abilities.callForHelp || index !== currentTeamIndex.value) return;
-  
+  if (
+    !teams.value[index].abilities.callForHelp ||
+    index !== currentTeamIndex.value
+  )
+    return;
+
   teams.value[index].abilities.callForHelp = false;
   callForHelpActive.value = true;
   callForHelpTimer.value = 60;
-  
+
   callTimerInterval = setInterval(() => {
     callForHelpTimer.value--;
     if (callForHelpTimer.value === 0) {
@@ -750,8 +903,8 @@ const useCallForHelp = (index) => {
     }
   }, 1000);
   setGameState({
-        teams: teams.value,
-      });
+    teams: teams.value,
+  });
 };
 
 // Stop the call for help timer
@@ -771,16 +924,23 @@ const toggleAnswer = () => {
 
 // Function to get a random confetti style
 const getConfettiStyle = (index) => {
-  const colors = ['#4f46e5', '#ec4899', '#fcd34d', '#10b981', '#f97316', '#0ea5e9'];
-  
+  const colors = [
+    "#4f46e5",
+    "#ec4899",
+    "#fcd34d",
+    "#10b981",
+    "#f97316",
+    "#0ea5e9",
+  ];
+
   // Use a consistent random seed based on the index
-  const randomLeft = ((index * 7919) % 100);
+  const randomLeft = (index * 7919) % 100;
   const randomDelay = ((index * 104729) % 50) / 10;
   const randomDuration = 3 + ((index * 15485863) % 40) / 10;
-  const colorIndex = ((index * 32452843) % colors.length);
+  const colorIndex = (index * 32452843) % colors.length;
   const size = 8 + ((index * 104729) % 10);
-  const isRectangular = ((index * 32452843) % 2) === 0;
-  
+  const isRectangular = (index * 32452843) % 2 === 0;
+
   return {
     left: `${randomLeft}%`,
     animationDelay: `${randomDelay}s`,
@@ -789,7 +949,7 @@ const getConfettiStyle = (index) => {
     width: `${size}px`,
     height: `${size}px`,
     transform: `rotate(${(index * 104729) % 360}deg)`,
-    borderRadius: isRectangular ? '2px' : '50%'
+    borderRadius: isRectangular ? "2px" : "50%",
   };
 };
 
@@ -797,9 +957,8 @@ const getConfettiStyle = (index) => {
 const restartGame = () => {
   // Clear game state and navigate to home
   clearGameState();
-  router.push('/');
+  router.push("/");
 };
-
 </script>
 
 <style scoped>
@@ -815,7 +974,7 @@ const restartGame = () => {
 }
 
 .game-container {
-  font-family: 'Dubai', 'Amiri', 'Arial', sans-serif;
+  font-family: "Dubai", "Amiri", "Arial", sans-serif;
   background-color: #f0f5ff;
   min-height: 100vh;
   padding-bottom: 2rem;
@@ -872,12 +1031,12 @@ const restartGame = () => {
   .main-content {
     flex-direction: column; /* Teams at top, game board below */
   }
-  
+
   .teams-sidebar {
     width: 100%;
     order: 1; /* Appears first (at top) on mobile */
   }
-  
+
   .game-board {
     order: 2; /* Appears second (below teams) on mobile */
   }
@@ -899,7 +1058,7 @@ const restartGame = () => {
 }
 
 .teams-header:after {
-  content: '';
+  content: "";
   display: block;
   width: 50px;
   height: 3px;
@@ -1379,7 +1538,8 @@ const restartGame = () => {
   border-top: 1px solid #e5e7eb;
 }
 
-.toggle-answer, .close-modal {
+.toggle-answer,
+.close-modal {
   padding: 0.75rem 1rem;
   border: none;
   border-radius: 8px;
@@ -1415,7 +1575,11 @@ const restartGame = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.95), rgba(124, 58, 237, 0.95));
+  background: linear-gradient(
+    135deg,
+    rgba(79, 70, 229, 0.95),
+    rgba(124, 58, 237, 0.95)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1499,12 +1663,18 @@ const restartGame = () => {
 }
 
 /* Making sure animations run */
-.badge, .first-place, .second-place, .third-place, 
-.title-animation, .winner-single, .new-game-btn {
+.badge,
+.first-place,
+.second-place,
+.third-place,
+.title-animation,
+.winner-single,
+.new-game-btn {
   animation-fill-mode: both;
 }
 
-.badge-large span, .badge span {
+.badge-large span,
+.badge span {
   display: block;
 }
 
@@ -1590,7 +1760,11 @@ const restartGame = () => {
 
 /* Winner Single */
 .winner-single {
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(139, 92, 246, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(79, 70, 229, 0.1),
+    rgba(139, 92, 246, 0.1)
+  );
   border-radius: 20px;
   padding: 2rem;
   margin: 1.5rem 0;
@@ -1890,43 +2064,43 @@ const restartGame = () => {
     width: 95%;
     margin: 0.5rem 0;
   }
-  
+
   .victory-badges {
     gap: 0.5rem;
     margin-top: 0.25rem;
     margin-bottom: 1rem;
   }
-  
+
   .badge {
     width: 40px;
     height: 40px;
   }
-  
+
   .badge-large {
     width: 55px;
     height: 55px;
   }
-  
+
   .badge span {
     font-size: 1.5rem;
   }
-  
+
   .badge-large span {
     font-size: 2rem;
   }
-  
+
   .title-animation {
     font-size: 2rem;
     margin-bottom: 1.5rem;
   }
-  
+
   /* Adjusting winner avatar size */
   .winner-avatar {
     width: 65px;
     height: 65px;
     font-size: 1.75rem;
   }
-  
+
   /* Reduce padding for single winner display */
   .winner-single {
     padding: 1.5rem 1rem;
@@ -1938,36 +2112,36 @@ const restartGame = () => {
   .winner-modal {
     padding: 1.5rem 1rem;
   }
-  
+
   .badge {
     width: 35px;
     height: 35px;
   }
-  
+
   .badge-large {
     width: 45px;
     height: 45px;
   }
-  
+
   .badge span {
     font-size: 1.25rem;
   }
-  
+
   .badge-large span {
     font-size: 1.75rem;
   }
-  
+
   /* Make sure the new game button fits */
   .new-game-btn {
     padding: 0.75rem 1.25rem;
     font-size: 1rem;
   }
-  
+
   /* Ensure titles fit on screen */
   .title-animation {
     font-size: 1.75rem;
   }
-  
+
   .winner-single h3 {
     font-size: 1.5rem;
   }
@@ -1979,7 +2153,7 @@ const restartGame = () => {
     align-items: flex-start;
     padding: 0.5rem;
   }
-  
+
   .winner-modal {
     margin: 0.5rem 0;
     padding: 1.5rem 1rem;
@@ -1987,7 +2161,8 @@ const restartGame = () => {
 }
 
 /* Fix for badge visibility on all screen sizes */
-.badge, .badge-large {
+.badge,
+.badge-large {
   position: relative;
   z-index: 10;
 }
@@ -2055,7 +2230,9 @@ const restartGame = () => {
   }
 }
 
-.question-card, .category-card, .team-card {
+.question-card,
+.category-card,
+.team-card {
   animation: fadeIn 0.3s ease-out;
 }
 
@@ -2077,7 +2254,7 @@ const restartGame = () => {
 }
 
 /* Accessibility improvements */
-button:focus, 
+button:focus,
 input:focus {
   outline: 2px solid #4f46e5;
   outline-offset: 2px;
@@ -2088,17 +2265,17 @@ input:focus {
   .game-container {
     background-color: white;
   }
-  
-  .teams-sidebar, 
-  .modal-controls, 
+
+  .teams-sidebar,
+  .modal-controls,
   .ability-controls {
     display: none;
   }
-  
+
   .game-board {
     box-shadow: none;
   }
-  
+
   .category-card {
     break-inside: avoid;
   }
