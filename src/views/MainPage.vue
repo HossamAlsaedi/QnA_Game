@@ -277,6 +277,20 @@ onMounted(async () => {
 
   // Show tracker after initial scroll
   window.addEventListener("scroll", handleScroll);
+
+  const APP_VERSION = "0.7.0";
+
+  function checkAndClearLocalStorageOnUpdate() {
+    const storedVersion = localStorage.getItem("appVersion");
+
+    if (storedVersion !== APP_VERSION) {
+      localStorage.clear(); //
+      localStorage.setItem("appVersion", APP_VERSION); //
+    }
+  }
+
+  // Run this early in your app (e.g., in main.js or App.vue mounted)
+  checkAndClearLocalStorageOnUpdate();
 });
 
 onUnmounted(() => {
@@ -337,10 +351,9 @@ const cleanupLocalStorageForNewGame = (categories) => {
 
   categories.forEach((category) => {
     const grouped = {
-      100: [],
       200: [],
-      300: [],
       400: [],
+      600: [],
     };
 
     category.questions.forEach((q) => {
@@ -349,7 +362,7 @@ const cleanupLocalStorageForNewGame = (categories) => {
       }
     });
 
-    [100, 200, 300, 400].forEach((points) => {
+    [200, 400, 600].forEach((points) => {
       const key = `${category.name}_${points}`;
       const used = usedQuestions[key] || [];
       const total = grouped[points].length;
