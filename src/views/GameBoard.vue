@@ -17,110 +17,113 @@
     </div>
 
     <div v-if="!loading" class="main-content">
-      <!-- Team List Sidebar -->
+      <!-- Team List Horizontal Bar -->
       <div class="teams-sidebar">
         <div v-if="teams.length > 0" class="teams-panel">
           <h4 class="teams-header">الفرق</h4>
 
-          <div
-            v-for="(team, index) in teams"
-            :key="team.id"
-            class="team-card"
-            :class="{ 'active-team': index === currentTeamIndex }"
-          >
-            <!-- Team Name and Score -->
-            <div class="team-header">
-              <div class="team-avatar">{{ team.name.charAt(0) }}</div>
-              <h5>{{ team.name }}</h5>
-            </div>
+          <div class="teams-grid">
+            <div
+              v-for="(team, index) in teams"
+              :key="team.id"
+              class="team-card"
+              :class="{ 'active-team': index === currentTeamIndex }"
+            >
+              <!-- Team Name and Score -->
+              <div class="team-header">
+                <div class="team-avatar">{{ team.name.charAt(0) }}</div>
+                <h5>{{ team.name }}</h5>
+              </div>
 
-            <!-- Score Controls -->
-            <div class="score-controls">
-              <button
-                class="score-btn decrease"
-                @click="adjustScore(index, -100)"
-              >
-                -
-              </button>
-              <span class="team-score">{{ team.score }}</span>
-              <button
-                class="score-btn increase"
-                @click="adjustScore(index, 100)"
-              >
-                +
-              </button>
-            </div>
+              <!-- Score Controls -->
+              <div class="score-controls">
+                <button
+                  class="score-btn decrease"
+                  @click="adjustScore(index, -100)"
+                >
+                  -
+                </button>
+                <span class="team-score">{{ team.score }}</span>
+                <button
+                  class="score-btn increase"
+                  @click="adjustScore(index, 100)"
+                >
+                  +
+                </button>
+              </div>
 
-            <!-- Special Abilities -->
-            <div v-if="index === currentTeamIndex" class="team-abilities">
-              <button
-                class="ability-btn double-points"
-                :class="{
-                  active: team.doubleActive,
-                  disabled:
-                    !team.abilities.doublePoints || index !== currentTeamIndex,
-                }"
-                :disabled="
-                  !team.abilities.doublePoints || index !== currentTeamIndex
-                "
-                @click="activateDoublePoints(index)"
-                title="نقاط مضاعفة"
-              >
-                <span>×2</span>
-              </button>
+              <!-- Special Abilities -->
+              <div v-if="index === currentTeamIndex" class="team-abilities">
+                <button
+                  class="ability-btn double-points"
+                  :class="{
+                    active: team.doubleActive,
+                    disabled:
+                      !team.abilities.doublePoints ||
+                      index !== currentTeamIndex,
+                  }"
+                  :disabled="
+                    !team.abilities.doublePoints || index !== currentTeamIndex
+                  "
+                  @click="activateDoublePoints(index)"
+                  title="نقاط مضاعفة"
+                >
+                  <span>×2</span>
+                </button>
 
-              <button
-                class="ability-btn change-question"
-                :class="{
-                  disabled:
+                <button
+                  class="ability-btn change-question"
+                  :class="{
+                    disabled:
+                      !team.abilities.changeQuestion ||
+                      index !== currentTeamIndex ||
+                      !currentQuestion,
+                  }"
+                  :disabled="
                     !team.abilities.changeQuestion ||
                     index !== currentTeamIndex ||
-                    !currentQuestion,
-                }"
-                :disabled="
-                  !team.abilities.changeQuestion ||
-                  index !== currentTeamIndex ||
-                  !currentQuestion
-                "
-                @click="useChangeQuestionAbility(index)"
-                title="تغيير السؤال"
-              >
-                <i class="fa fa-solid fa-arrow-left"></i>
-              </button>
+                    !currentQuestion
+                  "
+                  @click="useChangeQuestionAbility(index)"
+                  title="تغيير السؤال"
+                >
+                  <i class="fa fa-solid fa-arrow-left"></i>
+                </button>
 
-              <button
-                class="ability-btn call-help"
-                :class="{
-                  disabled:
+                <button
+                  class="ability-btn call-help"
+                  :class="{
+                    disabled:
+                      !team.abilities.callForHelp ||
+                      index !== currentTeamIndex ||
+                      !currentQuestion,
+                  }"
+                  :disabled="
                     !team.abilities.callForHelp ||
                     index !== currentTeamIndex ||
-                    !currentQuestion,
-                }"
-                :disabled="
-                  !team.abilities.callForHelp ||
-                  index !== currentTeamIndex ||
-                  !currentQuestion
-                "
-                @click="useCallForHelp(index)"
-                title="طلب المساعدة"
-              >
-                <i class="fa fa-solid fa-phone fa-xs"></i>
-              </button>
-            </div>
-
-            <!-- Help Timer -->
-            <div
-              v-if="callForHelpActive && index === currentTeamIndex"
-              class="help-timer"
-            >
-              <div class="timer-display">
-                <div
-                  class="timer-progress"
-                  :style="{ width: `${(callForHelpTimer / 60) * 100}%` }"
-                ></div>
-                <span>{{ callForHelpTimer }}ث</span>
+                    !currentQuestion
+                  "
+                  @click="useCallForHelp(index)"
+                  title="طلب المساعدة"
+                >
+                  <i class="fa fa-solid fa-phone fa-xs"></i>
+                </button>
               </div>
-              <button class="timer-cancel" @click="stopTimer()">إلغاء</button>
+
+              <!-- Help Timer -->
+              <div
+                v-if="callForHelpActive && index === currentTeamIndex"
+                class="help-timer"
+              >
+                <div class="timer-display">
+                  <div
+                    class="timer-progress"
+                    :class="{ active: callForHelpActive }"
+                  ></div>
+                  <span>{{ callForHelpTimer }}ث</span>
+                </div>
+                <button class="timer-cancel" @click="stopTimer()">إلغاء</button>
+              </div>
             </div>
           </div>
         </div>
@@ -138,21 +141,52 @@
             <div class="category-card">
               <!-- Right Questions Column (was Left) -->
               <div class="questions-column right">
+                <!-- First 200 points question -->
                 <button
-                  v-for="(question, idx) in category.questions.slice(0, 3)"
-                  :key="idx"
                   class="question-btn"
-                  :class="{ answered: question.answered }"
+                  :class="{ answered: category.questions[0]?.answered }"
                   :disabled="
-                    question.answered ||
-                    isButtonDisabled(category.id, question.points, idx)
+                    category.questions[0]?.answered ||
+                    isButtonDisabled(category.id, 200, 0)
                   "
                   @click="
-                    !isButtonDisabled(category.id, question.points, idx) &&
-                      selectQuestion(category, question, idx)
+                    !isButtonDisabled(category.id, 200, 0) &&
+                      selectQuestion(category, category.questions[0], 0)
                   "
                 >
-                  {{ question.points }}
+                  200
+                </button>
+
+                <!-- First 400 points question -->
+                <button
+                  class="question-btn"
+                  :class="{ answered: category.questions[2]?.answered }"
+                  :disabled="
+                    category.questions[2]?.answered ||
+                    isButtonDisabled(category.id, 400, 2)
+                  "
+                  @click="
+                    !isButtonDisabled(category.id, 400, 2) &&
+                      selectQuestion(category, category.questions[2], 2)
+                  "
+                >
+                  400
+                </button>
+
+                <!-- First 600 points question -->
+                <button
+                  class="question-btn"
+                  :class="{ answered: category.questions[4]?.answered }"
+                  :disabled="
+                    category.questions[4]?.answered ||
+                    isButtonDisabled(category.id, 600, 4)
+                  "
+                  @click="
+                    !isButtonDisabled(category.id, 600, 4) &&
+                      selectQuestion(category, category.questions[4], 4)
+                  "
+                >
+                  600
                 </button>
               </div>
 
@@ -168,21 +202,52 @@
 
               <!-- Left Questions Column (was Right) -->
               <div class="questions-column left">
+                <!-- Second 200 points question -->
                 <button
-                  v-for="(question, idx) in category.questions.slice(3)"
-                  :key="idx + 3"
                   class="question-btn"
-                  :class="{ answered: question.answered }"
+                  :class="{ answered: category.questions[1]?.answered }"
                   :disabled="
-                    question.answered ||
-                    isButtonDisabled(category.id, question.points, idx + 3)
+                    category.questions[1]?.answered ||
+                    isButtonDisabled(category.id, 200, 1)
                   "
                   @click="
-                    !isButtonDisabled(category.id, question.points, idx + 3) &&
-                      selectQuestion(category, question, idx + 3)
+                    !isButtonDisabled(category.id, 200, 1) &&
+                      selectQuestion(category, category.questions[1], 1)
                   "
                 >
-                  {{ question.points }}
+                  200
+                </button>
+
+                <!-- Second 400 points question -->
+                <button
+                  class="question-btn"
+                  :class="{ answered: category.questions[3]?.answered }"
+                  :disabled="
+                    category.questions[3]?.answered ||
+                    isButtonDisabled(category.id, 400, 3)
+                  "
+                  @click="
+                    !isButtonDisabled(category.id, 400, 3) &&
+                      selectQuestion(category, category.questions[3], 3)
+                  "
+                >
+                  400
+                </button>
+
+                <!-- Second 600 points question -->
+                <button
+                  class="question-btn"
+                  :class="{ answered: category.questions[5]?.answered }"
+                  :disabled="
+                    category.questions[5]?.answered ||
+                    isButtonDisabled(category.id, 600, 5)
+                  "
+                  @click="
+                    !isButtonDisabled(category.id, 600, 5) &&
+                      selectQuestion(category, category.questions[5], 5)
+                  "
+                >
+                  600
                 </button>
               </div>
             </div>
@@ -203,6 +268,22 @@
           <div class="question-meta">
             <h4>{{ currentCategory.name }}</h4>
             <div class="points-badge">{{ currentQuestion.points }} نقطة</div>
+          </div>
+          <!-- Add this timer element -->
+          <div class="question-timer">
+            <div class="timer-circle">
+              <svg width="60" height="60" viewBox="0 0 60 60">
+                <circle class="timer-background" cx="30" cy="30" r="28" />
+                <circle
+                  class="timer-progress"
+                  cx="30"
+                  cy="30"
+                  r="28"
+                  :style="{ strokeDashoffset: timerProgress }"
+                />
+              </svg>
+              <span class="timer-text">{{ formatTime(questionTimer) }}</span>
+            </div>
           </div>
         </div>
 
@@ -316,7 +397,7 @@
     <!-- Winner Modal -->
     <div v-if="showWinnerModal" class="winner-modal-overlay">
       <div class="winner-modal">
-        <!-- Confetti Elements - Generated dynamically with v-for -->
+        <!-- Confetti Elements -->
         <div class="confetti-container">
           <div
             class="confetti"
@@ -332,20 +413,42 @@
             <span>🎮</span>
           </div>
           <div class="badge badge-large" :style="{ '--index': 2 }">
-            <span>🏆</span>
+            <span v-if="isDraw">🤝</span>
+            <span v-else>🏆</span>
           </div>
           <div class="badge" :style="{ '--index': 3 }">
             <span>🎯</span>
           </div>
         </div>
 
-        <h2 class="title-animation">انتهت اللعبة!</h2>
+        <h2 class="title-animation">
+          {{ isDraw ? "تعادل!" : "انتهت اللعبة!" }}
+        </h2>
 
-        <!-- Winner section -->
-        <div
-          v-if="topTeams.length === 1 || teams.length === 2"
-          class="winner-single"
-        >
+        <!-- Draw section -->
+        <div v-if="isDraw" class="draw-section">
+          <h3 class="draw-title">تعادل بين الفرق التالية!</h3>
+          <div class="draw-teams-grid">
+            <div
+              v-for="(team, index) in drawTeams"
+              :key="team.id"
+              class="draw-team-card"
+              :style="{ '--index': index }"
+            >
+              <div class="draw-team-avatar">
+                {{ team.name.charAt(0) }}
+              </div>
+              <h4>{{ team.name }}</h4>
+              <div class="draw-team-score-container">
+                <div class="score-value">{{ team.score }}</div>
+                <div class="score-label">نقطة</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Winner section (single winner) -->
+        <div v-else-if="topTeams.length <= 2" class="winner-single">
           <div class="winner-avatar">
             {{ topTeams[0].name.charAt(0) }}
           </div>
@@ -356,8 +459,8 @@
           </div>
         </div>
 
-        <!-- Top teams list -->
-        <div v-else class="winner-list">
+        <!-- Podium section for other teams (only shown if not a draw and multiple teams exist) -->
+        <div v-if="!isDraw && teams.length > 2" class="winner-list">
           <h4>أفضل الفرق:</h4>
           <div class="podium-container">
             <div class="podium-place second-place" v-if="topTeams.length > 1">
@@ -395,7 +498,7 @@
 <script setup>
 import AppHeader from "../components/AppHeader.vue";
 import LoadSpinner from "../components/LoadSpinner.vue";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, onBeforeUnmount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
@@ -467,7 +570,7 @@ onMounted(() => {
   const alreadyPicked = Object.keys(availableQuestions).length > 0;
 
   selectedCategories.value = categories.map((category) => {
-    const groupedByPoints = { 100: [], 200: [], 300: [], 400: [] };
+    const groupedByPoints = { 200: [], 400: [], 600: [] };
 
     category.questions.forEach((q) => {
       if (groupedByPoints[q.points]) {
@@ -483,14 +586,6 @@ onMounted(() => {
       }
     }
 
-    const picked100 = pickQuestions(
-      groupedByPoints[100],
-      2,
-      category.id,
-      100,
-      category.questions,
-      category.name
-    );
     const picked200 = pickQuestions(
       groupedByPoints[200],
       2,
@@ -499,33 +594,32 @@ onMounted(() => {
       category.questions,
       category.name
     );
-    const picked300 = pickQuestions(
-      groupedByPoints[300],
-      1,
-      category.id,
-      300,
-      category.questions,
-      category.name
-    );
     const picked400 = pickQuestions(
       groupedByPoints[400],
-      1,
+      2,
       category.id,
       400,
       category.questions,
       category.name
     );
+    const picked600 = pickQuestions(
+      groupedByPoints[600],
+      2,
+      category.id,
+      600,
+      category.questions,
+      category.name
+    );
 
     availableQuestions[category.id] = {
-      100: picked100.length,
       200: picked200.length,
-      300: picked300.length,
-      400: picked400.length,
+      400: picked600.length,
+      600: picked400.length,
     };
 
     return {
       ...category,
-      questions: [...picked100, ...picked200, ...picked300, ...picked400],
+      questions: [...picked200, ...picked400, ...picked600],
     };
   });
 
@@ -560,6 +654,8 @@ onMounted(() => {
   if (savedQuestion && savedCategory) {
     const parsedQuestion = savedQuestion;
     const parsedCategory = savedCategory;
+    startQuestionTimer();
+
     const matchingCategory = selectedCategories.value.find(
       (cat) => cat.id === parsedCategory.id
     );
@@ -592,6 +688,59 @@ const nextTeamTurn = () => {
   setGameState({ currentTeamIndex: currentTeamIndex.value });
 };
 
+// ───────────────────────────────────────────────────────
+// 1) Timer state
+// ───────────────────────────────────────────────────────
+const questionTimer = ref(60);
+let questionTimerInterval = null;
+
+// ───────────────────────────────────────────────────────
+// 2) Timer progress for an SVG/circle progress bar
+// ───────────────────────────────────────────────────────
+const timerProgress = computed(() => {
+  const r = 28; // your circle’s radius
+  const circumference = 2 * Math.PI * r;
+  return circumference * (1 - questionTimer.value / 60);
+});
+
+// ───────────────────────────────────────────────────────
+// 3) Helper to format “MM:SS”
+// ───────────────────────────────────────────────────────
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
+}
+
+// ───────────────────────────────────────────────────────
+// 4) Start & clear timer
+// ───────────────────────────────────────────────────────
+function startQuestionTimer(duration = 60) {
+  clearQuestionTimer();
+  questionTimer.value = duration;
+  questionTimerInterval = setInterval(() => {
+    if (questionTimer.value > 0) {
+      questionTimer.value--;
+    } else {
+      clearQuestionTimer();
+    }
+  }, 1000);
+}
+
+function clearQuestionTimer() {
+  if (questionTimerInterval) {
+    clearInterval(questionTimerInterval);
+    questionTimerInterval = null;
+  }
+}
+
+// ───────────────────────────────────────────────────────
+// 5) Clean up on unmount
+// ───────────────────────────────────────────────────────
+onBeforeUnmount(() => {
+  clearQuestionTimer();
+});
+
 // Check if all questions are answered
 const checkIfGameOver = () => {
   const totalQuestions = selectedCategories.value.flatMap(
@@ -609,17 +758,39 @@ const closeModal = () => {
   currentQuestion.value = null;
   currentCategory.value = null;
   showAnswer.value = false;
-  stopTimer(); // Stop timer if active
   setGameState({
     currentQuestion: null,
     currentCategory: null,
   });
+  stopTimer();
   checkIfGameOver();
+  clearQuestionTimer();
 };
 
 // Sort teams by score and return top 3
+const teamScores = computed(() => {
+  return teams.value
+    .map((team) => ({ ...team, score: team.score }))
+    .sort((a, b) => b.score - a.score);
+});
+
+const highestScore = computed(() => {
+  return teamScores.value.length > 0 ? teamScores.value[0].score : 0;
+});
+
+const drawTeams = computed(() => {
+  return teamScores.value.filter((team) => team.score === highestScore.value);
+});
+
+const isDraw = computed(() => {
+  return drawTeams.value.length > 1;
+});
+
 const topTeams = computed(() => {
-  return [...teams.value].sort((a, b) => b.score - a.score).slice(0, 3);
+  if (isDraw.value) {
+    return drawTeams.value;
+  }
+  return teamScores.value;
 });
 
 // Select a question to display in the modal
@@ -627,6 +798,7 @@ const selectQuestion = (category, question, index) => {
   currentCategory.value = category;
   currentQuestion.value = { ...question, slotIndex: index };
   showAnswer.value = false;
+  startQuestionTimer();
   setGameState({
     currentQuestion: currentQuestion.value,
     currentCategory: currentCategory.value,
@@ -639,7 +811,6 @@ const adjustScore = (index, value) => {
   setGameState({ teams: teams.value });
 };
 
-// Award points to the selected team
 // Award points to the selected team
 const awardPoints = (teamIndex) => {
   if (currentQuestion.value && !currentQuestion.value.answered) {
@@ -833,6 +1004,10 @@ const useChangeQuestionAbility = (index) => {
       showAnswer.value = false;
       teams.value[index].abilities.changeQuestion = false;
 
+      const remaining = questionTimer.value;
+      const newDuration = remaining < 30 ? 30 : remaining;
+
+      startQuestionTimer(newDuration);
       // Update localStorage with newly used question
       answeredMap[mapKey] = answeredQuestions.concat(newQuestion.question);
       localStorage.setItem(answeredKey, JSON.stringify(answeredMap));
@@ -962,12 +1137,7 @@ const restartGame = () => {
 </script>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
+/* Base Styles */
 .rtl {
   direction: rtl;
   text-align: right;
@@ -978,6 +1148,113 @@ const restartGame = () => {
   background-color: #f0f5ff;
   min-height: 100vh;
   padding-bottom: 2rem;
+}
+
+/* Common Animations */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalZoomIn {
+  from {
+    transform: scale(0.8) rotateX(10deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(79, 70, 229, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-20px) rotateZ(0deg) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(400px) rotateZ(180deg) scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(800px) rotateZ(360deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes titleSlideIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes riseUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scoreCount {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes progressBar {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
 }
 
 /* Team Turn Banner */
@@ -997,7 +1274,8 @@ const restartGame = () => {
   font-size: 1.25rem;
 }
 
-.team-avatar {
+.team-avatar,
+.modal-avatar {
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   width: 2.5rem;
@@ -1013,33 +1291,16 @@ const restartGame = () => {
 /* Main Layout */
 .main-content {
   display: flex;
+  flex-direction: column;
   gap: 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 1rem;
-  flex-direction: row; /* Changed to row for LTR layout */
 }
 
-/* Teams Sidebar */
+/* Teams Section */
 .teams-sidebar {
-  width: 280px;
-  flex-shrink: 0;
-}
-
-/* Responsive behavior for small screens */
-@media (max-width: 768px) {
-  .main-content {
-    flex-direction: column; /* Teams at top, game board below */
-  }
-
-  .teams-sidebar {
-    width: 100%;
-    order: 1; /* Appears first (at top) on mobile */
-  }
-
-  .game-board {
-    order: 2; /* Appears second (below teams) on mobile */
-  }
+  width: 100%;
 }
 
 .teams-panel {
@@ -1067,11 +1328,17 @@ const restartGame = () => {
   border-radius: 2px;
 }
 
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
 .team-card {
   background-color: #f9fafb;
   border-radius: 12px;
   padding: 1.25rem;
-  margin-bottom: 1rem;
   transition: all 0.3s ease;
   border: 2px solid transparent;
 }
@@ -1141,10 +1408,18 @@ const restartGame = () => {
 }
 
 /* Team Abilities */
-.team-abilities {
+.team-abilities,
+.ability-controls {
   display: flex;
   gap: 0.5rem;
+}
+
+.team-abilities {
   margin-top: 0.75rem;
+}
+
+.ability-controls {
+  gap: 0.75rem;
 }
 
 .ability-btn {
@@ -1152,8 +1427,6 @@ const restartGame = () => {
   padding: 0.5rem;
   border: none;
   border-radius: 8px;
-  background-color: #e0e7ff;
-  color: #4f46e5;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -1194,8 +1467,14 @@ const restartGame = () => {
   color: #9ca3af;
 }
 
-/* Help Timer */
-.help-timer {
+.ability-btn .btn-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Timer Styles */
+.help-timer,
+.modal-help-timer {
   margin-top: 0.75rem;
 }
 
@@ -1211,7 +1490,8 @@ const restartGame = () => {
 .timer-progress {
   background: linear-gradient(90deg, #ec4899, #db2777);
   height: 100%;
-  transition: width 1s linear;
+  transition: none;
+  animation: progressBar 60s linear;
 }
 
 .timer-display span {
@@ -1251,7 +1531,7 @@ const restartGame = () => {
 
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 
@@ -1280,6 +1560,7 @@ const restartGame = () => {
   text-align: center;
   padding: 0 1rem;
   flex: 1;
+  order: 2;
 }
 
 .category-thumbnail {
@@ -1305,17 +1586,12 @@ const restartGame = () => {
   width: 80px;
 }
 
-/* Adjusted for RTL layout */
 .questions-column.left {
   order: 3;
 }
 
 .questions-column.right {
   order: 1;
-}
-
-.category-info {
-  order: 2;
 }
 
 .question-btn {
@@ -1334,12 +1610,7 @@ const restartGame = () => {
   box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
 }
 
-.question-btn.answered {
-  background-color: #d1d5db;
-  color: #9ca3af;
-  cursor: not-allowed;
-}
-
+.question-btn.answered,
 .question-btn:disabled {
   background-color: #d1d5db;
   color: #9ca3af;
@@ -1380,7 +1651,47 @@ const restartGame = () => {
   padding: 1.25rem;
 }
 
-/* RTL support for question header */
+.question-timer {
+  margin-right: auto;
+  margin-left: 1rem;
+}
+
+.timer-circle {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.timer-circle svg {
+  transform: rotate(-90deg);
+}
+
+.timer-background {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 4;
+}
+
+.timer-progress {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 176;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timer-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+}
+
 .rtl .question-header {
   flex-direction: row-reverse;
 }
@@ -1390,7 +1701,7 @@ const restartGame = () => {
   height: 50px;
   object-fit: cover;
   border-radius: 8px;
-  margin-left: 1rem; /* Changed for RTL */
+  margin-left: 1rem;
 }
 
 .question-meta {
@@ -1449,26 +1760,11 @@ const restartGame = () => {
   color: white;
 }
 
-.ability-controls {
-  display: flex;
-  gap: 0.75rem;
-}
-
 .ability-controls .ability-btn {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   padding: 0.5rem 0.75rem;
-}
-
-.ability-btn .btn-label {
-  font-size: 0.7rem;
-  font-weight: 600;
-}
-
-.modal-help-timer {
-  width: 100%;
-  margin-top: 0.75rem;
 }
 
 /* Answer Section */
@@ -1483,7 +1779,7 @@ const restartGame = () => {
   padding: 1rem;
   background-color: #f0fdf4;
   border-radius: 8px;
-  border-right: 4px solid #16a34a; /* Changed for RTL */
+  border-right: 4px solid #16a34a;
   border-left: none;
 }
 
@@ -1505,67 +1801,65 @@ const restartGame = () => {
 }
 
 .award-btn {
-  padding: 0.5rem 1rem;
-  background-color: #4f46e5;
+  background-color: #6366f1;
   color: white;
   border: none;
   border-radius: 8px;
+  padding: 0.75rem 1.5rem;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s;
 }
 
 .award-btn:hover {
-  background-color: #4338ca;
+  background-color: #4f46e5;
   transform: translateY(-2px);
 }
 
 .award-btn.nobody-btn {
-  background-color: #ef4444;
-  color: white;
+  background-color: #9ca3af;
 }
 
 .award-btn.nobody-btn:hover {
-  background-color: #dc2626;
+  background-color: #6b7280;
 }
 
 /* Modal Controls */
 .modal-controls {
   display: flex;
-  padding: 1rem;
-  gap: 1rem;
+  justify-content: space-between;
+  padding: 1.25rem;
   background-color: #f9fafb;
   border-top: 1px solid #e5e7eb;
 }
 
 .toggle-answer,
 .close-modal {
-  padding: 0.75rem 1rem;
-  border: none;
+  padding: 0.75rem 1.5rem;
   border-radius: 8px;
-  cursor: pointer;
   font-weight: 600;
+  cursor: pointer;
   transition: all 0.2s;
 }
 
 .toggle-answer {
-  background-color: #fef3c7;
-  color: #d97706;
-  flex: 1;
+  background-color: #10b981;
+  color: white;
+  border: none;
 }
 
 .toggle-answer:hover {
-  background-color: #fde68a;
+  background-color: #059669;
 }
 
 .close-modal {
-  background-color: #e0e7ff;
-  color: #4f46e5;
-  flex: 1;
+  background-color: white;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
 }
 
 .close-modal:hover {
-  background-color: #c7d2fe;
+  background-color: #f3f4f6;
 }
 
 /* Winner Modal */
@@ -1590,15 +1884,6 @@ const restartGame = () => {
   overflow-y: auto; /* Enable scrolling if content is tall */
 }
 
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .winner-modal {
   background: linear-gradient(135deg, #ffffff, #f9fafb);
   border-radius: 24px;
@@ -1614,18 +1899,6 @@ const restartGame = () => {
   margin: 1.5rem 0; /* Add margin to ensure it's not flush against edges */
 }
 
-@keyframes modalZoomIn {
-  from {
-    transform: scale(0.8) rotateX(10deg);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1) rotateX(0);
-    opacity: 1;
-  }
-}
-
-/* Confetti Positioning Improvements */
 .confetti-container {
   position: absolute;
   top: 0;
@@ -1647,22 +1920,7 @@ const restartGame = () => {
   will-change: transform;
 }
 
-@keyframes fall {
-  0% {
-    transform: translateY(-20px) rotateZ(0deg) scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(400px) rotateZ(180deg) scale(1.2);
-    opacity: 0.8;
-  }
-  100% {
-    transform: translateY(800px) rotateZ(360deg) scale(0.5);
-    opacity: 0;
-  }
-}
-
-/* Making sure animations run */
+/* Animation fill modes */
 .badge,
 .first-place,
 .second-place,
@@ -1671,11 +1929,6 @@ const restartGame = () => {
 .winner-single,
 .new-game-btn {
   animation-fill-mode: both;
-}
-
-.badge-large span,
-.badge span {
-  display: block;
 }
 
 /* Victory Badges */
@@ -1711,26 +1964,17 @@ const restartGame = () => {
   background: linear-gradient(135deg, #f59e0b, #d97706);
 }
 
+.badge span,
+.badge-large span {
+  display: block;
+}
+
 .badge span {
-  font-size: 1.75rem; /* Slightly smaller for better fit */
+  font-size: 1.75rem;
 }
 
 .badge-large span {
-  font-size: 2.5rem; /* Slightly smaller for better fit */
-}
-
-@keyframes badgePop {
-  0% {
-    transform: scale(0.5);
-    opacity: 0;
-  }
-  80% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+  font-size: 2.5rem;
 }
 
 /* Title Animation */
@@ -1747,19 +1991,9 @@ const restartGame = () => {
   opacity: 0;
 }
 
-@keyframes titleSlideIn {
-  from {
-    transform: translateY(50px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* Winner Single */
-.winner-single {
+/* Winner Single & Draw Section - Common styles */
+.winner-single,
+.draw-section {
   background: linear-gradient(
     135deg,
     rgba(79, 70, 229, 0.1),
@@ -1776,6 +2010,16 @@ const restartGame = () => {
   transform: translateY(30px);
 }
 
+.winner-single {
+  animation: winnerAppear 0.8s ease-out forwards;
+  animation-delay: 0.6s;
+}
+
+.draw-section {
+  animation: drawAppear 0.8s ease-out forwards;
+  animation-delay: 0.6s;
+}
+
 @keyframes winnerAppear {
   from {
     opacity: 0;
@@ -1787,7 +2031,20 @@ const restartGame = () => {
   }
 }
 
-.winner-avatar {
+@keyframes drawAppear {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Winner & Draw Avatar Styles */
+.winner-avatar,
+.draw-team-avatar {
   width: 80px;
   height: 80px;
   background: linear-gradient(135deg, #4f46e5, #8b5cf6);
@@ -1804,7 +2061,17 @@ const restartGame = () => {
   animation: pulse 2s infinite;
 }
 
-@keyframes pulse {
+.draw-team-avatar {
+  width: 70px;
+  height: 70px;
+  font-size: 1.8rem;
+  margin: 0 auto 1rem;
+  box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
+  animation: drawPulse 2s infinite;
+  animation-delay: calc(1.2s + var(--index, 0) * 0.1s);
+}
+
+@keyframes drawPulse {
   0% {
     box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
   }
@@ -1822,12 +2089,31 @@ const restartGame = () => {
   margin-bottom: 1rem;
 }
 
-.winner-score-container {
+/* Score Value Styles */
+.winner-score-container,
+.draw-team-score-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   animation: scoreCount 1.5s ease-out forwards;
   animation-delay: 1s;
+}
+
+.draw-team-score-container {
+  animation: drawScoreAppear 1s ease-out forwards;
+  animation-delay: calc(1.3s + var(--index, 0) * 0.1s);
+  opacity: 0;
+}
+
+@keyframes drawScoreAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .score-value {
@@ -1839,24 +2125,19 @@ const restartGame = () => {
   -webkit-text-fill-color: transparent;
 }
 
+.draw-team-score-container .score-value {
+  font-size: 2.25rem;
+}
+
 .score-label {
   font-size: 1.25rem;
   color: #6b7280;
   margin-top: 0.5rem;
 }
 
-@keyframes scoreCount {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+.draw-team-score-container .score-label {
+  font-size: 1rem;
+  margin-top: 0.25rem;
 }
 
 /* Winner List - Podium Style */
@@ -1983,15 +2264,48 @@ const restartGame = () => {
   background: linear-gradient(135deg, #10b981, #059669);
 }
 
-@keyframes riseUp {
-  from {
-    transform: translateY(100px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+/* Common rise animation */
+.first-place,
+.second-place,
+.third-place {
+  animation: riseUp 1s ease-out forwards;
+  opacity: 0;
+}
+
+.first-place {
+  animation-delay: 0.8s;
+}
+
+.second-place {
+  animation-delay: 1s;
+}
+
+.third-place {
+  animation-delay: 1.2s;
+}
+
+/* Podium avatars - specific sizes */
+.first-place .podium-avatar {
+  width: 60px;
+  height: 60px;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+/* Podium blocks - specific heights and colors */
+.first-place .podium-block {
+  height: 120px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.second-place .podium-block {
+  height: 80px;
+  background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+}
+
+.third-place .podium-block {
+  height: 60px;
+  background: linear-gradient(135deg, #10b981, #059669);
 }
 
 /* New Game Button */
@@ -2029,6 +2343,155 @@ const restartGame = () => {
   font-size: 1.5rem;
 }
 
+.draw-section {
+  background: linear-gradient(
+    135deg,
+    rgba(79, 70, 229, 0.05),
+    rgba(139, 92, 246, 0.05)
+  );
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  position: relative;
+  z-index: 5;
+  animation: drawAppear 0.8s ease-out forwards;
+  animation-delay: 0.6s;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.draw-title {
+  font-size: 1.75rem;
+  color: #4f46e5;
+  margin-bottom: 2rem;
+  text-align: center;
+  animation: drawTitleSlide 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    forwards;
+  animation-delay: 0.8s;
+  opacity: 0;
+}
+
+.draw-teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.draw-team-card {
+  border-radius: 16px;
+  padding: 1.25rem;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: drawCardAppear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    forwards;
+  animation-delay: calc(1s + var(--index, 0) * 0.1s);
+  opacity: 0;
+  transform: scale(0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Draw team background colors */
+.draw-team-card:nth-child(1) {
+  background: linear-gradient(135deg, #fff5f5, #ffe3e3);
+}
+
+.draw-team-card:nth-child(2) {
+  background: linear-gradient(135deg, #f0f7ff, #e3edff);
+}
+
+.draw-team-card:nth-child(3) {
+  background: linear-gradient(135deg, #f0fff4, #dcfce7);
+}
+
+.draw-team-card:nth-child(4) {
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+}
+
+/* Draw team avatars */
+.draw-team-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  margin: 0 auto 1rem;
+  box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
+  text-transform: uppercase;
+  animation: drawPulse 2s infinite;
+  animation-delay: calc(1.2s + var(--index, 0) * 0.1s);
+}
+
+/* Draw team avatar colors */
+.draw-team-card:nth-child(1) .draw-team-avatar {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.draw-team-card:nth-child(2) .draw-team-avatar {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.draw-team-card:nth-child(3) .draw-team-avatar {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.draw-team-card:nth-child(4) .draw-team-avatar {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.draw-team-card h4 {
+  font-size: 1.25rem;
+  color: #1f2937;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.draw-team-score-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: drawScoreAppear 1s ease-out forwards;
+  animation-delay: calc(1.3s + var(--index, 0) * 0.1s);
+  opacity: 0;
+}
+
+/* Score specific styles for draw section */
+.draw-team-score-container .score-value {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #4f46e5;
+  background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.draw-team-score-container .score-label {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+/* ================================
+   SECTION 8: Animations
+   ================================ */
+
+@keyframes riseUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 @keyframes buttonAppear {
   from {
     opacity: 0;
@@ -2040,12 +2503,40 @@ const restartGame = () => {
   }
 }
 
-.pulse-animation {
-  animation: pulseButton 2s infinite;
-  animation-delay: 2s;
+@keyframes drawAppear {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@keyframes pulseButton {
+@keyframes drawTitleSlide {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes drawCardAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes drawPulse {
   0% {
     box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
   }
@@ -2057,18 +2548,103 @@ const restartGame = () => {
   }
 }
 
-/* Responsive Design */
+@keyframes drawScoreAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ================================
+   SECTION 9: Media Queries
+   ================================ */
+
+/* Large screens */
+@media (max-width: 1280px) {
+  .teams-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablets */
 @media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+
+  .teams-grid,
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teams-panel,
+  .game-board {
+    padding: 1rem;
+  }
+
+  .team-card {
+    padding: 1rem;
+  }
+
+  .question-card {
+    border-radius: 0;
+    max-height: 100vh;
+  }
+
+  .question-header {
+    padding: 1rem;
+  }
+
+  .question-content {
+    padding: 1.5rem;
+    font-size: 1.25rem;
+  }
+
+  .modal-team-abilities {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ability-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .ability-btn {
+    flex: 1;
+  }
+
+  .modal-controls {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .toggle-answer,
+  .close-modal {
+    width: 100%;
+  }
+
+  /* Winner modal specific */
   .winner-modal {
-    padding: 2rem 1rem;
-    width: 95%;
-    margin: 0.5rem 0;
+    padding: 1.5rem;
+  }
+
+  .title-animation {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
   }
 
   .victory-badges {
-    gap: 0.5rem;
-    margin-top: 0.25rem;
-    margin-bottom: 1rem;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
   }
 
   .badge {
@@ -2077,207 +2653,168 @@ const restartGame = () => {
   }
 
   .badge-large {
-    width: 55px;
-    height: 55px;
+    width: 60px;
+    height: 60px;
   }
 
-  .badge span {
+  .winner-avatar {
+    width: 60px;
+    height: 60px;
     font-size: 1.5rem;
   }
 
-  .badge-large span {
+  .score-value {
     font-size: 2rem;
   }
 
-  .title-animation {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
+  /* Podium specific */
+  .podium-container {
+    height: 250px;
+    gap: 0.25rem;
   }
 
-  /* Adjusting winner avatar size */
-  .winner-avatar {
-    width: 65px;
-    height: 65px;
-    font-size: 1.75rem;
+  .podium-place {
+    width: 90px;
   }
 
-  /* Reduce padding for single winner display */
-  .winner-single {
-    padding: 1.5rem 1rem;
-  }
-}
-
-/* Extra small screen adjustments */
-@media (max-width: 480px) {
-  .winner-modal {
-    padding: 1.5rem 1rem;
-  }
-
-  .badge {
-    width: 35px;
-    height: 35px;
-  }
-
-  .badge-large {
-    width: 45px;
-    height: 45px;
-  }
-
-  .badge span {
+  .podium-avatar {
+    width: 50px;
+    height: 50px;
     font-size: 1.25rem;
   }
 
-  .badge-large span {
-    font-size: 1.75rem;
+  .first-place .podium-block {
+    height: 140px;
   }
 
-  /* Make sure the new game button fits */
+  .second-place .podium-block {
+    height: 100px;
+  }
+
+  .third-place .podium-block {
+    height: 70px;
+  }
+
   .new-game-btn {
-    padding: 0.75rem 1.25rem;
+    padding: 0.875rem 1.5rem;
     font-size: 1rem;
   }
 
-  /* Ensure titles fit on screen */
-  .title-animation {
-    font-size: 1.75rem;
+  /* Draw section specific */
+  .draw-teams-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
   }
 
-  .winner-single h3 {
+  .draw-team-card {
+    padding: 1rem;
+  }
+
+  .draw-team-avatar {
+    width: 60px;
+    height: 60px;
     font-size: 1.5rem;
   }
-}
 
-/* Ensure modal scrolls properly on very small screens */
-@media (max-height: 600px) {
-  .winner-modal-overlay {
-    align-items: flex-start;
-    padding: 0.5rem;
+  .draw-team-card h4 {
+    font-size: 1.125rem;
   }
 
-  .winner-modal {
-    margin: 0.5rem 0;
-    padding: 1.5rem 1rem;
+  .draw-team-score-container .score-value {
+    font-size: 2rem;
   }
 }
 
-/* Fix for badge visibility on all screen sizes */
-.badge,
-.badge-large {
-  position: relative;
-  z-index: 10;
-}
-
-/* RTL-specific adjustments */
-.rtl .category-image {
-  margin-left: 0;
-  margin-right: 1rem;
-}
-
-.rtl .answer-reveal {
-  border-right: none;
-  border-left: 4px solid #16a34a;
-}
-
-/* Custom scrollbar for better UX */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #94a3b8;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
-}
-
-/* Loading spinner */
-.loading-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid rgba(79, 70, 229, 0.2);
-  border-radius: 50%;
-  border-top-color: #4f46e5;
-  animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Additional animations for better UX */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.question-card,
-.category-card,
-.team-card {
-  animation: fadeIn 0.3s ease-out;
-}
-
-/* Double points active indicator pulse animation */
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(217, 119, 6, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0);
-  }
-}
-
-.ability-btn.double-points.active {
-  animation: pulse 2s infinite;
-}
-
-/* Accessibility improvements */
-button:focus,
-input:focus {
-  outline: 2px solid #4f46e5;
-  outline-offset: 2px;
-}
-
-/* Print styles */
-@media print {
-  .game-container {
-    background-color: white;
+/* Mobile devices */
+@media (max-width: 480px) {
+  .team-turn-content {
+    font-size: 1rem;
   }
 
-  .teams-sidebar,
-  .modal-controls,
-  .ability-controls {
+  .team-avatar {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+  }
+
+  .teams-header {
+    font-size: 1.25rem;
+  }
+
+  .category-thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+
+  .questions-column {
+    width: 70px;
+    gap: 0.5rem;
+  }
+
+  .question-btn {
+    padding: 0.625rem;
+    font-size: 0.875rem;
+  }
+
+  .question-content {
+    font-size: 1.125rem;
+    padding: 1rem;
+  }
+
+  .category-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ability-btn .btn-label {
     display: none;
   }
 
-  .game-board {
-    box-shadow: none;
+  .award-btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
   }
 
-  .category-card {
-    break-inside: avoid;
+  .title-animation {
+    font-size: 1.5rem;
+  }
+
+  .score-value {
+    font-size: 1.75rem;
+  }
+
+  .podium-place {
+    width: 80px;
+  }
+
+  /* Draw section specific */
+  .draw-title {
+    font-size: 1.5rem;
+  }
+
+  .draw-teams-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .draw-team-card {
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+  .team-turn-content {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .ability-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .ability-btn {
+    width: 100%;
   }
 }
 </style>

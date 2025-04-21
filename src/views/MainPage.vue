@@ -114,7 +114,7 @@
                         class="btn btn-light remove-team"
                         title="إزالة الفريق"
                       >
-                        <i class="fa fas fa-times-circle"></i>
+                        <i class="fa fas fa-times"></i>
                       </button>
                     </div>
                   </div>
@@ -155,11 +155,59 @@
       </div>
     </div>
   </div>
+
+  <!-- Floating Category Tracker -->
+  <transition name="slide-fade">
+    <div
+      v-if="selectedCategories.length > 0 || showCategoryTracker"
+      class="category-tracker"
+      :class="{ warning: selectedCategories.length < 2 }"
+    >
+      <div class="tracker-header">
+        <div class="tracker-title">
+          <i class="bi bi-stack"></i>
+          <span>الفئات المختارة</span>
+        </div>
+        <div
+          class="tracker-count"
+          :class="{ warning: selectedCategories.length < 2 }"
+        >
+          {{ selectedCategories.length }}/{{ maxCategories }}
+        </div>
+      </div>
+      <div class="tracker-body">
+        <div v-if="selectedCategories.length > 0" class="categories-list">
+          <div
+            v-for="(category, index) in selectedCategories"
+            :key="category.id"
+            class="category-item animate__animated animate__fadeInRight"
+            :style="{ 'animation-delay': `${index * 0.1}s` }"
+          >
+            <span class="category-number">{{ index + 1 }}</span>
+            <span class="category-name">{{
+              category.nameAr || category.name
+            }}</span>
+            <button
+              class="remove-category"
+              @click.stop="toggleActive(category)"
+              title="إزالة الفئة"
+            >
+              <i class="fa fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div v-else class="tracker-empty">
+          <i class="fa fas fa-info-circle"></i>
+          <span>اختر على الأقل فئتين</span>
+        </div>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script setup>
 import AppHeader from "../components/AppHeader.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import LoadSpinner from "@/components/LoadSpinner.vue";
 
@@ -168,6 +216,7 @@ const categories = ref([]);
 const selectedCategories = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
+const showCategoryTracker = ref(false);
 
 const minCategories = 2;
 const maxCategories = 6;
@@ -225,7 +274,19 @@ onMounted(async () => {
     console.error("Error loading categories:", error);
   }
   loading.value = false;
+
+  // Show tracker after initial scroll
+  window.addEventListener("scroll", handleScroll);
 });
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+
+const handleScroll = () => {
+  // Show tracker after scrolling 100px
+  showCategoryTracker.value = window.scrollY > 100;
+};
 
 const toggleActive = (category) => {
   const index = selectedCategories.value.indexOf(category);
@@ -883,22 +944,252 @@ const handleImageError = (event) => {
   }
 }
 
-/* Responsive adjustments */
+/* Floating Category Tracker Styles */
+/* Floating Category Tracker Styles - Continuation */
+.category-tracker {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  max-width: 280px;
+  max-height: 80vh;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.category-tracker.warning {
+  border: 2px solid #ff9800;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.tracker-header {
+  background: linear-gradient(45deg, #7209b7, #4361ee);
+  color: white;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tracker-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.tracker-title i {
+  font-size: 1rem;
+}
+
+.tracker-count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.tracker-count.warning {
+  background: #ff9800;
+  color: white;
+  animation: pulse-attention 1.5s infinite;
+}
+
+.tracker-body {
+  max-height: calc(80vh - 50px);
+  overflow-y: auto;
+  padding: 10px;
+  width: 300px; /* Fixed width for all items */
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.category-item:hover {
+  background: #eef2f7;
+  transform: translateX(5px);
+}
+
+.category-number {
+  background: #7209b7;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.category-name {
+  flex: 1;
+  font-size: 0.9rem;
+  color: white;
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide overflow text */
+  text-overflow: ellipsis; /* Show ellipsis (...) for overflow text */
+}
+
+.remove-category {
+  background: transparent;
+  border: none;
+  color: #dc3545;
+  font-size: 1.2rem;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+.remove-category:hover {
+  background: #fee2e2;
+  transform: rotate(90deg);
+}
+
+.remove-category i {
+  line-height: 1;
+}
+
+.tracker-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #6c757d;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.tracker-empty i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #ff9800;
+}
+
+/* Transition for the tracker */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(-20px);
+  opacity: 0;
+}
+
+/* Custom scrollbar for tracker body */
+.tracker-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.tracker-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.tracker-body::-webkit-scrollbar-thumb {
+  background: #7209b7;
+  border-radius: 4px;
+}
+
+.tracker-body::-webkit-scrollbar-thumb:hover {
+  background: #560bad;
+}
+
+/* Responsive design for mobile */
 @media (max-width: 768px) {
-  .category-card {
-    height: 180px;
+  .category-tracker {
+    left: 10px;
+    top: 10px;
+    width: 240px;
+    max-height: 240px;
+    overflow: scroll;
   }
 
-  .team-card {
-    margin-bottom: 1rem;
+  .tracker-body {
+    width: 100%; /* Full width on mobile */
   }
 
-  .main-card {
-    padding: 1rem;
+  .tracker-title {
+    font-size: 0.85rem;
   }
 
-  .game-title {
-    font-size: 2rem;
+  .category-item {
+    padding: 6px 10px;
+  }
+
+  .category-name {
+    font-size: 0.85rem;
+  }
+}
+
+/* RTL support for floating tracker */
+[dir="rtl"] .category-tracker {
+  left: auto;
+  right: 20px;
+}
+
+[dir="rtl"] .category-number {
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+[dir="rtl"] .category-item:hover {
+  transform: translateX(-5px);
+}
+
+[dir="rtl"] .slide-fade-enter-from,
+[dir="rtl"] .slide-fade-leave-to {
+  transform: translateX(20px);
+}
+
+@media (max-width: 768px) {
+  [dir="rtl"] .category-tracker {
+    right: 10px;
   }
 }
 </style>
