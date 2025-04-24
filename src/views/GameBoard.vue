@@ -20,7 +20,7 @@
       <!-- Team List Horizontal Bar -->
       <div class="teams-sidebar">
         <div v-if="teams.length > 0" class="teams-panel">
-          <h4 class="teams-header">الفرق</h4>
+          <h4 class="title-header">الفرق</h4>
 
           <div class="teams-grid">
             <div
@@ -132,6 +132,8 @@
       <!-- Game Board -->
       <div class="game-board">
         <!-- Categories Grid -->
+        <h4 class="title-header">التصنيفات</h4>
+
         <div v-if="!currentQuestion" class="categories-grid">
           <div
             v-for="category in selectedCategories"
@@ -1301,6 +1303,7 @@ const restartGame = () => {
 /* Teams Section */
 .teams-sidebar {
   width: 100%;
+  order: 2;
 }
 
 .teams-panel {
@@ -1310,7 +1313,7 @@ const restartGame = () => {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.teams-header {
+.title-header {
   color: #4f46e5;
   text-align: center;
   margin-bottom: 1.5rem;
@@ -1318,7 +1321,7 @@ const restartGame = () => {
   position: relative;
 }
 
-.teams-header:after {
+.title-header:after {
   content: "";
   display: block;
   width: 50px;
@@ -1741,9 +1744,7 @@ const restartGame = () => {
 .modal-team-abilities {
   background-color: #f3f4f6;
   padding: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -2608,11 +2609,6 @@ const restartGame = () => {
     font-size: 1.25rem;
   }
 
-  .modal-team-abilities {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
   .ability-controls {
     width: 100%;
     justify-content: space-between;
@@ -2737,7 +2733,7 @@ const restartGame = () => {
     font-size: 1rem;
   }
 
-  .teams-header {
+  .title-header {
     font-size: 1.25rem;
   }
 

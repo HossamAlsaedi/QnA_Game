@@ -184,7 +184,7 @@
             :style="{ 'animation-delay': `${index * 0.1}s` }"
           >
             <span class="category-number">{{ index + 1 }}</span>
-            <span class="category-name">{{
+            <span class="tracker-name">{{
               category.nameAr || category.name
             }}</span>
             <button
@@ -632,7 +632,8 @@ const handleImageError = (event) => {
   transform: scale(1.1);
 }
 
-.category-name {
+.category-name,
+.tracker-name {
   height: 30%;
   background: linear-gradient(90deg, #4361ee, #3a0ca3);
   background-size: 200% 200%;
@@ -1070,13 +1071,18 @@ const handleImageError = (event) => {
   flex-shrink: 0;
 }
 
-.category-name {
+.category-name,
+.tracker-name {
   flex: 1;
   font-size: 0.9rem;
   color: white;
   white-space: nowrap; /* Prevent text from wrapping */
   overflow: hidden; /* Hide overflow text */
   text-overflow: ellipsis; /* Show ellipsis (...) for overflow text */
+}
+
+.tracker-name {
+  border-radius: 25px;
 }
 
 .remove-category {
@@ -1175,8 +1181,12 @@ const handleImageError = (event) => {
     padding: 6px 10px;
   }
 
-  .category-name {
+  .category-name,
+  .tracker-name {
     font-size: 0.85rem;
+  }
+  .tracker-name {
+    border-radius: 0px;
   }
 }
 
