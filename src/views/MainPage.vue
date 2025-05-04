@@ -247,19 +247,18 @@ onMounted(async () => {
       "SA.json",
       "animals.json",
       "countries_capitals.json",
-      "RE.json",
+      "general.json",
       "quran.json",
       "Islam.json",
       "ps-games.json",
-      "wwe.json",
-      "ST.json",
-      "hayala.json",
       "cars.json",
+      "wwe.json",
+      "RE.json",
+      "anime.json",
+      "ST.json",
       "PB.json",
       "puzzles.json",
       "history.json",
-      "general.json",
-      "anime.json",
     ];
     const categoryPromises = categoryFiles.map(async (file) => {
       const response = await fetch(
@@ -278,7 +277,7 @@ onMounted(async () => {
   // Show tracker after initial scroll
   window.addEventListener("scroll", handleScroll);
 
-  const APP_VERSION = "0.7.0";
+  const APP_VERSION = "0.7.1";
 
   function checkAndClearLocalStorageOnUpdate() {
     const storedVersion = localStorage.getItem("appVersion");

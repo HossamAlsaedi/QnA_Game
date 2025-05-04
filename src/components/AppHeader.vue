@@ -1,23 +1,25 @@
 <template>
   <header class="header-gradient shadow sticky-top">
     <!-- Background overlay that covers the main content when mobile menu is open -->
-    <div 
-      class="menu-backdrop" 
-      :class="{ 'menu-backdrop-active': mobileMenuOpen }" 
+    <div
+      class="menu-backdrop"
+      :class="{ 'menu-backdrop-active': mobileMenuOpen }"
       @click="toggleMobileMenu"
     ></div>
-    
+
     <div class="container-fluid">
       <div class="d-flex justify-content-between align-items-center py-3">
         <!-- Game Logo (positioned on left in RTL layout) -->
         <h1 class="m-0 text-white d-flex align-items-center fw-bold game-logo">
           <i class="fa fas fa-gamepad logo-icon"></i>
-          <span class="logo-text me-2">سؤال وجواب</span>
+          <span class="logo-text me-2">إختبر ذكائك</span>
         </h1>
-        
+
         <!-- Desktop Navigation (positioned on right in RTL layout) -->
         <nav class="navigation d-flex align-items-center">
-          <ul class="list-unstyled mb-0 d-flex flex-wrap justify-content-end align-items-center">
+          <ul
+            class="list-unstyled mb-0 d-flex flex-wrap justify-content-end align-items-center"
+          >
             <li class="nav-item mb-2 mb-md-0 me-3">
               <RouterLink to="/" class="btn btn-nav">
                 <i class="fa fas fa-home"></i>
@@ -26,34 +28,37 @@
             </li>
             <!-- Continue Game Button (conditionally displayed) -->
             <li v-if="isMainPage && hasGameState" class="nav-item mb-2 mb-md-0">
-              <button 
-                @click="router.push({ name: 'game-board' });" 
+              <button
+                @click="router.push({ name: 'game-board' })"
                 class="btn btn-nav continue-game-btn"
               >
-              <span class="btn-text">استكمال اللعبة</span>
-              <i class="fa fas fa-play-circle me-2"></i>
+                <span class="btn-text">استكمال اللعبة</span>
+                <i class="fa fas fa-play-circle me-2"></i>
               </button>
             </li>
             <!-- Add more navigation items here as needed -->
           </ul>
-          
+
           <!-- Mobile Menu Button -->
-          <button 
-            class="mobile-menu-btn d-md-none ms-2" 
+          <button
+            class="mobile-menu-btn d-md-none ms-2"
             @click="toggleMobileMenu"
             aria-label="Toggle Menu"
           >
-            <i class="fa fas" :class="[mobileMenuOpen ? 'fa-times' : 'fa-bars']"></i>
+            <i
+              class="fa fas"
+              :class="[mobileMenuOpen ? 'fa-times' : 'fa-bars']"
+            ></i>
           </button>
         </nav>
       </div>
-      
+
       <!-- Mobile Navigation Overlay -->
       <div class="mobile-menu" :class="{ 'mobile-menu-open': mobileMenuOpen }">
         <ul class="list-unstyled p-3">
           <li class="mb-3">
-            <button 
-              @click="navigateAndCloseMenu('/')" 
+            <button
+              @click="navigateAndCloseMenu('/')"
               class="btn btn-nav-mobile w-100 text-start"
             >
               <i class="fa fas fa-home px-1"></i>الرئيسية
@@ -61,14 +66,20 @@
           </li>
           <!-- Always show continue button on mobile, but disable it when no game state -->
           <li class="mb-3">
-            <button 
-              @click="hasGameState ? navigateAndCloseMenu({ name: 'game-board' }) : null" 
+            <button
+              @click="
+                hasGameState
+                  ? navigateAndCloseMenu({ name: 'game-board' })
+                  : null
+              "
               class="btn btn-nav-mobile w-100 text-start"
               :class="{ 'btn-nav-disabled': !hasGameState }"
               :disabled="!hasGameState"
             >
               <i class="fa fas fa-play-circle px-1"></i>استكمال اللعبة
-              <small v-if="!hasGameState" class="d-block no-game-message mt-1">(لا توجد لعبة محفوظة)</small>
+              <small v-if="!hasGameState" class="d-block no-game-message mt-1"
+                >(لا توجد لعبة محفوظة)</small
+              >
             </button>
           </li>
           <!-- Add more mobile navigation items here as needed -->
@@ -79,8 +90,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
@@ -89,51 +100,51 @@ const mobileMenuOpen = ref(false);
 
 // Check if user is on the main page
 const isMainPage = computed(() => {
-  return route.path === '/';
+  return route.path === "/";
 });
 
 // Check for gameState in localStorage when component mounts
 onMounted(() => {
   checkForGameState();
-  
+
   // Add event listener to update button visibility when localStorage changes
-  window.addEventListener('storage', checkForGameState);
-  
+  window.addEventListener("storage", checkForGameState);
+
   // Close mobile menu when window is resized to desktop size
-  window.addEventListener('resize', () => {
+  window.addEventListener("resize", () => {
     if (window.innerWidth >= 768) {
       mobileMenuOpen.value = false;
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
   });
 });
 
 // Function to check for gameState in localStorage
 function checkForGameState() {
-  hasGameState.value = !!localStorage.getItem('gameState');
+  hasGameState.value = !!localStorage.getItem("gameState");
 }
 
 // Toggle mobile menu
 function toggleMobileMenu() {
   mobileMenuOpen.value = !mobileMenuOpen.value;
-  
+
   // Add or remove scroll lock on body when menu is open
   if (mobileMenuOpen.value) {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
   } else {
-    document.body.style.overflow = '';
+    document.body.style.overflow = "";
   }
 }
 
 // Navigate and close mobile menu
 function navigateAndCloseMenu(route) {
-  if (typeof route === 'string') {
+  if (typeof route === "string") {
     router.push(route);
   } else {
     router.push(route);
   }
   mobileMenuOpen.value = false;
-  document.body.style.overflow = '';
+  document.body.style.overflow = "";
 }
 </script>
 
@@ -144,7 +155,7 @@ function navigateAndCloseMenu(route) {
 
 /* Enhanced header gradient with more vibrant colors to match main page */
 .header-gradient {
-  background: linear-gradient(135deg, #7209B7 0%, #3A0CA3 100%);
+  background: linear-gradient(135deg, #7209b7 0%, #3a0ca3 100%);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -195,14 +206,24 @@ function navigateAndCloseMenu(route) {
 }
 
 @keyframes pulse-rotate {
-  0% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.2) rotate(5deg); }
-  100% { transform: scale(1) rotate(0deg); }
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 @keyframes shine {
-  0% { background-position: -100%; }
-  100% { background-position: 200%; }
+  0% {
+    background-position: -100%;
+  }
+  100% {
+    background-position: 200%;
+  }
 }
 
 /* Enhanced Navigation Button */
@@ -222,7 +243,7 @@ function navigateAndCloseMenu(route) {
 }
 
 .btn-nav::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -256,8 +277,12 @@ function navigateAndCloseMenu(route) {
 }
 
 @keyframes subtle-glow {
-  from { box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); }
-  to { box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); }
+  from {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+  to {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  }
 }
 
 /* Mobile Menu Button */
@@ -285,7 +310,7 @@ function navigateAndCloseMenu(route) {
   width: 80%;
   max-width: 320px;
   height: 100vh;
-  background: linear-gradient(135deg, #7209B7 0%, #3A0CA3 100%);
+  background: linear-gradient(135deg, #7209b7 0%, #3a0ca3 100%);
   z-index: 99;
   transition: right 0.3s ease;
   box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
@@ -324,7 +349,7 @@ function navigateAndCloseMenu(route) {
 
 /* Special styling for the "No saved game" message */
 .no-game-message {
-  color: #FFD166; /* Warm yellow color that stands out on purple */
+  color: #ffd166; /* Warm yellow color that stands out on purple */
   font-weight: 500;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
   background-color: rgba(0, 0, 0, 0.2);
@@ -339,11 +364,11 @@ function navigateAndCloseMenu(route) {
   .navigation ul {
     display: none !important;
   }
-  
+
   .game-logo {
     font-size: 0.8em;
   }
-  
+
   .logo-icon {
     font-size: 1.2rem;
   }
@@ -353,11 +378,11 @@ function navigateAndCloseMenu(route) {
   .mobile-menu-btn {
     display: none;
   }
-  
+
   .mobile-menu {
     display: none;
   }
-  
+
   .menu-backdrop {
     display: none;
   }
@@ -369,7 +394,7 @@ function navigateAndCloseMenu(route) {
     padding: 6px 12px;
     font-size: 0.9rem;
   }
-  
+
   .logo-text {
     font-size: 1.2rem;
   }
@@ -380,11 +405,11 @@ function navigateAndCloseMenu(route) {
   .btn-text {
     display: none;
   }
-  
+
   .btn-nav {
     padding: 8px;
   }
-  
+
   .logo-text {
     font-size: 1rem;
   }
